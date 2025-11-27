@@ -23,14 +23,32 @@ export const emojis: Emoji[] = [
     formats: {
       png: [
         {
-          name: 'grinning-face-128.png',
+          name: 'grinning-face.png',
           size: '15 KB',
           url: '/placeholder.png',
         },
       ],
-      gif: [],
-      image: [],
-      video: [],
+      gif: [
+        {
+          name: 'grinning-face.gif',
+          size: '1.1 MB',
+          url: '/placeholder.gif',
+        },
+      ],
+      image: [
+        {
+          name: 'grinning-face.jpg',
+          size: '85 KB',
+          url: '/placeholder.jpg',
+        },
+      ],
+      video: [
+        {
+          name: 'grinning-face.mp4',
+          size: '3.8 MB',
+          url: '/placeholder.mp4',
+        },
+      ],
     },
     related: ['rolling-on-the-floor-laughing', 'winking-face'],
     views: 0,
