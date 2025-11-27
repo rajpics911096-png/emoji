@@ -16,8 +16,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { SvgIcon } from '@/components/svg-icon';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { useTranslations } from '@/context/translations-context';
+import { use } from 'react';
 
-export default function Home({ params: { lang } }: { params: { lang: string }}) {
+export default function Home({ params }: { params: { lang: string }}) {
+  const { lang } = use(Promise.resolve(params));
   const { settings } = useSiteSettings();
   const { t } = useTranslations();
   const featuredEmojis = emojis.slice(0, 8);

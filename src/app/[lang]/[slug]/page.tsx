@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { pages as allPages } from '@/lib/data'; // This is a temporary import path, should be from a central data source.
+import { use } from 'react';
 
 // In a real app, this would be fetched from a database or CMS
 const getPageBySlug = (slug: string) => {
@@ -16,7 +17,8 @@ export async function generateStaticParams() {
   }
 
 export default function GenericPage({ params }: { params: { slug: string, lang: string } }) {
-  const page = getPageBySlug(params.slug);
+  const { slug, lang } = use(Promise.resolve(params));
+  const page = getPageBySlug(slug);
 
   if (!page || page.status === 'draft') {
     notFound();
@@ -24,7 +26,7 @@ export default function GenericPage({ params }: { params: { slug: string, lang: 
 
   return (
     <>
-      <Header lang={params.lang} />
+      <Header lang={lang} />
       <main className="flex-1 py-12 md:py-16">
         <div className="container mx-auto px-4">
             <div className="prose lg:prose-xl dark:prose-invert max-w-4xl mx-auto">
@@ -32,7 +34,7 @@ export default function GenericPage({ params }: { params: { slug: string, lang: 
             </div>
         </div>
       </main>
-      <Footer lang={params.lang} />
+      <Footer lang={lang} />
     </>
   );
 }
