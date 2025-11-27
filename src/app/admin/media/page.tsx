@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MoreVertical, Upload, Copy, Download, Trash2, File as FileIcon } from "lucide-react";
+import { MoreVertical, Upload, Copy, Download, Trash2, File as FileIcon, X } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +14,7 @@ import { emojis } from '@/lib/data';
 import type { EmojiFormatFile } from '@/lib/types';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
+import { Checkbox } from '@/components/ui/checkbox';
 
 type MediaFile = EmojiFormatFile & { format: string; emojiId: string; };
 
@@ -26,6 +27,7 @@ const initialFiles: MediaFile[] = emojis.flatMap(emoji =>
 export default function MediaPage() {
     const { toast } = useToast();
     const [mediaFiles, setMediaFiles] = useState<MediaFile[]>(initialFiles);
+    const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
 
     const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
@@ -72,6 +74,33 @@ export default function MediaPage() {
         });
     }
 
+    const handleSelectFile = (url: string) => {
+        setSelectedFiles(prev => 
+            prev.includes(url) ? prev.filter(u => u !== url) : [...prev, url]
+        );
+    };
+
+    const handleDeleteSelected = () => {
+        const remainingFiles = mediaFiles.filter(file => !selectedFiles.includes(file.url));
+        const filesToDelete = mediaFiles.filter(file => selectedFiles.includes(file.url));
+        
+        filesToDelete.forEach(file => {
+            if (file.url.startsWith('blob:')) {
+                URL.revokeObjectURL(file.url);
+            }
+        });
+        
+        setMediaFiles(remainingFiles);
+        
+        toast({
+            title: "Files Deleted",
+            description: `${selectedFiles.length} file(s) have been deleted.`,
+            variant: 'destructive'
+        });
+
+        setSelectedFiles([]);
+    }
+
     const FilePreview = ({ file }: { file: MediaFile }) => {
         const isImage = ['png', 'gif', 'image', 'jpeg', 'webp'].includes(file.format) || file.url.startsWith('blob:image');
         const isVideo = file.format === 'video' || file.url.startsWith('blob:video');
@@ -96,25 +125,40 @@ export default function MediaPage() {
                     <h1 className="text-3xl font-headline font-bold">Media Library</h1>
                     <p className="text-muted-foreground">Manage your uploaded files here.</p>
                 </div>
-                <Button size="sm" className="gap-1" asChild>
-                    <label htmlFor="file-upload">
-                        <Upload className="h-3.5 w-3.5" />
-                        <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Upload File</span>
-                    </label>
-                </Button>
+                <div className="flex items-center gap-2">
+                    {selectedFiles.length > 0 && (
+                         <Button size="sm" variant="destructive" className="gap-1" onClick={handleDeleteSelected}>
+                            <Trash2 className="h-3.5 w-3.5" />
+                            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Delete ({selectedFiles.length})</span>
+                        </Button>
+                    )}
+                    <Button size="sm" className="gap-1" asChild>
+                        <label htmlFor="file-upload">
+                            <Upload className="h-3.5 w-3.5" />
+                            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Upload File</span>
+                        </label>
+                    </Button>
+                </div>
                 <input id="file-upload" type="file" multiple className="hidden" onChange={handleFileUpload} />
             </div>
 
             {mediaFiles.length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                    {mediaFiles.map((file, index) => (
-                        <Card key={`${index}-${file.name}`} className="group relative">
+                    {mediaFiles.map((file) => (
+                        <Card key={file.url} className="group relative" data-state={selectedFiles.includes(file.url) ? 'selected' : 'unselected'}>
+                            <div className="absolute top-2 left-2 z-10">
+                                <Checkbox
+                                    checked={selectedFiles.includes(file.url)}
+                                    onCheckedChange={() => handleSelectFile(file.url)}
+                                    className="bg-background/50 hover:bg-background/80"
+                                />
+                            </div>
                             <FilePreview file={file} />
                             <CardContent className="p-3">
                                 <p className="text-xs font-medium truncate" title={file.name}>{file.name}</p>
                                 <p className="text-xs text-muted-foreground">{file.size}</p>
                             </CardContent>
-                            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <Button variant="secondary" size="icon" className="h-7 w-7">
@@ -137,6 +181,9 @@ export default function MediaPage() {
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </div>
+                            <div className="absolute inset-0 rounded-lg ring-2 ring-primary ring-offset-2 ring-offset-background transition-all"
+                                style={{ opacity: selectedFiles.includes(file.url) ? 1 : 0 }}
+                             />
                         </Card>
                     ))}
                 </div>
