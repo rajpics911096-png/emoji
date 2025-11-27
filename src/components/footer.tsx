@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from 'next/link';
@@ -19,8 +20,8 @@ export default function Footer({ lang }: { lang: string }) {
   return (
     <footer className="bg-primary/5 border-t">
       <div className="container mx-auto py-12 px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="md:col-span-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="sm:col-span-2 md:col-span-1">
             <Link href={`/${lang}`} className="flex items-center space-x-2 mb-4">
               <SvgIcon svg={settings.logo} className="h-8 w-8" />
               <span className="font-bold text-xl font-headline">{settings.name}</span>

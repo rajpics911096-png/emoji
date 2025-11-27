@@ -45,9 +45,9 @@ export default function EmojiPage({ params }: { params: { id: string, lang: stri
   return (
     <>
       <Header lang={lang} />
-      <main className="flex-1 py-12 md:py-16">
+      <main className="flex-1 py-8 md:py-12">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8 md:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
             <div className="md:col-span-2">
                 <EmojiView emoji={emoji} />
             </div>
@@ -77,8 +77,8 @@ export default function EmojiPage({ params }: { params: { id: string, lang: stri
           <EmojiDownloads emoji={emoji} />
 
           {related.length > 0 && (
-            <section className="mt-16 md:mt-24">
-              <h2 className="text-3xl font-headline font-bold text-center mb-10">
+            <section className="mt-12 md:mt-20">
+              <h2 className="text-3xl font-headline font-bold text-center mb-8">
                 {t('relatedEmojisTitle')}
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">

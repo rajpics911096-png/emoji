@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from 'next/link';
@@ -54,7 +55,7 @@ export default function Home({ params }: { params: { lang: string }}) {
             <h2 className="text-3xl font-headline font-bold text-center mb-10">
               {t('exploreCategories')}
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6 text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-6 text-center">
               {categories.map((category) => (
                 <Link key={category.id} href={`/${lang}/emojis/${category.id}`}>
                   <Card className="group transform hover:-translate-y-2 transition-transform duration-300 ease-in-out hover:shadow-xl">

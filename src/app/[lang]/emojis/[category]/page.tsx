@@ -1,3 +1,4 @@
+
 'use client';
 
 import { notFound } from 'next/navigation';
@@ -38,16 +39,16 @@ export default function CategoryPage({
     <>
       <Header lang={lang} />
       <main className="flex-1 container mx-auto py-8 px-4">
-        <div className="text-center mb-12">
+        <div className="text-center mb-10 md:mb-12">
             <h1 className="text-4xl md:text-5xl font-headline font-bold text-primary tracking-tighter">
                 {categoryName}
             </h1>
-            <p className="mt-3 text-lg md:text-xl max-w-2xl mx-auto text-foreground/80">
+            <p className="mt-3 text-lg md:text-xl max-w-3xl mx-auto text-foreground/80">
                 {t('categoryDescription', { categoryName: categoryName })}
             </p>
         </div>
         
-        <div className="max-w-2xl mx-auto mb-12">
+        <div className="max-w-2xl mx-auto mb-10 md:mb-12">
             <IntelligentSearchBar lang={lang} />
         </div>
         

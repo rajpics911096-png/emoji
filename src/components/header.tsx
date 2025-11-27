@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from 'next/link';
@@ -16,17 +17,19 @@ import { useSiteSettings } from '@/context/site-settings-context';
 import { ThemeToggle } from './theme-toggle';
 import { LanguageSwitcher } from './language-switcher';
 import { useTranslations } from '@/context/translations-context';
+import { useState } from 'react';
 
 export default function Header({ lang }: { lang: string }) {
   const { settings } = useSiteSettings();
   const { t } = useTranslations();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navItems = categories.filter(c => c.id !== 'all');
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
         <div className="flex items-center md:hidden">
-            <Sheet>
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
                 <Button
                 variant="ghost"
@@ -37,7 +40,7 @@ export default function Header({ lang }: { lang: string }) {
                 </Button>
             </SheetTrigger>
             <SheetContent side="left">
-                <Link href={`/${lang}`} className="flex items-center space-x-2">
+                <Link href={`/${lang}`} className="flex items-center space-x-2" onClick={() => setIsMobileMenuOpen(false)}>
                 <SvgIcon svg={settings.logo} className="h-6 w-6" />
                 <span className="font-bold font-headline text-lg">{settings.name}</span>
                 </Link>
@@ -47,6 +50,7 @@ export default function Header({ lang }: { lang: string }) {
                     key={item.id}
                     href={`/${lang}/emojis/${item.id}`}
                     className="text-lg font-medium transition-colors hover:text-primary"
+                    onClick={() => setIsMobileMenuOpen(false)}
                     >
                     {t(`category_${item.id}`)}
                     </Link>
@@ -86,7 +90,7 @@ export default function Header({ lang }: { lang: string }) {
         </div>
 
 
-        <div className="flex items-center justify-end space-x-2">
+        <div className="flex flex-1 items-center justify-end space-x-2">
           <ThemeToggle />
           <LanguageSwitcher />
         </div>
