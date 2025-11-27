@@ -52,10 +52,6 @@ export default function EmojiPage({ params }: { params: { id: string, lang: stri
                 <EmojiView emoji={emoji} />
             </div>
             <aside className="space-y-8">
-              <div className="space-y-4">
-                <div className="prose dark:prose-invert max-w-none text-foreground/80" dangerouslySetInnerHTML={{ __html: emoji.description }} />
-              </div>
-
               {category && (
                 <Card>
                   <CardHeader>
@@ -72,6 +68,9 @@ export default function EmojiPage({ params }: { params: { id: string, lang: stri
                   </CardContent>
                 </Card>
               )}
+              <div className="space-y-4">
+                <div className="prose dark:prose-invert max-w-none text-foreground/80" dangerouslySetInnerHTML={{ __html: emoji.description }} />
+              </div>
             </aside>
           </div>
           
