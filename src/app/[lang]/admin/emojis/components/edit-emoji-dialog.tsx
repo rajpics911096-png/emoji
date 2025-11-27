@@ -186,7 +186,7 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
                       <SelectContent>
                         {categories.filter(c => c.id !== 'all').map((cat) => (
                           <SelectItem key={cat.id} value={cat.id}>
-                            {t(`category_${cat.id}`)}
+                            {t(cat.name)}
                           </SelectItem>
                         ))}
                       </SelectContent>

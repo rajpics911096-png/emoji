@@ -107,7 +107,7 @@ export default function CategoriesPage() {
                 <TableCell className="font-medium text-2xl">
                   <SvgIcon svg={category.icon} className="h-6 w-6" />
                 </TableCell>
-                <TableCell className="font-medium">{t(`category_${category.id}`)}</TableCell>
+                <TableCell className="font-medium">{t(category.name)}</TableCell>
                 <TableCell className="font-mono text-sm">{category.id}</TableCell>
                 <TableCell>
                   <DropdownMenu>
