@@ -53,6 +53,9 @@ export default function SettingsPage() {
   }
 
   const handleSitemap = () => {
+    // In a real application, this would trigger a server action
+    // to regenerate the sitemap file. For this prototype, we'll just show a toast.
+    // The sitemap is already being generated dynamically at /sitemap.xml
     toast({
       title: t('settings_toast_sitemap_title'),
       description: t('settings_toast_sitemap_desc'),
@@ -282,7 +285,7 @@ export default function SettingsPage() {
           <div className="space-y-2">
             <Label>{t('settings_sitemap_label')}</Label>
             <Button onClick={handleSitemap} variant="outline" className="w-full">
-              {t('settings_sitemap_button')}
+              Sitemap Generation
             </Button>
             <p className="text-sm text-muted-foreground">
               {t('settings_sitemap_desc')}
