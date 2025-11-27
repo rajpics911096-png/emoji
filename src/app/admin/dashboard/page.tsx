@@ -1,23 +1,34 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Smile, Users, Eye, Download } from "lucide-react";
+import Link from 'next/link';
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
+import { Smile, Users, Eye, Download, PlusCircle, FilePlus, ArrowRight } from "lucide-react";
+import { Button } from '@/components/ui/button';
 
 export default function DashboardPage() {
   const stats = [
-    { title: "Total Emojis", value: "1,250", icon: Smile, change: "+20.1% from last month" },
-    { title: "Total Users", value: "23,456", icon: Users, change: "+180.1% from last month" },
-    { title: "Page Views", value: "5,231,890", icon: Eye, change: "+19% from last month" },
-    { title: "Total Downloads", value: "1,234,567", icon: Download, change: "+22% from last month" },
+    { title: "Total Emojis", value: "1,250", icon: Smile, change: "+20.1% from last month", color: "bg-blue-500" },
+    { title: "Total Users", value: "23,456", icon: Users, change: "+180.1% from last month", color: "bg-green-500" },
+    { title: "Page Views", value: "5,231,890", icon: Eye, change: "+19% from last month", color: "bg-yellow-500" },
+    { title: "Total Downloads", value: "1,234,567", icon: Download, change: "+22% from last month", color: "bg-red-500" },
+  ];
+
+  const quickActions = [
+    { label: 'Add New Emoji', href: '/admin/emojis', icon: PlusCircle },
+    { label: 'Add New Page', href: '/admin/pages', icon: FilePlus },
+    { label: 'Manage Categories', href: '/admin/categories', icon: ArrowRight },
   ];
 
   return (
-    <div>
-      <h1 className="text-3xl font-headline font-bold mb-6">Dashboard</h1>
+    <div className="space-y-6 md:space-y-8">
+      <h1 className="text-3xl font-headline font-bold">Dashboard</h1>
+      
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
-          <Card key={stat.title}>
+          <Card key={stat.title} className="flex flex-col justify-between transform hover:-translate-y-1 transition-transform duration-300 ease-in-out hover:shadow-xl">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-              <stat.icon className="h-4 w-4 text-muted-foreground" />
+              <div className={`p-2 rounded-full text-primary-foreground ${stat.color}`}>
+                <stat.icon className="h-4 w-4" />
+              </div>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stat.value}</div>
@@ -26,14 +37,33 @@ export default function DashboardPage() {
           </Card>
         ))}
       </div>
-      <div className="mt-8">
-        <Card>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="lg:col-span-2">
             <CardHeader>
-                <CardTitle>Coming Soon</CardTitle>
+                <CardTitle>Analytics Overview</CardTitle>
+                <CardDescription>A summary of your website's performance.</CardDescription>
             </CardHeader>
             <CardContent>
-                <p className="text-muted-foreground">More detailed analytics and charts will be available here soon.</p>
+                <p className="text-muted-foreground text-center py-10">Charts and detailed analytics coming soon.</p>
             </CardContent>
+        </Card>
+
+         <Card>
+          <CardHeader>
+            <CardTitle>Quick Actions</CardTitle>
+            <CardDescription>Quickly jump to common tasks.</CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col space-y-2">
+            {quickActions.map(action => (
+                 <Button key={action.href} asChild variant="outline" className="justify-start">
+                    <Link href={action.href}>
+                        <action.icon className="mr-2 h-4 w-4"/>
+                        {action.label}
+                    </Link>
+                 </Button>
+            ))}
+          </CardContent>
         </Card>
       </div>
     </div>
