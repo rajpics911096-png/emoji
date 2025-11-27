@@ -1,7 +1,9 @@
-import { redirect } from 'next/navigation';
-
 // This is the root layout of the application.
-// It redirects the user to the default language.
-export default function RootLayout() {
-  redirect('/en');
+// It immediately renders its children, which will be the language-specific layouts.
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return children;
 }
