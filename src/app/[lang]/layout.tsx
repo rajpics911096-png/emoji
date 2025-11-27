@@ -1,5 +1,5 @@
 
-import type { Metadata } from 'next';
+import type { Metadata, ResolvingMetadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
 import '../globals.css';
 import { cn } from '@/lib/utils';
@@ -7,11 +7,68 @@ import { SiteSettingsProvider } from '@/context/site-settings-context';
 import { TranslationsProvider } from '@/context/translations-context';
 import { i18n } from '@/lib/i18n-config';
 import { FirebaseProvider } from '@/firebase/provider';
+import { defaultSiteSettings } from '@/lib/site-settings';
+import translations from '@/lib/translations';
 
-export const metadata: Metadata = {
-  title: 'EmojiVerse',
-  description: 'Your universe of emojis, with PNGs, GIFs, and more!',
-};
+type Props = {
+  params: { lang: string }
+}
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const lang = (i18n.locales.includes(params.lang as any) ? params.lang : i18n.defaultLocale) as keyof typeof translations;
+  const t = (key: string) => translations[lang]?.[key] || translations['en'][key] || key;
+
+  return {
+    title: {
+      default: defaultSiteSettings.name,
+      template: `%s | ${defaultSiteSettings.name}`,
+    },
+    description: t('siteDescription'),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
+    alternates: {
+      canonical: '/',
+      languages: i18n.locales.reduce((acc, locale) => {
+        acc[locale] = `/${locale}`;
+        return acc;
+      }, {} as Record<string, string>),
+    },
+     openGraph: {
+      title: defaultSiteSettings.name,
+      description: t('siteDescription'),
+      url: '/',
+      siteName: defaultSiteSettings.name,
+      images: [
+        {
+          url: '/og-image.png',
+          width: 1200,
+          height: 630,
+        },
+      ],
+      locale: lang,
+      type: 'website',
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: defaultSiteSettings.name,
+      description: t('siteDescription'),
+      images: ['/og-image.png'],
+    },
+  }
+}
 
 export async function generateStaticParams() {
   return i18n.locales.map((locale) => ({ lang: locale }))
