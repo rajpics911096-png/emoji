@@ -66,32 +66,43 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
     const files = event.target.files;
     if (!files) return;
 
-    const newFiles = Array.from(files).reduce((acc, file) => {
+    const newFilesMap = Array.from(files).reduce((acc, file) => {
       const fileType = file.type.split('/')[1];
-      const format = ['png', 'gif', 'webp', 'jpeg', 'jpg'].includes(fileType) ? 'image' : 
-                     (file.type.startsWith('video/')) ? 'video' : 'other';
-      
-      const simpleFormat = fileType === 'png' ? 'png' : fileType === 'gif' ? 'gif' : format;
+      const simpleFormat = file.type.startsWith('image/png') ? 'png' :
+                           file.type.startsWith('image/gif') ? 'gif' :
+                           file.type.startsWith('image/') ? 'image' :
+                           file.type.startsWith('video/') ? 'video' : null;
 
-      if (simpleFormat !== 'other' && acc[simpleFormat]) {
+      if (simpleFormat && acc[simpleFormat]) {
         const newFile: EmojiFormatFile = {
             name: file.name,
             size: `${(file.size / 1024).toFixed(2)} KB`,
             url: URL.createObjectURL(file),
+            type: file.type,
         };
         acc[simpleFormat] = [...acc[simpleFormat], newFile];
       }
       return acc;
     }, { ...uploadedFiles });
-
-    setUploadedFiles(newFiles);
+    
+    setUploadedFiles(newFilesMap);
   };
   
   const removeFile = (format: string, url: string) => {
-      setUploadedFiles(prev => ({
-        ...prev,
-        [format]: prev[format].filter(f => f.url !== url),
-      }));
+      setUploadedFiles(prev => {
+        const updatedFormatFiles = prev[format].filter(f => f.url !== url);
+        const newFiles = {
+          ...prev,
+          [format]: updatedFormatFiles,
+        };
+
+        // Also check if this file exists in other formats (like image) and remove it
+        if (format === 'png' || format === 'gif') {
+            newFiles.image = newFiles.image.filter(f => f.url !== url);
+        }
+
+        return newFiles;
+      });
       URL.revokeObjectURL(url);
   };
 
@@ -104,6 +115,7 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
   const handleOpenChange = (open: boolean) => {
     if (!open) {
       reset();
+      Object.values(uploadedFiles).flat().forEach(file => URL.revokeObjectURL(file.url));
       setUploadedFiles({ png: [], gif: [], image: [], video: [] });
     }
     onOpenChange(open);
@@ -168,7 +180,7 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
             <div className="grid grid-cols-1 md:grid-cols-4 items-start gap-4">
                 <Label className="text-left md:text-right pt-2">{t('emoji_form_upload_title')}</Label>
                  <div className="md:col-span-3 space-y-4">
-                    <Input id="file-upload" type="file" multiple onChange={handleFileChange} />
+                    <Input id="file-upload" type="file" multiple onChange={handleFileChange} accept="image/png, image/gif, image/jpeg, image/webp, video/*" />
                     {allUploadedFiles.length > 0 ? (
                         <div className="space-y-3">
                             <h4 className="font-medium text-sm">{t('emoji_form_uploaded_title')}</h4>
@@ -187,7 +199,7 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
             </div>
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
               {t('dialog_cancel_button')}
             </Button>
             <Button type="submit">{t('add_emoji_dialog_add_button')}</Button>

@@ -2,6 +2,7 @@ export type EmojiFormatFile = {
   url: string;
   size: string;
   name: string;
+  type?: string;
 };
 
 export type Emoji = {
