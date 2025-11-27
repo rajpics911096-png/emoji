@@ -15,6 +15,7 @@ import type { EmojiFormatFile } from '@/lib/types';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 
 type MediaFile = EmojiFormatFile & { format: string; emojiId: string; };
 
@@ -64,6 +65,7 @@ export default function MediaPage() {
     
     const deleteFile = (fileToRemove: MediaFile) => {
         setMediaFiles(mediaFiles.filter(file => file.url !== fileToRemove.url));
+        setSelectedFiles(selectedFiles.filter(url => url !== fileToRemove.url));
         if (fileToRemove.url.startsWith('blob:')) {
             URL.revokeObjectURL(fileToRemove.url);
         }
@@ -79,6 +81,14 @@ export default function MediaPage() {
             prev.includes(url) ? prev.filter(u => u !== url) : [...prev, url]
         );
     };
+
+    const handleSelectAll = (checked: boolean | 'indeterminate') => {
+        if (checked === true) {
+            setSelectedFiles(mediaFiles.map(file => file.url));
+        } else {
+            setSelectedFiles([]);
+        }
+    }
 
     const handleDeleteSelected = () => {
         const remainingFiles = mediaFiles.filter(file => !selectedFiles.includes(file.url));
@@ -117,6 +127,9 @@ export default function MediaPage() {
             </div>
         );
     };
+    
+    const isAllSelected = selectedFiles.length > 0 && selectedFiles.length === mediaFiles.length;
+    const isIndeterminate = selectedFiles.length > 0 && selectedFiles.length < mediaFiles.length;
 
     return (
         <div>
@@ -125,13 +138,27 @@ export default function MediaPage() {
                     <h1 className="text-3xl font-headline font-bold">Media Library</h1>
                     <p className="text-muted-foreground">Manage your uploaded files here.</p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-4">
                     {selectedFiles.length > 0 && (
-                         <Button size="sm" variant="destructive" className="gap-1" onClick={handleDeleteSelected}>
-                            <Trash2 className="h-3.5 w-3.5" />
-                            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Delete ({selectedFiles.length})</span>
-                        </Button>
+                        <div className="flex items-center gap-2">
+                             <Button size="sm" variant="destructive" className="gap-1" onClick={handleDeleteSelected}>
+                                <Trash2 className="h-3.5 w-3.5" />
+                                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Delete ({selectedFiles.length})</span>
+                            </Button>
+                        </div>
                     )}
+                    <div className="flex items-center gap-2">
+                        <Checkbox
+                            id="select-all"
+                            checked={isAllSelected}
+                            onCheckedChange={handleSelectAll}
+                            aria-label="Select all"
+                            className='hidden sm:flex'
+                        />
+                        <Label htmlFor='select-all' className='hidden sm:block text-sm font-medium'>
+                            {isAllSelected ? 'Deselect All' : 'Select All'}
+                        </Label>
+                    </div>
                     <Button size="sm" className="gap-1" asChild>
                         <label htmlFor="file-upload">
                             <Upload className="h-3.5 w-3.5" />
@@ -145,11 +172,15 @@ export default function MediaPage() {
             {mediaFiles.length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                     {mediaFiles.map((file) => (
-                        <Card key={file.url} className="group relative" data-state={selectedFiles.includes(file.url) ? 'selected' : 'unselected'}>
+                        <Card 
+                            key={file.url} 
+                            className="group relative cursor-pointer"
+                            onClick={() => handleSelectFile(file.url)}
+                            data-state={selectedFiles.includes(file.url) ? 'selected' : 'unselected'}
+                        >
                             <div className="absolute top-2 left-2 z-10">
                                 <Checkbox
                                     checked={selectedFiles.includes(file.url)}
-                                    onCheckedChange={() => handleSelectFile(file.url)}
                                     className="bg-background/50 hover:bg-background/80"
                                 />
                             </div>
@@ -158,7 +189,7 @@ export default function MediaPage() {
                                 <p className="text-xs font-medium truncate" title={file.name}>{file.name}</p>
                                 <p className="text-xs text-muted-foreground">{file.size}</p>
                             </CardContent>
-                            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10" onClick={(e) => e.stopPropagation()}>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <Button variant="secondary" size="icon" className="h-7 w-7">
