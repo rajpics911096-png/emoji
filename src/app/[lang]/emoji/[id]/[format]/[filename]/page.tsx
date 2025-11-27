@@ -122,10 +122,10 @@ export default function FileDownloadPage() {
   return (
     <>
       <Header lang={lang} />
-      <main className="flex-1 py-8 md:py-12 bg-gray-100 dark:bg-gray-900">
+      <main className="flex-1 py-8 md:py-12 bg-card">
         <div className="container mx-auto px-4">
             <div className="mb-4">
-                 <Button asChild variant="ghost" className="text-primary hover:text-primary/80">
+                 <Button asChild variant="ghost" className="text-muted-foreground hover:text-primary">
                     <Link href={`/${lang}/emoji/${id}`}>
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to {emoji.title}
@@ -133,21 +133,21 @@ export default function FileDownloadPage() {
                  </Button>
             </div>
             
-            <div className="flex flex-col items-center gap-10">
+            <div className="flex flex-col items-center gap-4 text-center">
+                 <h1 className="text-3xl font-headline font-bold mb-2">{file.name}</h1>
                 <div className="w-full max-w-lg">
                   <FilePreview file={file} format={format} />
                 </div>
                 
-                <div className="w-full max-w-lg text-center">
-                    <h1 className="text-3xl font-headline font-bold mb-2">{file.name}</h1>
-                    <div className="flex items-center justify-center gap-4 text-muted-foreground mb-6">
+                <div className="w-full max-w-lg text-center space-y-4">
+                    <div className="flex items-center justify-center gap-4 text-muted-foreground">
                         <Badge variant="outline" className="capitalize">{format}</Badge>
                         <Badge variant="outline">{file.size}</Badge>
                     </div>
                     <DownloadButton file={file} />
                 </div>
                 
-                <Separator className="my-4" />
+                <Separator className="my-8" />
                 
                 <div className="w-full max-w-5xl space-y-12">
                     {relatedFiles.length > 0 && (
@@ -188,4 +188,3 @@ export default function FileDownloadPage() {
     </>
   );
 }
-
