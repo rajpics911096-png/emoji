@@ -7,6 +7,7 @@ import { EmojiCard } from '@/components/emoji-card';
 import { EmojiView } from './components/emoji-view';
 import { SvgIcon } from '@/components/svg-icon';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { EmojiDownloads } from './components/emoji-downloads';
 
 export async function generateStaticParams() {
     return emojis.map((emoji) => ({
@@ -61,6 +62,9 @@ export default function EmojiPage({ params }: { params: { id: string } }) {
               )}
             </aside>
           </div>
+          
+          <EmojiDownloads emoji={emoji} />
+
           {related.length > 0 && (
             <section className="mt-16 md:mt-24">
               <h2 className="text-3xl font-headline font-bold text-center mb-10">

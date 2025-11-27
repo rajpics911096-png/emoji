@@ -7,11 +7,18 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { downloadTimer } from "@/lib/data";
+import { useState } from "react";
 
 export default function SettingsPage() {
   const { toast } = useToast();
+  const [timer, setTimer] = useState(downloadTimer);
 
   const handleSave = () => {
+    // Here you would typically save the settings to a backend.
+    // For this example, we'll just show a toast.
+    // In a real app, you might update the `downloadTimer` in `src/lib/data.ts`
+    // via an API call.
     toast({
       title: "Settings Saved",
       description: "Your settings have been successfully saved.",
@@ -70,7 +77,7 @@ export default function SettingsPage() {
               <Select defaultValue="alegreya">
                 <SelectTrigger id="body-font">
                   <SelectValue placeholder="Select font" />
-                </SelectTrigger>
+                </Trigger>
                 <SelectContent>
                   <SelectItem value="alegreya">Alegreya</SelectItem>
                   <SelectItem value="georgia">Georgia</SelectItem>
@@ -93,8 +100,8 @@ export default function SettingsPage() {
             <CardContent>
                 <div className="space-y-2">
                     <Label htmlFor="download-timer">Download Timer (seconds)</Label>
-                    <Input id="download-timer" type="number" defaultValue="15" />
-                    <p className="text-sm text-muted-foreground">Set the delay before a user can download a file.</p>
+                    <Input id="download-timer" type="number" value={timer} onChange={e => setTimer(parseInt(e.target.value, 10))} />
+                    <p className="text-sm text-muted-foreground">Set the delay before a user can download a file. Default is 10 seconds.</p>
                 </div>
             </CardContent>
         </Card>

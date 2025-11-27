@@ -210,4 +210,4 @@ export function getRelatedEmojis(emoji: Emoji) {
     return emojis.filter(e => emoji.related.includes(e.id));
 }
 
-export const downloadTimer = 15; // default 15 seconds
+export const downloadTimer = 10;
