@@ -17,6 +17,7 @@ import {
   Settings,
   Smile,
   LogOut,
+  Tags,
 } from "lucide-react";
 
 export function AdminSidebar() {
@@ -32,6 +33,11 @@ export function AdminSidebar() {
       href: "/admin/emojis",
       label: "Emojis",
       icon: Smile,
+    },
+    {
+      href: "/admin/categories",
+      label: "Categories",
+      icon: Tags,
     },
     {
       href: "/admin/settings",
@@ -59,7 +65,7 @@ export function AdminSidebar() {
             <SidebarMenuItem key={item.href}>
               <SidebarMenuButton
                 asChild
-                isActive={pathname === item.href}
+                isActive={pathname.startsWith(item.href)}
                 tooltip={item.label}
               >
                 <Link href={item.href}>
