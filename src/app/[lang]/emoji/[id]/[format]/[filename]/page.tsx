@@ -91,7 +91,8 @@ const FilePreview = ({ file, format }: { file: EmojiFormatFile; format: string }
 };
 
 
-export default function FileDownloadPage({ params }: { params: { id: string; lang: string; format: string; filename: string } }) {
+export default function FileDownloadPage() {
+  const params = useParams<{ id: string; lang: string; format: string; filename: string }>();
   const { id, lang, format, filename } = params;
   
   const { t } = useTranslations();
@@ -188,3 +189,4 @@ export default function FileDownloadPage({ params }: { params: { id: string; lan
     </>
   );
 }
+

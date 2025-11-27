@@ -1,5 +1,5 @@
 
-"use client";
+'use client';
 
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -19,7 +19,8 @@ import { SvgIcon } from '@/components/svg-icon';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { useTranslations } from '@/context/translations-context';
 
-export default function Home({ params }: { params: { lang: string } }) {
+export default function Home() {
+  const params = useParams<{ lang: string }>();
   const lang = params.lang;
   const { settings } = useSiteSettings();
   const { t } = useTranslations();
@@ -90,3 +91,4 @@ export default function Home({ params }: { params: { lang: string } }) {
     </>
   );
 }
+

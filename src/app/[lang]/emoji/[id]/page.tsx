@@ -15,7 +15,8 @@ import { useEffect, useRef } from 'react';
 import { useTranslations } from '@/context/translations-context';
 import { AdSlot } from '@/components/ad-slot';
 
-export default function EmojiPage({ params }: { params: { id: string, lang: string } }) {
+export default function EmojiPage() {
+  const params = useParams<{ id: string, lang: string }>();
   const { id, lang } = params;
   const emoji = getEmojiById(id);
   const effectRan = useRef(false);
@@ -35,11 +36,12 @@ export default function EmojiPage({ params }: { params: { id: string, lang: stri
     };
   }, [emoji]);
 
+
   if (!emoji) {
     notFound();
   }
 
-  const category = categories.find((c) => c.id === emoji.category);
+  const category = categories.find(c => c.id === emoji.category);
   const related = getRelatedEmojis(emoji);
 
   return (
@@ -48,10 +50,10 @@ export default function EmojiPage({ params }: { params: { id: string, lang: stri
       <main className="flex-1 py-12 md:py-16">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 md:gap-12">
-            <div className="md:col-span-2 space-y-8">
-              <EmojiView emoji={emoji} />
-              <AdSlot location="below_emoji" />
-              <EmojiDownloads emoji={emoji} lang={lang} />
+            <div className="md:col-span-2">
+                <EmojiView emoji={emoji} />
+                <AdSlot location="below_emoji" />
+                <EmojiDownloads emoji={emoji} lang={lang} />
             </div>
             <aside className="space-y-8">
               <AdSlot location="sidebar" />
@@ -59,10 +61,7 @@ export default function EmojiPage({ params }: { params: { id: string, lang: stri
                 <h3 className="font-headline text-2xl font-semibold text-primary">
                   {t('descriptionTitle')}
                 </h3>
-                <div
-                  className="prose dark:prose-invert max-w-none text-foreground/80"
-                  dangerouslySetInnerHTML={{ __html: emoji.description }}
-                />
+                <div className="prose dark:prose-invert max-w-none text-foreground/80" dangerouslySetInnerHTML={{ __html: emoji.description }} />
               </div>
 
               {category && (
@@ -71,29 +70,19 @@ export default function EmojiPage({ params }: { params: { id: string, lang: stri
                     <CardTitle>{t('categoryTitle')}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <Link
-                      href={`/${lang}/emojis/${category.id}`}
-                      className="group flex items-center gap-4"
-                    >
-                      <SvgIcon
-                        svg={category.icon}
-                        className="w-10 h-10 text-primary"
-                      />
-                      <div>
-                        <p className="font-semibold text-lg group-hover:text-primary transition-colors">
-                          {t(`category_${category.id}`)}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {t('viewAllInCategory')}
-                        </p>
-                      </div>
+                    <Link href={`/${lang}/emojis/${category.id}`} className="group flex items-center gap-4">
+                        <SvgIcon svg={category.icon} className="w-10 h-10 text-primary" />
+                        <div>
+                            <p className="font-semibold text-lg group-hover:text-primary transition-colors">{t(`category_${category.id}`)}</p>
+                            <p className="text-sm text-muted-foreground">{t('viewAllInCategory')}</p>
+                        </div>
                     </Link>
                   </CardContent>
                 </Card>
               )}
             </aside>
           </div>
-
+          
           {related.length > 0 && (
             <section className="mt-16 md:mt-24">
               <h2 className="text-3xl font-headline font-bold text-center mb-10">
@@ -101,11 +90,7 @@ export default function EmojiPage({ params }: { params: { id: string, lang: stri
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
                 {related.map((relatedEmoji) => (
-                  <EmojiCard
-                    key={relatedEmoji.id}
-                    emoji={relatedEmoji}
-                    lang={lang}
-                  />
+                  <EmojiCard key={relatedEmoji.id} emoji={relatedEmoji} lang={lang} />
                 ))}
               </div>
             </section>
@@ -116,3 +101,4 @@ export default function EmojiPage({ params }: { params: { id: string, lang: stri
     </>
   );
 }
+

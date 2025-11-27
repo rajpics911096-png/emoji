@@ -9,8 +9,9 @@ import Footer from '@/components/footer';
 import IntelligentSearchBar from '@/components/intelligent-search-bar';
 import { useTranslations } from '@/context/translations-context';
 
-export default function CategoryPage({ params }: { params: { category: string, lang: string } }) {
+export default function CategoryPage() {
   const searchParams = useSearchParams();
+  const params = useParams<{ category: string, lang: string }>();
   const { category: categorySlug, lang } = params;
 
   const { t } = useTranslations();
@@ -64,3 +65,4 @@ export default function CategoryPage({ params }: { params: { category: string, l
     </>
   );
 }
+
