@@ -1,6 +1,7 @@
 
 'use client';
 
+import { use } from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getEmojiById, getRelatedEmojis, emojis, categories } from '@/lib/data';
@@ -15,7 +16,7 @@ import { useEffect, useRef } from 'react';
 import { useTranslations } from '@/context/translations-context';
 
 export default function EmojiPage({ params }: { params: { id: string, lang: string } }) {
-  const { id, lang } = params;
+  const { id, lang } = use(Promise.resolve(params));
   const emoji = getEmojiById(id);
   const effectRan = useRef(false);
   const { t } = useTranslations();
@@ -53,9 +54,6 @@ export default function EmojiPage({ params }: { params: { id: string, lang: stri
             </div>
             <aside className="space-y-8">
               <div className="space-y-4">
-                <h3 className="font-headline text-2xl font-semibold text-primary">
-                  {t('descriptionTitle')}
-                </h3>
                 <div className="prose dark:prose-invert max-w-none text-foreground/80" dangerouslySetInnerHTML={{ __html: emoji.description }} />
               </div>
 
@@ -98,4 +96,3 @@ export default function EmojiPage({ params }: { params: { id: string, lang: stri
     </>
   );
 }
-
