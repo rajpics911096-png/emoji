@@ -71,7 +71,9 @@ export default function EmojisPage() {
         <div className="flex items-center justify-between">
             <div>
                 <CardTitle>Emojis</CardTitle>
-                <CardDescription>Manage your website&apos;s emojis here.</CardDescription>
+                <CardDescription>
+                  Manage your website&apos;s emojis here. You currently have {emojiList.length} emojis.
+                </CardDescription>
             </div>
             <Button size="sm" className="gap-1" onClick={() => setIsAddDialogOpen(true)}>
                 <PlusCircle className="h-3.5 w-3.5" />
