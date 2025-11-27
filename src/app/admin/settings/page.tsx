@@ -32,10 +32,8 @@ export default function SettingsPage() {
     });
   };
 
-
   return (
-    <div className="mx-auto grid max-w-4xl flex-1 auto-rows-start gap-4 md:gap-8 lg:max-w-5xl">
-      <div className="grid auto-rows-start gap-4 md:gap-8">
+    <div className="mx-auto max-w-4xl flex-1 space-y-4 md:space-y-8">
         <h1 className="text-3xl font-headline font-bold">Settings</h1>
         <Card>
           <CardHeader>
@@ -132,7 +130,6 @@ export default function SettingsPage() {
         <div className="flex justify-end">
             <Button size="lg" onClick={handleSave}>Save All Settings</Button>
         </div>
-      </div>
     </div>
   );
 }
