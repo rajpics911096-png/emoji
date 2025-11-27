@@ -10,12 +10,14 @@ import { useSiteSettings } from "@/context/site-settings-context";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslations } from "@/context/translations-context";
 import { useState } from "react";
-import { getAuth, updatePassword, type User } from "firebase/auth";
+import { getAuth, updatePassword, updateEmail, type User } from "firebase/auth";
+import { Separator } from "@/components/ui/separator";
 
 export default function SettingsPage() {
   const { t } = useTranslations();
   const { toast } = useToast();
   const { settings, setSettings, resetSettings } = useSiteSettings();
+  const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -40,6 +42,36 @@ export default function SettingsPage() {
       title: t('settings_toast_sitemap_title'),
       description: t('settings_toast_sitemap_desc'),
     });
+  };
+
+  const handleChangeEmail = async () => {
+    if (!newEmail) {
+      toast({
+        variant: "destructive",
+        title: "Email is required",
+        description: "Please enter a new email address.",
+      });
+      return;
+    }
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        await updateEmail(user, newEmail);
+        toast({
+          title: "Email Updated",
+          description: "Your login email has been changed successfully.",
+        });
+        setNewEmail("");
+      } catch (error: any) {
+        toast({
+          variant: "destructive",
+          title: "Email Change Failed",
+          description: error.message || "Please log out and log in again before changing your email.",
+        });
+      }
+    }
   };
 
   const handleChangePassword = async () => {
@@ -125,34 +157,50 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle>Account</CardTitle>
           <CardDescription>
-            Change your login password here.
+            Change your login email and password here.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="new-password">New Password</Label>
-            <Input
-              id="new-password"
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="Enter your new password"
-            />
+        <CardContent className="space-y-6">
+          <div className="space-y-4">
+             <div className="space-y-2">
+                <Label htmlFor="new-email">New Email</Label>
+                <Input
+                  id="new-email"
+                  type="email"
+                  value={newEmail}
+                  onChange={(e) => setNewEmail(e.target.value)}
+                  placeholder="Enter your new email"
+                />
+              </div>
+              <Button onClick={handleChangeEmail}>Change Email</Button>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="confirm-password">Confirm New Password</Label>
-            <Input
-              id="confirm-password"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm your new password"
-            />
+
+          <Separator />
+          
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="new-password">New Password</Label>
+              <Input
+                id="new-password"
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Enter your new password"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirm-password">Confirm New Password</Label>
+              <Input
+                id="confirm-password"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm your new password"
+              />
+            </div>
+             <Button onClick={handleChangePassword}>Change Password</Button>
           </div>
         </CardContent>
-        <CardFooter>
-          <Button onClick={handleChangePassword}>Change Password</Button>
-        </CardFooter>
       </Card>
 
       <Card>
