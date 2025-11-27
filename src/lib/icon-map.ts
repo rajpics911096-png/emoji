@@ -46,6 +46,8 @@ export const iconMap: { [key: string]: React.ComponentType<{ className?: string 
 
 export const iconNames = Object.keys(iconMap);
 
+export const socialIconNames = ['github', 'twitter', 'linkedin'];
+
 export const getIconName = (IconComponent: React.ComponentType<{ className?: string }>) => {
     for (const name in iconMap) {
       if (iconMap[name] === IconComponent) {

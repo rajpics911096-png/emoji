@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { downloadTimer, footerContent as initialFooterContent } from "@/lib/data";
+import { socialIconNames } from "@/lib/icon-map";
 import { useState } from "react";
 import type { FooterContent, LinkItem, SocialLink } from "@/lib/types";
 import { Trash2 } from "lucide-react";
@@ -153,7 +155,18 @@ export default function SettingsPage() {
                            <div className="grid grid-cols-2 gap-2 flex-1">
                              <div className="space-y-1">
                                 <Label htmlFor={`social-icon-${index}`} className="text-xs">Icon</Label>
-                                <Input id={`social-icon-${index}`} value={link.icon} onChange={(e) => handleFooterChange('social', index, 'icon', e.target.value)} placeholder="e.g. twitter, github" />
+                                <Select value={link.icon} onValueChange={(value) => handleFooterChange('social', index, 'icon', value)}>
+                                    <SelectTrigger id={`social-icon-${index}`}>
+                                        <SelectValue placeholder="Select an icon" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {socialIconNames.map(iconName => (
+                                            <SelectItem key={iconName} value={iconName} className="capitalize">
+                                                {iconName}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div className="space-y-1">
                                 <Label htmlFor={`social-href-${index}`} className="text-xs">URL</Label>
