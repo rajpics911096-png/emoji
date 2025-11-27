@@ -33,6 +33,7 @@ const DownloadButton = ({ file }: { file: EmojiFormatFile }) => {
       setIsCountingDown(false);
     }
     return () => clearInterval(intervalId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCountingDown, timer, file]);
   
   const handleDownload = () => {
@@ -108,8 +109,6 @@ export default function FileDownloadPage() {
     notFound();
   }
 
-  const category = categories.find(c => c.id === emoji.category);
-  
   const relatedFiles = useMemo(() => {
     return (Object.keys(emoji.formats) as (keyof typeof emoji.formats)[])
       .flatMap(fmt => 
@@ -131,57 +130,55 @@ export default function FileDownloadPage() {
                     </Link>
                  </Button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-                <div className="md:col-span-2">
-                    <div className="space-y-4">
-                        <FilePreview file={file} format={format} />
-                        <div className="text-center">
-                            <h1 className="text-3xl font-headline font-bold">{file.name}</h1>
-                            <p className="text-muted-foreground">Part of the {emoji.title} collection</p>
-                        </div>
-                        <DownloadButton file={file} />
+            
+            <div className="max-w-2xl mx-auto space-y-8">
+                <div className="space-y-4">
+                    <FilePreview file={file} format={format} />
+                    <div className="text-center">
+                        <h1 className="text-3xl font-headline font-bold">{file.name}</h1>
+                        <p className="text-muted-foreground">Part of the {emoji.title} collection</p>
                     </div>
+                    <DownloadButton file={file} />
                 </div>
-                 <aside className="space-y-8">
-                     {relatedFiles.length > 0 && (
-                        <Card>
-                          <CardHeader>
-                            <CardTitle>{t('relatedFilesTitle', {defaultValue: 'Related Files'})}</CardTitle>
-                          </CardHeader>
-                          <CardContent>
-                            <div className="grid grid-cols-3 gap-2">
-                                {relatedFiles.map(relatedFile => (
-                                    <Link key={relatedFile.url} href={`/${lang}/emoji/${id}/${relatedFile.format}/${encodeURIComponent(relatedFile.name)}`}>
-                                        <Card className="group aspect-square flex items-center justify-center p-1 hover:bg-muted/50 transition-colors">
-                                           {relatedFile.format === 'video' ? (
-                                                <Video className="w-6 h-6 text-muted-foreground" />
-                                            ) : (
-                                                <Image src={relatedFile.url} alt={relatedFile.name} width={40} height={40} objectFit="contain" />
-                                            )}
-                                        </Card>
-                                    </Link>
-                                ))}
-                            </div>
-                          </CardContent>
-                        </Card>
-                     )}
-                     {category && (
-                        <Card>
-                        <CardHeader>
-                            <CardTitle>{t('categoryTitle')}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <Link href={`/${lang}/emojis/${category.id}`} className="group flex items-center gap-4">
-                                <SvgIcon svg={category.icon} className="w-10 h-10 text-primary" />
-                                <div>
-                                    <p className="font-semibold text-lg group-hover:text-primary transition-colors">{t(`category_${category.id}`)}</p>
-                                    <p className="text-sm text-muted-foreground">{t('viewAllInCategory')}</p>
-                                </div>
-                            </Link>
-                        </CardContent>
-                        </Card>
-                    )}
-                </aside>
+                
+                {relatedFiles.length > 0 && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>{t('relatedFilesTitle')}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+                            {relatedFiles.map(relatedFile => (
+                                <Link key={relatedFile.url} href={`/${lang}/emoji/${id}/${relatedFile.format}/${encodeURIComponent(relatedFile.name)}`}>
+                                    <Card className="group aspect-square flex items-center justify-center p-1 hover:bg-muted/50 transition-colors">
+                                       {relatedFile.type?.startsWith('video') ? (
+                                            <Video className="w-6 h-6 text-muted-foreground" />
+                                        ) : (
+                                            <Image src={relatedFile.url} alt={relatedFile.name} width={40} height={40} objectFit="contain" />
+                                        )}
+                                    </Card>
+                                </Link>
+                            ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                )}
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{t('exploreCategories')}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                      {categories.map((cat) => (
+                        <Link key={cat.id} href={`/${lang}/emojis/${cat.id}`} className="group flex flex-col items-center gap-2 p-3 rounded-md hover:bg-muted/50 transition-colors">
+                          <SvgIcon svg={cat.icon} className="w-8 h-8 text-primary" />
+                          <p className="font-semibold text-sm text-center group-hover:text-primary transition-colors">{t(`category_${cat.id}`)}</p>
+                        </Link>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
             </div>
         </div>
       </main>
