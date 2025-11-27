@@ -167,8 +167,20 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
-        ads_settings_description: 'Manage your ad settings here.',
+        
+        // ADS Settings
+        ads_settings_description: 'Manage your ad placements and codes here.',
         ads_settings_placeholder: 'ADS settings form will be here.',
+        ads_settings_location_label: 'Ad Location',
+        ads_settings_location_placeholder: 'Select a location',
+        ads_settings_location_header: 'Header',
+        ads_settings_location_footer: 'Footer',
+        ads_settings_location_below_emoji: 'Below Emoji View',
+        ads_settings_location_sidebar: 'In Sidebar',
+        ads_settings_code_label: 'Ad Code',
+        ads_settings_code_placeholder: 'Paste your ad code (e.g., Google AdSense script) here.',
+        ads_settings_add_slot_button: 'Add Ad Slot',
+        ads_settings_saved_desc: 'Your ad settings have been saved.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -395,8 +407,21 @@ const translations = {
         settings_toast_reset_desc: 'Tus ajustes se han restablecido a los valores predeterminados.',
         settings_toast_sitemap_title: 'Sitemap Generado',
         settings_toast_sitemap_desc: 'El sitemap ha sido generado/actualizado.',
-        ads_settings_description: 'Gestiona tus ajustes de anuncios aquí.',
+        
+        // ADS Settings
+        ads_settings_description: 'Gestiona tus ubicaciones y códigos de anuncios aquí.',
         ads_settings_placeholder: 'El formulario de ajustes de ADS estará aquí.',
+        ads_settings_location_label: 'Ubicación del Anuncio',
+        ads_settings_location_placeholder: 'Selecciona una ubicación',
+        ads_settings_location_header: 'Encabezado',
+        ads_settings_location_footer: 'Pie de página',
+        ads_settings_location_below_emoji: 'Debajo de la Vista de Emoji',
+        ads_settings_location_sidebar: 'En la Barra Lateral',
+        ads_settings_code_label: 'Código del Anuncio',
+        ads_settings_code_placeholder: 'Pega tu código de anuncio (por ejemplo, script de Google AdSense) aquí.',
+        ads_settings_add_slot_button: 'Añadir Espacio Publicitario',
+        ads_settings_saved_desc: 'Tus ajustes de anuncios han sido guardados.',
+
 
         // Footer Settings page
         footer_settings_title: 'Ajustes del Pie de Página',
@@ -623,8 +648,21 @@ const translations = {
         settings_toast_reset_desc: 'आपकी सेटings डिफ़ॉल्ट पर रीसेट कर दी गई हैं।',
         settings_toast_sitemap_title: 'साइटमैप उत्पन्न हुआ',
         settings_toast_sitemap_desc: 'साइटमैप उत्पन्न/अपडेट किया गया है।',
-        ads_settings_description: 'अपनी विज्ञापन सेटिंग्स यहाँ प्रबंधित करें।',
+        
+        // ADS Settings
+        ads_settings_description: 'अपनी विज्ञापन प्लेसमेंट और कोड यहाँ प्रबंधित करें।',
         ads_settings_placeholder: 'ADS सेटिंग्स फ़ॉर्म यहाँ होगा।',
+        ads_settings_location_label: 'विज्ञापन स्थान',
+        ads_settings_location_placeholder: 'एक स्थान चुनें',
+        ads_settings_location_header: 'हेडर',
+        ads_settings_location_footer: 'फुटर',
+        ads_settings_location_below_emoji: 'इमोजी व्यू के नीचे',
+        ads_settings_location_sidebar: 'साइडबार में',
+        ads_settings_code_label: 'विज्ञापन कोड',
+        ads_settings_code_placeholder: 'अपना विज्ञापन कोड (जैसे, Google AdSense स्क्रिप्ट) यहाँ पेस्ट करें।',
+        ads_settings_add_slot_button: 'विज्ञापन स्लॉट जोड़ें',
+        ads_settings_saved_desc: 'आपकी विज्ञापन सेटिंग्स सहेज ली गई हैं।',
+
 
         // Footer Settings page
         footer_settings_title: 'फुटर सेटिंग्स',
@@ -851,8 +889,21 @@ const translations = {
         settings_toast_reset_desc: 'Vos paramètres ont été réinitialisés aux valeurs par défaut.',
         settings_toast_sitemap_title: 'Sitemap généré',
         settings_toast_sitemap_desc: 'Le sitemap a été généré/mis à jour.',
-        ads_settings_description: 'Gérez vos paramètres publicitaires ici.',
+        
+        // ADS Settings
+        ads_settings_description: 'Gérez vos emplacements et codes publicitaires ici.',
         ads_settings_placeholder: 'Le formulaire de paramètres ADS sera ici.',
+        ads_settings_location_label: 'Emplacement de l\'annonce',
+        ads_settings_location_placeholder: 'Sélectionnez un emplacement',
+        ads_settings_location_header: 'En-tête',
+        ads_settings_location_footer: 'Pied de page',
+        ads_settings_location_below_emoji: 'Sous la vue Emoji',
+        ads_settings_location_sidebar: 'Dans la barre latérale',
+        ads_settings_code_label: 'Code de l\'annonce',
+        ads_settings_code_placeholder: 'Collez votre code d\'annonce (par exemple, le script Google AdSense) ici.',
+        ads_settings_add_slot_button: 'Ajouter un emplacement publicitaire',
+        ads_settings_saved_desc: 'Vos paramètres publicitaires ont été enregistrés.',
+
 
         // Footer Settings page
         footer_settings_title: 'Paramètres du pied de page',
@@ -1079,8 +1130,21 @@ const translations = {
         settings_toast_reset_desc: '設定はデフォルトにリセットされました。',
         settings_toast_sitemap_title: 'サイトマップが生成されました',
         settings_toast_sitemap_desc: 'サイトマップが生成/更新されました。',
-        ads_settings_description: '広告設定をここで管理します。',
-        ads_settings_placeholder: 'ADS 設定フォームはここに表示されます。',
+        
+        // ADS Settings
+        ads_settings_description: '広告の配置とコードをここで管理します。',
+        ads_settings_placeholder: 'ADS設定フォームはここにあります。',
+        ads_settings_location_label: '広告の場所',
+        ads_settings_location_placeholder: '場所を選択',
+        ads_settings_location_header: 'ヘッダー',
+        ads_settings_location_footer: 'フッター',
+        ads_settings_location_below_emoji: '絵文字ビューの下',
+        ads_settings_location_sidebar: 'サイドバー内',
+        ads_settings_code_label: '広告コード',
+        ads_settings_code_placeholder: '広告コード（Google AdSenseスクリプトなど）をここに貼り付けます。',
+        ads_settings_add_slot_button: '広告スロットを追加',
+        ads_settings_saved_desc: '広告設定が保存されました。',
+
 
         // Footer Settings page
         footer_settings_title: 'フッター設定',
@@ -1307,8 +1371,20 @@ const translations = {
         settings_toast_reset_desc: 'Ihre Einstellungen wurden auf die Standardwerte zurückgesetzt.',
         settings_toast_sitemap_title: 'Sitemap generiert',
         settings_toast_sitemap_desc: 'Die Sitemap wurde generiert/aktualisiert.',
-        ads_settings_description: 'Verwalten Sie hier Ihre Anzeigeneinstellungen.',
+        
+        // ADS Settings
+        ads_settings_description: 'Verwalten Sie hier Ihre Anzeigenplatzierungen und -codes.',
         ads_settings_placeholder: 'Das ADS-Einstellungsformular wird hier sein.',
+        ads_settings_location_label: 'Anzeigenposition',
+        ads_settings_location_placeholder: 'Wählen Sie eine Position',
+        ads_settings_location_header: 'Kopfzeile',
+        ads_settings_location_footer: 'Fußzeile',
+        ads_settings_location_below_emoji: 'Unter der Emoji-Ansicht',
+        ads_settings_location_sidebar: 'In der Seitenleiste',
+        ads_settings_code_label: 'Anzeigencode',
+        ads_settings_code_placeholder: 'Fügen Sie hier Ihren Anzeigencode (z. B. Google AdSense-Skript) ein.',
+        ads_settings_add_slot_button: 'Anzeigensteckplatz hinzufügen',
+        ads_settings_saved_desc: 'Ihre Anzeigeneinstellungen wurden gespeichert.',
 
         // Footer Settings page
         footer_settings_title: 'Fußzeileneinstellungen',
@@ -1535,8 +1611,20 @@ const translations = {
         settings_toast_reset_desc: 'Suas configurações foram redefinidas para os padrões.',
         settings_toast_sitemap_title: 'Sitemap Gerado',
         settings_toast_sitemap_desc: 'O sitemap foi gerado/atualizado.',
-        ads_settings_description: 'Gerencie suas configurações de anúncios aqui.',
+        
+        // ADS Settings
+        ads_settings_description: 'Gerencie seus posicionamentos e códigos de anúncios aqui.',
         ads_settings_placeholder: 'O formulário de configurações de ADS estará aqui.',
+        ads_settings_location_label: 'Local do Anúncio',
+        ads_settings_location_placeholder: 'Selecione um local',
+        ads_settings_location_header: 'Cabeçalho',
+        ads_settings_location_footer: 'Rodapé',
+        ads_settings_location_below_emoji: 'Abaixo da Visualização do Emoji',
+        ads_settings_location_sidebar: 'Na Barra Lateral',
+        ads_settings_code_label: 'Código do Anúncio',
+        ads_settings_code_placeholder: 'Cole seu código de anúncio (por exemplo, script do Google AdSense) aqui.',
+        ads_settings_add_slot_button: 'Adicionar Espaço de Anúncio',
+        ads_settings_saved_desc: 'Suas configurações de anúncio foram salvas.',
 
         // Footer Settings page
         footer_settings_title: 'Configurações do Rodapé',
@@ -1763,8 +1851,20 @@ const translations = {
         settings_toast_reset_desc: 'Ваши настройки сброшены до значений по умолчанию.',
         settings_toast_sitemap_title: 'Sitemap создан',
         settings_toast_sitemap_desc: 'Sitemap был создан/обновлен.',
-        ads_settings_description: 'Управляйте настройками рекламы здесь.',
+        
+        // ADS Settings
+        ads_settings_description: 'Управляйте размещением и кодами объявлений здесь.',
         ads_settings_placeholder: 'Форма настроек ADS будет здесь.',
+        ads_settings_location_label: 'Местоположение объявления',
+        ads_settings_location_placeholder: 'Выберите местоположение',
+        ads_settings_location_header: 'Шапка',
+        ads_settings_location_footer: 'Подвал',
+        ads_settings_location_below_emoji: 'Под просмотром эмодзи',
+        ads_settings_location_sidebar: 'В боковой панели',
+        ads_settings_code_label: 'Код объявления',
+        ads_settings_code_placeholder: 'Вставьте сюда код вашего объявления (например, скрипт Google AdSense).',
+        ads_settings_add_slot_button: 'Добавить рекламный блок',
+        ads_settings_saved_desc: 'Ваши настройки рекламы были сохранены.',
 
         // Footer Settings page
         footer_settings_title: 'Настройки подвала',
@@ -1991,8 +2091,20 @@ const translations = {
         settings_toast_reset_desc: '您的设置已重置为默认值。',
         settings_toast_sitemap_title: '站点地图已生成',
         settings_toast_sitemap_desc: '站点地图已生成/更新。',
-        ads_settings_description: '在此处管理您的广告设置。',
+        
+        // ADS Settings
+        ads_settings_description: '在此处管理您的广告展示位置和代码。',
         ads_settings_placeholder: 'ADS 设置表单将在此处。',
+        ads_settings_location_label: '广告位置',
+        ads_settings_location_placeholder: '选择一个位置',
+        ads_settings_location_header: '页眉',
+        ads_settings_location_footer: '页脚',
+        ads_settings_location_below_emoji: '在表情符号视图下方',
+        ads_settings_location_sidebar: '在侧边栏中',
+        ads_settings_code_label: '广告代码',
+        ads_settings_code_placeholder: '在此处粘贴您的广告代码（例如，Google AdSense脚本）。',
+        ads_settings_add_slot_button: '添加广告位',
+        ads_settings_saved_desc: '您的广告设置已保存。',
 
         // Footer Settings page
         footer_settings_title: '页脚设置',
@@ -2219,8 +2331,20 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
-        ads_settings_description: 'Manage your ad settings here.',
+        
+        // ADS Settings
+        ads_settings_description: 'Manage your ad placements and codes here.',
         ads_settings_placeholder: 'ADS settings form will be here.',
+        ads_settings_location_label: 'Ad Location',
+        ads_settings_location_placeholder: 'Select a location',
+        ads_settings_location_header: 'Header',
+        ads_settings_location_footer: 'Footer',
+        ads_settings_location_below_emoji: 'Below Emoji View',
+        ads_settings_location_sidebar: 'In Sidebar',
+        ads_settings_code_label: 'Ad Code',
+        ads_settings_code_placeholder: 'Paste your ad code (e.g., Google AdSense script) here.',
+        ads_settings_add_slot_button: 'Add Ad Slot',
+        ads_settings_saved_desc: 'Your ad settings have been saved.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -2447,8 +2571,20 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
-        ads_settings_description: 'Manage your ad settings here.',
+        
+        // ADS Settings
+        ads_settings_description: 'Manage your ad placements and codes here.',
         ads_settings_placeholder: 'ADS settings form will be here.',
+        ads_settings_location_label: 'Ad Location',
+        ads_settings_location_placeholder: 'Select a location',
+        ads_settings_location_header: 'Header',
+        ads_settings_location_footer: 'Footer',
+        ads_settings_location_below_emoji: 'Below Emoji View',
+        ads_settings_location_sidebar: 'In Sidebar',
+        ads_settings_code_label: 'Ad Code',
+        ads_settings_code_placeholder: 'Paste your ad code (e.g., Google AdSense script) here.',
+        ads_settings_add_slot_button: 'Add Ad Slot',
+        ads_settings_saved_desc: 'Your ad settings have been saved.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -2675,8 +2811,20 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
-        ads_settings_description: 'Manage your ad settings here.',
+        
+        // ADS Settings
+        ads_settings_description: 'Manage your ad placements and codes here.',
         ads_settings_placeholder: 'ADS settings form will be here.',
+        ads_settings_location_label: 'Ad Location',
+        ads_settings_location_placeholder: 'Select a location',
+        ads_settings_location_header: 'Header',
+        ads_settings_location_footer: 'Footer',
+        ads_settings_location_below_emoji: 'Below Emoji View',
+        ads_settings_location_sidebar: 'In Sidebar',
+        ads_settings_code_label: 'Ad Code',
+        ads_settings_code_placeholder: 'Paste your ad code (e.g., Google AdSense script) here.',
+        ads_settings_add_slot_button: 'Add Ad Slot',
+        ads_settings_saved_desc: 'Your ad settings have been saved.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -2903,8 +3051,20 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
-        ads_settings_description: 'Manage your ad settings here.',
+        
+        // ADS Settings
+        ads_settings_description: 'Manage your ad placements and codes here.',
         ads_settings_placeholder: 'ADS settings form will be here.',
+        ads_settings_location_label: 'Ad Location',
+        ads_settings_location_placeholder: 'Select a location',
+        ads_settings_location_header: 'Header',
+        ads_settings_location_footer: 'Footer',
+        ads_settings_location_below_emoji: 'Below Emoji View',
+        ads_settings_location_sidebar: 'In Sidebar',
+        ads_settings_code_label: 'Ad Code',
+        ads_settings_code_placeholder: 'Paste your ad code (e.g., Google AdSense script) here.',
+        ads_settings_add_slot_button: 'Add Ad Slot',
+        ads_settings_saved_desc: 'Your ad settings have been saved.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -3131,8 +3291,20 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
-        ads_settings_description: 'Manage your ad settings here.',
+        
+        // ADS Settings
+        ads_settings_description: 'Manage your ad placements and codes here.',
         ads_settings_placeholder: 'ADS settings form will be here.',
+        ads_settings_location_label: 'Ad Location',
+        ads_settings_location_placeholder: 'Select a location',
+        ads_settings_location_header: 'Header',
+        ads_settings_location_footer: 'Footer',
+        ads_settings_location_below_emoji: 'Below Emoji View',
+        ads_settings_location_sidebar: 'In Sidebar',
+        ads_settings_code_label: 'Ad Code',
+        ads_settings_code_placeholder: 'Paste your ad code (e.g., Google AdSense script) here.',
+        ads_settings_add_slot_button: 'Add Ad Slot',
+        ads_settings_saved_desc: 'Your ad settings have been saved.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -3359,8 +3531,20 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
-        ads_settings_description: 'Manage your ad settings here.',
+        
+        // ADS Settings
+        ads_settings_description: 'Manage your ad placements and codes here.',
         ads_settings_placeholder: 'ADS settings form will be here.',
+        ads_settings_location_label: 'Ad Location',
+        ads_settings_location_placeholder: 'Select a location',
+        ads_settings_location_header: 'Header',
+        ads_settings_location_footer: 'Footer',
+        ads_settings_location_below_emoji: 'Below Emoji View',
+        ads_settings_location_sidebar: 'In Sidebar',
+        ads_settings_code_label: 'Ad Code',
+        ads_settings_code_placeholder: 'Paste your ad code (e.g., Google AdSense script) here.',
+        ads_settings_add_slot_button: 'Add Ad Slot',
+        ads_settings_saved_desc: 'Your ad settings have been saved.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -3587,8 +3771,20 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
-        ads_settings_description: 'Manage your ad settings here.',
+        
+        // ADS Settings
+        ads_settings_description: 'Manage your ad placements and codes here.',
         ads_settings_placeholder: 'ADS settings form will be here.',
+        ads_settings_location_label: 'Ad Location',
+        ads_settings_location_placeholder: 'Select a location',
+        ads_settings_location_header: 'Header',
+        ads_settings_location_footer: 'Footer',
+        ads_settings_location_below_emoji: 'Below Emoji View',
+        ads_settings_location_sidebar: 'In Sidebar',
+        ads_settings_code_label: 'Ad Code',
+        ads_settings_code_placeholder: 'Paste your ad code (e.g., Google AdSense script) here.',
+        ads_settings_add_slot_button: 'Add Ad Slot',
+        ads_settings_saved_desc: 'Your ad settings have been saved.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -3815,8 +4011,20 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
-        ads_settings_description: 'Manage your ad settings here.',
+        
+        // ADS Settings
+        ads_settings_description: 'Manage your ad placements and codes here.',
         ads_settings_placeholder: 'ADS settings form will be here.',
+        ads_settings_location_label: 'Ad Location',
+        ads_settings_location_placeholder: 'Select a location',
+        ads_settings_location_header: 'Header',
+        ads_settings_location_footer: 'Footer',
+        ads_settings_location_below_emoji: 'Below Emoji View',
+        ads_settings_location_sidebar: 'In Sidebar',
+        ads_settings_code_label: 'Ad Code',
+        ads_settings_code_placeholder: 'Paste your ad code (e.g., Google AdSense script) here.',
+        ads_settings_add_slot_button: 'Add Ad Slot',
+        ads_settings_saved_desc: 'Your ad settings have been saved.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -4043,8 +4251,20 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
-        ads_settings_description: 'Manage your ad settings here.',
+        
+        // ADS Settings
+        ads_settings_description: 'Manage your ad placements and codes here.',
         ads_settings_placeholder: 'ADS settings form will be here.',
+        ads_settings_location_label: 'Ad Location',
+        ads_settings_location_placeholder: 'Select a location',
+        ads_settings_location_header: 'Header',
+        ads_settings_location_footer: 'Footer',
+        ads_settings_location_below_emoji: 'Below Emoji View',
+        ads_settings_location_sidebar: 'In Sidebar',
+        ads_settings_code_label: 'Ad Code',
+        ads_settings_code_placeholder: 'Paste your ad code (e.g., Google AdSense script) here.',
+        ads_settings_add_slot_button: 'Add Ad Slot',
+        ads_settings_saved_desc: 'Your ad settings have been saved.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -4271,8 +4491,20 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
-        ads_settings_description: 'Manage your ad settings here.',
+        
+        // ADS Settings
+        ads_settings_description: 'Manage your ad placements and codes here.',
         ads_settings_placeholder: 'ADS settings form will be here.',
+        ads_settings_location_label: 'Ad Location',
+        ads_settings_location_placeholder: 'Select a location',
+        ads_settings_location_header: 'Header',
+        ads_settings_location_footer: 'Footer',
+        ads_settings_location_below_emoji: 'Below Emoji View',
+        ads_settings_location_sidebar: 'In Sidebar',
+        ads_settings_code_label: 'Ad Code',
+        ads_settings_code_placeholder: 'Paste your ad code (e.g., Google AdSense script) here.',
+        ads_settings_add_slot_button: 'Add Ad Slot',
+        ads_settings_saved_desc: 'Your ad settings have been saved.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -4499,8 +4731,20 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
-        ads_settings_description: 'Manage your ad settings here.',
+        
+        // ADS Settings
+        ads_settings_description: 'Manage your ad placements and codes here.',
         ads_settings_placeholder: 'ADS settings form will be here.',
+        ads_settings_location_label: 'Ad Location',
+        ads_settings_location_placeholder: 'Select a location',
+        ads_settings_location_header: 'Header',
+        ads_settings_location_footer: 'Footer',
+        ads_settings_location_below_emoji: 'Below Emoji View',
+        ads_settings_location_sidebar: 'In Sidebar',
+        ads_settings_code_label: 'Ad Code',
+        ads_settings_code_placeholder: 'Paste your ad code (e.g., Google AdSense script) here.',
+        ads_settings_add_slot_button: 'Add Ad Slot',
+        ads_settings_saved_desc: 'Your ad settings have been saved.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -4567,3 +4811,4 @@ export type Translations = typeof translations;
 export default translations;
 
     
+
