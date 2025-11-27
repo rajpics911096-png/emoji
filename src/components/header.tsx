@@ -9,11 +9,12 @@ import {
 import { Button } from '@/components/ui/button';
 import {
   Menu,
-  Shield,
 } from 'lucide-react';
 import { SvgIcon } from './svg-icon';
 import { categories } from '@/lib/data';
 import { useSiteSettings } from '@/context/site-settings-context';
+import { ThemeToggle } from './theme-toggle';
+import { LanguageSwitcher } from './language-switcher';
 
 export default function Header() {
   const { settings } = useSiteSettings();
@@ -72,13 +73,14 @@ export default function Header() {
           </SheetContent>
         </Sheet>
 
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <Link href="/admin">
-            <Button variant="ghost" size="sm">
-              <Shield className="mr-2 h-4 w-4" />
-              Admin Panel
-            </Button>
-          </Link>
+        <div className="flex flex-1 items-center justify-end space-x-2">
+          <LanguageSwitcher />
+          <ThemeToggle />
+          <Button variant="outline" size="sm" asChild>
+            <Link href="/admin">
+              Admin
+            </Link>
+          </Button>
         </div>
       </div>
     </header>
