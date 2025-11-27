@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
-import { Smile, FilePlus, Download, ArrowRight, Tags } from "lucide-react";
+import { Smile, FilePlus, Download, ArrowRight, Tags, PlusCircle } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { emojis, pages, categories } from '@/lib/data';
 import { useState, useEffect } from 'react';
