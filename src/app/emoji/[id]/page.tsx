@@ -31,20 +31,7 @@ export default function EmojiPage({ params }: { params: { id: string } }) {
                 <EmojiView emoji={emoji} />
             </div>
             <aside>
-                <div className="bg-card border rounded-lg p-6">
-                    <h3 className="font-headline text-2xl font-semibold mb-4 text-primary">Details</h3>
-                    <dl className="space-y-3">
-                        <div>
-                            <dt className="font-semibold text-sm text-muted-foreground">Title</dt>
-                            <dd className="text-lg">{emoji.title}</dd>
-                        </div>
-                        <div>
-                            <dt className="font-semibold text-sm text-muted-foreground">Category</dt>
-                            <dd><Link href={`/emojis/${emoji.category}`} className="text-lg text-primary hover:underline">{emoji.category.replace(/-/g, ' ')}</Link></dd>
-                        </div>
-                    </dl>
-                </div>
-                <div className="mt-8">
+                <div>
                     <h3 className="font-headline text-2xl font-semibold mb-2 text-primary">Description</h3>
                     <p className="text-lg text-foreground/80 leading-relaxed">{emoji.description}</p>
                 </div>
