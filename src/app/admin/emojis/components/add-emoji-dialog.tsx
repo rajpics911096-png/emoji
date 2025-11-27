@@ -89,7 +89,7 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl">
+      <DialogContent className="sm:max-w-4xl">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>Add New Emoji</DialogTitle>
@@ -98,29 +98,29 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto px-1">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="emoji" className="text-right">
+            <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+              <Label htmlFor="emoji" className="text-left md:text-right">
                 Emoji
               </Label>
-              <div className="col-span-3">
+              <div className="md:col-span-3">
                 <Input id="emoji" {...register("emoji")} className="w-20 text-2xl text-center p-0 h-12" />
                 {errors.emoji && <p className="text-destructive text-sm mt-1">{errors.emoji.message}</p>}
               </div>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="title" className="text-right">
+            <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+              <Label htmlFor="title" className="text-left md:text-right">
                 Title
               </Label>
-              <div className="col-span-3">
+              <div className="md:col-span-3">
                 <Input id="title" {...register("title")} />
                 {errors.title && <p className="text-destructive text-sm mt-1">{errors.title.message}</p>}
               </div>
             </div>
-            <div className="grid grid-cols-4 items-start gap-4">
-              <Label htmlFor="description" className="text-right pt-2">
+            <div className="grid grid-cols-1 md:grid-cols-4 items-start gap-4">
+              <Label htmlFor="description" className="text-left md:text-right pt-2">
                 Description
               </Label>
-              <div className="col-span-3">
+              <div className="md:col-span-3">
                 <Controller
                     name="description"
                     control={control}
@@ -134,11 +134,11 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
                 {errors.description && <p className="text-destructive text-sm mt-1">{errors.description.message}</p>}
               </div>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="category" className="text-right">
+            <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+              <Label htmlFor="category" className="text-left md:text-right">
                 Category
               </Label>
-              <div className="col-span-3">
+              <div className="md:col-span-3">
                 <Controller
                     name="category"
                     control={control}
@@ -160,29 +160,29 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
                 {errors.category && <p className="text-destructive text-sm mt-1">{errors.category.message}</p>}
               </div>
             </div>
-            <div className="col-span-4 space-y-4">
+            <div className="col-span-1 md:col-span-4 space-y-4">
                 <h3 className="font-medium text-center text-sm text-muted-foreground pt-2">Upload Files</h3>
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="png" className="text-right">PNG</Label>
-                    <div className="col-span-3">
+                <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+                    <Label htmlFor="png" className="text-left md:text-right">PNG</Label>
+                    <div className="md:col-span-3">
                         <Input id="png" type="file" {...register("png")} accept="image/png" multiple />
                     </div>
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="gif" className="text-right">GIF</Label>
-                    <div className="col-span-3">
+                <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+                    <Label htmlFor="gif" className="text-left md:text-right">GIF</Label>
+                    <div className="md:col-span-3">
                         <Input id="gif" type="file" {...register("gif")} accept="image/gif" multiple />
                     </div>
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="image" className="text-right">Image</Label>
-                    <div className="col-span-3">
+                <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+                    <Label htmlFor="image" className="text-left md:text-right">Image</Label>
+                    <div className="md:col-span-3">
                         <Input id="image" type="file" {...register("image")} accept="image/jpeg,image/webp" multiple />
                     </div>
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="video" className="text-right">Video</Label>
-                    <div className="col-span-3">
+                <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+                    <Label htmlFor="video" className="text-left md:text-right">Video</Label>
+                    <div className="md:col-span-3">
                         <Input id="video" type="file" {...register("video")} accept="video/mp4,video/webm" multiple />
                     </div>
                 </div>

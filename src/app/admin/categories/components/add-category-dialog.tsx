@@ -56,20 +56,20 @@ export function AddCategoryDialog({ isOpen, onOpenChange, onAddCategory }: AddCa
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto px-1">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
+            <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-left md:text-right">
                 Name
               </Label>
-              <div className="col-span-3">
+              <div className="md:col-span-3">
                 <Input id="name" {...register("name")} />
                 {errors.name && <p className="text-destructive text-sm mt-1">{errors.name.message}</p>}
               </div>
             </div>
-            <div className="grid grid-cols-4 items-start gap-4">
-              <Label htmlFor="icon" className="text-right pt-2">
+            <div className="grid grid-cols-1 md:grid-cols-4 items-start gap-4">
+              <Label htmlFor="icon" className="text-left md:text-right pt-2">
                 Icon (SVG)
               </Label>
-              <div className="col-span-3">
+              <div className="md:col-span-3">
                 <Textarea id="icon" {...register("icon")} placeholder="Paste SVG code here" rows={4} />
                 {errors.icon && <p className="text-destructive text-sm mt-1">{errors.icon.message}</p>}
               </div>

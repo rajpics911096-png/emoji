@@ -76,29 +76,29 @@ export function AddPageDialog({ isOpen, onOpenChange, onAddPage }: AddPageDialog
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto px-1">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="title" className="text-right">
+            <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+              <Label htmlFor="title" className="text-left md:text-right">
                 Title
               </Label>
-              <div className="col-span-3">
+              <div className="md:col-span-3">
                 <Input id="title" {...register("title")} />
                 {errors.title && <p className="text-destructive text-sm mt-1">{errors.title.message}</p>}
               </div>
             </div>
-             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="slug" className="text-right">
+             <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+              <Label htmlFor="slug" className="text-left md:text-right">
                 Slug
               </Label>
-              <div className="col-span-3">
+              <div className="md:col-span-3">
                 <Input id="slug" {...register("slug")} />
                 {errors.slug && <p className="text-destructive text-sm mt-1">{errors.slug.message}</p>}
               </div>
             </div>
-            <div className="grid grid-cols-4 items-start gap-4">
-              <Label htmlFor="content" className="text-right pt-2">
+            <div className="grid grid-cols-1 md:grid-cols-4 items-start gap-4">
+              <Label htmlFor="content" className="text-left md:text-right pt-2">
                 Content
               </Label>
-              <div className="col-span-3">
+              <div className="md:col-span-3">
                 <Controller
                     name="content"
                     control={control}
@@ -112,11 +112,11 @@ export function AddPageDialog({ isOpen, onOpenChange, onAddPage }: AddPageDialog
                 {errors.content && <p className="text-destructive text-sm mt-1">{errors.content.message}</p>}
               </div>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="status" className="text-right">
+            <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+              <Label htmlFor="status" className="text-left md:text-right">
                 Status
               </Label>
-              <div className="col-span-3">
+              <div className="md:col-span-3">
                 <Controller
                     name="status"
                     control={control}
