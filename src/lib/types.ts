@@ -1,0 +1,26 @@
+export type EmojiFormatFile = {
+  url: string;
+  size: string;
+  name: string;
+};
+
+export type Emoji = {
+  id: string;
+  emoji: string;
+  title: string;
+  description: string;
+  category: string;
+  formats: {
+    png: EmojiFormatFile[];
+    gif: EmojiFormatFile[];
+    image: EmojiFormatFile[];
+    video: EmojiFormatFile[];
+  };
+  related: string[];
+};
+
+export type EmojiCategory = {
+  id: string;
+  name: string;
+  icon: React.ComponentType<{ className?: string }>;
+};
