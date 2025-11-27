@@ -21,12 +21,34 @@ export default function AdsTxtSettingsPage() {
   const { toast } = useToast();
   const { settings, setSettings } = useSiteSettings();
 
-  const handleSave = () => {
-    setSettings(settings);
-    toast({
-      title: t('settings_toast_saved_title'),
-      description: 'Your ads.txt file has been updated.',
-    });
+  const handleSave = async () => {
+    try {
+      // This is a workaround for a prototype environment.
+      // In a real app, this would be a server action that writes to a secure location.
+      // We are creating a "server action" on the client to write the file.
+      const response = await fetch('/api/update-ads-txt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: settings.adsTxtContent || '' }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save ads.txt');
+      }
+
+      setSettings(settings); // This updates localStorage
+      toast({
+        title: t('settings_toast_saved_title'),
+        description: 'Your ads.txt file has been updated.',
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Could not save ads.txt file.',
+      });
+    }
   };
 
   const handleAdsTxtChange = (content: string) => {
