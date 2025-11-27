@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -171,9 +172,9 @@ export default function MediaPage() {
 
             {mediaFiles.length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                    {mediaFiles.map((file) => (
+                    {mediaFiles.map((file, index) => (
                         <Card 
-                            key={file.url} 
+                            key={`${file.emojiId}-${file.format}-${file.name}-${index}`}
                             className="group relative cursor-pointer"
                             onClick={() => handleSelectFile(file.url)}
                             data-state={selectedFiles.includes(file.url) ? 'selected' : 'unselected'}
