@@ -14,6 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { useTranslations } from '@/context/translations-context';
 import { Label } from '@/components/ui/label';
+import Link from 'next/link';
 
 export default function AdsTxtSettingsPage() {
   const { t } = useTranslations();
@@ -36,7 +37,14 @@ export default function AdsTxtSettingsPage() {
     <div className="mx-auto max-w-4xl flex-1 space-y-4 md:space-y-8">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-headline font-bold">Ads.txt</h1>
-        <Button onClick={handleSave}>{t('settings_save_button')}</Button>
+        <div className="flex gap-2">
+          <Button variant="outline" asChild>
+            <Link href="/ads.txt" target="_blank">
+              Preview
+            </Link>
+          </Button>
+          <Button onClick={handleSave}>{t('settings_save_button')}</Button>
+        </div>
       </div>
 
       <Card>
