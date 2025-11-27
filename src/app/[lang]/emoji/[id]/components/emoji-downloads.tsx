@@ -120,9 +120,6 @@ export function EmojiDownloads({ emoji }: { emoji: Emoji }) {
 
   return (
     <section className="mt-16 md:mt-24">
-      <h2 className="text-3xl font-headline font-bold text-center mb-10">
-        {t('downloadsTitle')}
-      </h2>
       <Tabs defaultValue={tabs[0].value}>
         <div className="flex justify-center">
             <ScrollArea className="w-auto whitespace-nowrap">
