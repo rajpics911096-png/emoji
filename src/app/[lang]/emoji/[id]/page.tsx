@@ -11,11 +11,11 @@ import { EmojiView } from './components/emoji-view';
 import { SvgIcon } from '@/components/svg-icon';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EmojiDownloads } from './components/emoji-downloads';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, use } from 'react';
 import { useTranslations } from '@/context/translations-context';
 
 export default function EmojiPage() {
-  const params = useParams<{ id: string; lang: string }>();
+  const params = use(Promise.resolve(useParams<{ id: string; lang: string }>()));
   const { id, lang } = params;
   const emoji = getEmojiById(id);
   const effectRan = useRef(false);
@@ -48,8 +48,9 @@ export default function EmojiPage() {
       <main className="flex-1 py-12 md:py-16">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 md:gap-12">
-            <div className="md:col-span-2">
+            <div className="md:col-span-2 space-y-8">
               <EmojiView emoji={emoji} />
+              <EmojiDownloads emoji={emoji} lang={lang} />
             </div>
             <aside className="space-y-8">
               <div className="space-y-4">
@@ -90,8 +91,6 @@ export default function EmojiPage() {
               )}
             </aside>
           </div>
-
-          <EmojiDownloads emoji={emoji} lang={lang} />
 
           {related.length > 0 && (
             <section className="mt-16 md:mt-24">
