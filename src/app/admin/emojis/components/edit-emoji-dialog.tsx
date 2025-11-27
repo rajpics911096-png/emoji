@@ -18,8 +18,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { categories } from "@/lib/data";
 import type { Emoji, EmojiFormatFile } from "@/lib/types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
+import Image from "next/image";
+import { FileType } from 'lucide-react';
+
 
 const fileSchema = z.custom<FileList>().optional();
 
@@ -43,7 +46,9 @@ interface EditEmojiDialogProps {
   emoji: Emoji;
 }
 
-export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: EditEmojiDialogProps) {
+export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji: initialEmoji }: EditEmojiDialogProps) {
+  const [emoji, setEmoji] = useState<Emoji>(initialEmoji);
+
   const {
     register,
     handleSubmit,
@@ -59,23 +64,25 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
       category: emoji.category,
     },
   });
-  
+
   useEffect(() => {
-    if (emoji) {
-      reset({
-        emoji: emoji.emoji,
-        title: emoji.title,
-        description: emoji.description,
-        category: emoji.category,
-      });
-    }
-  }, [emoji, reset]);
+    setEmoji(initialEmoji);
+    reset({
+      emoji: initialEmoji.emoji,
+      title: initialEmoji.title,
+      description: initialEmoji.description,
+      category: initialEmoji.category,
+    });
+  }, [initialEmoji, reset]);
 
   const onSubmit = (data: EmojiFormData) => {
     const updatedFormats = { ...emoji.formats };
     
     const processFiles = (files: FileList | undefined, format: keyof typeof updatedFormats) => {
-        if (files) {
+        if (files && files.length > 0) {
+            if(!updatedFormats[format]) {
+              updatedFormats[format] = [];
+            }
             Array.from(files).forEach(file => {
                 updatedFormats[format].push({ name: file.name, size: `${(file.size / 1024).toFixed(2)} KB`, url: URL.createObjectURL(file) });
             });
@@ -88,19 +95,38 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
     processFiles(data.video, 'video');
     
     onEditEmoji({ ...emoji, ...data, formats: updatedFormats });
+    onOpenChange(false);
   };
   
   const handleRemoveFile = (format: keyof Emoji['formats'], index: number) => {
     const updatedEmoji = { ...emoji };
+    const fileToRemove = updatedEmoji.formats[format][index];
+    if (fileToRemove.url.startsWith('blob:')) {
+      URL.revokeObjectURL(fileToRemove.url);
+    }
     updatedEmoji.formats[format].splice(index, 1);
-    onEditEmoji(updatedEmoji);
+    setEmoji(updatedEmoji);
   }
 
   const dialogCategories = categories.filter(c => c.id !== 'all');
+  
+  const FilePreview = ({ file, format }: { file: EmojiFormatFile, format: string }) => {
+    const formatType = format.split('/')[0];
+    const isImage = formatType === 'png' || formatType === 'gif' || formatType === 'image' || file.url.match(/\.(jpeg|jpg|gif|png|webp)$/i);
+    const isVideo = formatType === 'video' || file.url.match(/\.(mp4|webm)$/i);
+
+    if (isImage) {
+        return <Image src={file.url} alt={file.name} width={40} height={40} className="w-10 h-10 object-contain bg-secondary/50 rounded-md" />;
+    }
+    if (isVideo) {
+        return <video src={file.url} className="w-10 h-10 bg-secondary/50 rounded-md" />;
+    }
+    return <div className="w-10 h-10 flex items-center justify-center bg-secondary/50 rounded-md"><FileType className="w-6 h-6 text-muted-foreground" /></div>;
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="max-w-md">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>Edit Emoji</DialogTitle>
@@ -193,13 +219,16 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
             <div className="col-span-4 space-y-2 pt-4">
               <h3 className="font-medium text-center text-sm text-muted-foreground">Uploaded Files</h3>
               {Object.entries(emoji.formats).map(([format, files]) => (
-                files.length > 0 && (
+                files && files.length > 0 && (
                   <div key={format}>
                     <h4 className="font-semibold text-xs uppercase text-muted-foreground tracking-wider mb-1 capitalize">{format}</h4>
                     <div className="space-y-2">
                     {files.map((file, index) => (
-                      <div key={`${format}-${index}`} className="flex items-center justify-between p-2 bg-secondary/50 rounded-md text-sm">
-                        <span className="truncate">{file.name}</span>
+                      <div key={`${format}-${index}-${file.name}`} className="flex items-center justify-between p-2 bg-secondary/50 rounded-md text-sm">
+                        <div className="flex items-center gap-2 truncate">
+                           <FilePreview file={file} format={format} />
+                           <span className="truncate">{file.name}</span>
+                        </div>
                         <Button type="button" variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleRemoveFile(format as keyof Emoji['formats'], index)}>
                             <X className="h-4 w-4" />
                         </Button>
@@ -209,7 +238,7 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
                   </div>
                 )
               ))}
-              {Object.values(emoji.formats).every(f => f.length === 0) && <p className="text-sm text-center text-muted-foreground">No files uploaded yet.</p>}
+              {Object.values(emoji.formats).every(f => !f || f.length === 0) && <p className="text-sm text-center text-muted-foreground">No files uploaded yet.</p>}
             </div>
 
           </div>

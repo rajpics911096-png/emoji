@@ -6,12 +6,9 @@ import type { Emoji, EmojiFormatFile } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
-import { Copy, Check, Download, FileType, Grid } from 'lucide-react';
+import { Copy, Check, Download, FileType, Grid, Image as ImageIcon, Video, Film } from 'lucide-react';
 import { downloadTimer } from '@/lib/data';
 import Image from 'next/image';
-import { SvgIcon } from '@/components/svg-icon';
-import { iconMap } from '@/lib/icon-map';
-
 
 interface EmojiViewProps {
   emoji: Emoji;
@@ -35,11 +32,11 @@ export function EmojiView({ emoji }: EmojiViewProps) {
   };
   
   useEffect(() => {
+    let timerId: NodeJS.Timeout | null = null;
     if (downloading && downloading.timer > 0) {
-      const timeoutId = setTimeout(() => {
+      timerId = setTimeout(() => {
         setDownloading(d => d ? { ...d, timer: d.timer - 1 } : null);
       }, 1000);
-      return () => clearTimeout(timeoutId);
     } else if (downloading && downloading.timer === 0 && currentFile) {
       const link = document.createElement('a');
       link.href = downloading.url;
@@ -50,32 +47,38 @@ export function EmojiView({ emoji }: EmojiViewProps) {
       setDownloading(null);
       setCurrentFile(null);
     }
+    
+    return () => {
+      if (timerId) clearTimeout(timerId);
+    };
   }, [downloading, currentFile]);
 
-  const allFiles = Object.entries(emoji.formats).flatMap(([format, files]) => files.map(file => ({ ...file, format })));
+  const allFiles = Object.entries(emoji.formats).flatMap(([format, files]) => 
+    files ? files.map(file => ({ ...file, format })) : []
+  );
+
   const formatTabs = Object.entries(emoji.formats)
-    .filter(([, files]) => files.length > 0)
+    .filter(([, files]) => files && files.length > 0)
     .map(([format]) => format);
   
   const tabs = allFiles.length > 0 ? ['all', ...formatTabs] : [];
 
   const formatIcons: { [key: string]: React.ReactNode } = {
     all: <Grid className="mr-2 h-4 w-4" />,
-    png: <SvgIcon svg='<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>' className="mr-2 h-4 w-4" />,
-    gif: <SvgIcon svg='<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-film"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h4"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M21 7.5h-4"/><path d="M21 12h-4"/><path d="M21 16.5h-4"/></svg>' className="mr-2 h-4 w-4" />,
+    png: <ImageIcon className="mr-2 h-4 w-4" />,
+    gif: <Film className="mr-2 h-4 w-4" />,
     image: <FileType className="mr-2 h-4 w-4" />,
-    video: <SvgIcon svg='<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-video"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg>' className="mr-2 h-4 w-4" />,
+    video: <Video className="mr-2 h-4 w-4" />,
   };
   
-  const FilePreview = ({ file, format }: { file: EmojiFormatFile, format: string }) => {
-    const formatType = format.split('/')[0];
-    const isImage = formatType === 'png' || formatType === 'gif' || formatType === 'image';
-    const isVideo = formatType === 'video';
+  const FilePreview = ({ file }: { file: EmojiFormatFile }) => {
+    const isImage = file.url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i) || file.url.startsWith('data:image');
+    const isVideo = file.url.match(/\.(mp4|webm)$/i) || file.url.startsWith('data:video');
 
-    if (isImage || file.url.match(/\.(jpeg|jpg|gif|png|webp)$/)) {
-        return <Image src={file.url} alt={file.name} width={128} height={128} className="w-32 h-32 object-contain bg-secondary/50 rounded-md" />;
+    if (isImage) {
+        return <Image src={file.url} alt={file.name} width={128} height={128} className="w-32 h-32 object-contain bg-secondary/50 rounded-md" unoptimized />;
     }
-    if (isVideo || file.url.match(/\.(mp4|webm)$/)) {
+    if (isVideo) {
         return <video src={file.url} controls className="w-32 h-32 bg-secondary/50 rounded-md" />;
     }
     return <div className="w-32 h-32 flex items-center justify-center bg-secondary/50 rounded-md"><FileType className="w-12 h-12 text-muted-foreground" /></div>;
@@ -84,7 +87,7 @@ export function EmojiView({ emoji }: EmojiViewProps) {
   const FileCard = ({ file, format }: { file: EmojiFormatFile, format: string }) => (
     <div key={file.url} className="flex flex-col sm:flex-row items-center justify-between p-3 bg-secondary/50 rounded-md gap-4">
       <div className="flex items-center gap-4 w-full sm:w-auto">
-        <FilePreview file={file} format={format} />
+        <FilePreview file={file} />
         <div className="truncate">
           <p className="font-semibold truncate">{file.name}</p>
           <p className="text-sm text-muted-foreground">{file.size}</p>
@@ -136,7 +139,7 @@ export function EmojiView({ emoji }: EmojiViewProps) {
             <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
               {tabs.map((tab) => (
                 <TabsTrigger key={tab} value={tab} className="capitalize flex-1">
-                    {formatIcons[tab]} {tab}
+                    {formatIcons[tab] || <FileType className="mr-2 h-4 w-4" />} {tab}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -150,7 +153,7 @@ export function EmojiView({ emoji }: EmojiViewProps) {
                 </Card>
             </TabsContent>
             {Object.entries(emoji.formats).map(([format, files]) =>
-              files.length > 0 ? (
+              files && files.length > 0 ? (
                 <TabsContent key={format} value={format}>
                   <Card>
                     <CardContent className="p-4 sm:p-6 space-y-4">
