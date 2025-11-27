@@ -17,6 +17,7 @@ export type Emoji = {
     video: EmojiFormatFile[];
   };
   related: string[];
+  views: number;
 };
 
 export type EmojiCategory = {

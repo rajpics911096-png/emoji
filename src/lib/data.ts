@@ -33,6 +33,7 @@ export const emojis: Emoji[] = [
       video: [],
     },
     related: ['rolling-on-the-floor-laughing', 'winking-face'],
+    views: 1345,
   },
   {
     id: 'rolling-on-the-floor-laughing',
@@ -48,6 +49,7 @@ export const emojis: Emoji[] = [
       video: [],
     },
     related: ['grinning-face', 'winking-face'],
+    views: 2890,
   },
   {
     id: 'winking-face',
@@ -66,6 +68,7 @@ export const emojis: Emoji[] = [
       video: [],
     },
     related: ['grinning-face', 'rolling-on-the-floor-laughing'],
+    views: 876,
   },
   {
     id: 'cat-face',
@@ -81,6 +84,7 @@ export const emojis: Emoji[] = [
       video: [],
     },
     related: ['dog-face', 'lion-face'],
+    views: 1102,
   },
   {
     id: 'dog-face',
@@ -96,6 +100,7 @@ export const emojis: Emoji[] = [
       video: [],
     },
     related: ['cat-face', 'lion-face'],
+    views: 954,
   },
   {
     id: 'lion-face',
@@ -110,6 +115,7 @@ export const emojis: Emoji[] = [
       video: [{ name: 'lion.mp4', size: '4.5 MB', url: '/placeholder.mp4' }],
     },
     related: ['cat-face', 'dog-face'],
+    views: 732,
   },
   {
     id: 'pizza',
@@ -124,6 +130,7 @@ export const emojis: Emoji[] = [
       video: [],
     },
     related: ['hamburger', 'french-fries'],
+    views: 3120,
   },
   {
     id: 'hamburger',
@@ -138,6 +145,7 @@ export const emojis: Emoji[] = [
       video: [],
     },
     related: ['pizza', 'french-fries'],
+    views: 2450,
   },
   {
     id: 'french-fries',
@@ -151,7 +159,8 @@ export const emojis: Emoji[] = [
         image: [],
         video: []
     },
-    related: ['pizza', 'hamburger']
+    related: ['pizza', 'hamburger'],
+    views: 1987,
   },
   {
     id: 'rocket',
@@ -165,7 +174,8 @@ export const emojis: Emoji[] = [
         image: [],
         video: []
     },
-    related: ['airplane', 'statue-of-liberty']
+    related: ['airplane', 'statue-of-liberty'],
+    views: 5642,
   },
     {
     id: 'airplane',
@@ -179,7 +189,8 @@ export const emojis: Emoji[] = [
         image: [],
         video: []
     },
-    related: ['rocket', 'statue-of-liberty']
+    related: ['rocket', 'statue-of-liberty'],
+    views: 4321,
   },
   {
     id: 'statue-of-liberty',
@@ -193,7 +204,8 @@ export const emojis: Emoji[] = [
         image: [],
         video: []
     },
-    related: ['rocket', 'airplane']
+    related: ['rocket', 'airplane'],
+    views: 3890,
   }
 ];
 

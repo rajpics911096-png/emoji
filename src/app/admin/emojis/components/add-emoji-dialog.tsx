@@ -37,7 +37,7 @@ type EmojiFormData = z.infer<typeof emojiSchema>;
 interface AddEmojiDialogProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  onAddEmoji: (emoji: Omit<Emoji, 'id' | 'related'>) => void;
+  onAddEmoji: (emoji: Omit<Emoji, 'id' | 'related' | 'views'>) => void;
 }
 
 export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDialogProps) {
