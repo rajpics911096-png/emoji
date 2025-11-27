@@ -17,13 +17,19 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { categories } from "@/lib/data";
-import type { Emoji } from "@/lib/types";
+import type { Emoji, EmojiFormatFile } from "@/lib/types";
+
+const fileSchema = z.custom<FileList>().transform(file => file.length > 0 ? file.item(0) : null);
 
 const emojiSchema = z.object({
   emoji: z.string().min(1, "Emoji character is required."),
   title: z.string().min(1, "Title is required."),
   description: z.string().min(1, "Description is required."),
   category: z.string().min(1, "Category is required."),
+  png: fileSchema.optional(),
+  gif: fileSchema.optional(),
+  image: fileSchema.optional(),
+  video: fileSchema.optional(),
 });
 
 type EmojiFormData = z.infer<typeof emojiSchema>;
@@ -31,7 +37,7 @@ type EmojiFormData = z.infer<typeof emojiSchema>;
 interface AddEmojiDialogProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  onAddEmoji: (emoji: Omit<Emoji, 'id' | 'formats' | 'related'>) => void;
+  onAddEmoji: (emoji: Omit<Emoji, 'id' | 'related'>) => void;
 }
 
 export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDialogProps) {
@@ -46,7 +52,37 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
   });
 
   const onSubmit = (data: EmojiFormData) => {
-    onAddEmoji(data);
+    const newFormats: {
+        png: EmojiFormatFile[];
+        gif: EmojiFormatFile[];
+        image: EmojiFormatFile[];
+        video: EmojiFormatFile[];
+    } = { png: [], gif: [], image: [], video: [] };
+
+    if (data.png) {
+        const file = data.png;
+        newFormats.png.push({ name: file.name, size: `${(file.size / 1024).toFixed(2)} KB`, url: URL.createObjectURL(file) });
+    }
+    if (data.gif) {
+        const file = data.gif;
+        newFormats.gif.push({ name: file.name, size: `${(file.size / 1024).toFixed(2)} KB`, url: URL.createObjectURL(file) });
+    }
+    if (data.image) {
+        const file = data.image;
+        newFormats.image.push({ name: file.name, size: `${(file.size / 1024).toFixed(2)} KB`, url: URL.createObjectURL(file) });
+    }
+    if (data.video) {
+        const file = data.video;
+        newFormats.video.push({ name: file.name, size: `${(file.size / 1024).toFixed(2)} KB`, url: URL.createObjectURL(file) });
+    }
+
+    onAddEmoji({
+        emoji: data.emoji,
+        title: data.title,
+        description: data.description,
+        category: data.category,
+        formats: newFormats
+    });
     reset();
   };
 
@@ -115,6 +151,33 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
                 />
                 {errors.category && <p className="text-destructive text-sm mt-1">{errors.category.message}</p>}
               </div>
+            </div>
+            <div className="col-span-4 space-y-4">
+                <h3 className="font-medium text-center text-sm text-muted-foreground pt-2">Upload Files</h3>
+                <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="png" className="text-right">PNG</Label>
+                    <div className="col-span-3">
+                        <Input id="png" type="file" {...register("png")} accept="image/png" />
+                    </div>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="gif" className="text-right">GIF</Label>
+                    <div className="col-span-3">
+                        <Input id="gif" type="file" {...register("gif")} accept="image/gif" />
+                    </div>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="image" className="text-right">Image</Label>
+                    <div className="col-span-3">
+                        <Input id="image" type="file" {...register("image")} accept="image/jpeg,image/webp" />
+                    </div>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="video" className="text-right">Video</Label>
+                    <div className="col-span-3">
+                        <Input id="video" type="file" {...register("video")} accept="video/mp4,video/webm" />
+                    </div>
+                </div>
             </div>
           </div>
           <DialogFooter>

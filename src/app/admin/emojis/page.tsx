@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MoreHorizontal, PlusCircle } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { emojis } from "@/lib/data";
+import { emojis as initialEmojis } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { AddEmojiDialog } from "./components/add-emoji-dialog";
@@ -25,7 +25,7 @@ export default function EmojisPage() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState<Emoji | null>(null);
-  const [emojiList, setEmojiList] = useState<Emoji[]>(emojis);
+  const [emojiList, setEmojiList] = useState<Emoji[]>(initialEmojis);
 
   const handleDelete = (emojiId: string, emojiTitle: string) => {
     setEmojiList(emojiList.filter((emoji) => emoji.id !== emojiId));
@@ -40,11 +40,10 @@ export default function EmojisPage() {
     setIsEditDialogOpen(true);
   };
 
-  const handleAddEmoji = (newEmoji: Omit<Emoji, 'id' | 'formats' | 'related'>) => {
+  const handleAddEmoji = (newEmoji: Omit<Emoji, 'id' | 'related'>) => {
     const emojiToAdd: Emoji = {
       ...newEmoji,
       id: newEmoji.title.toLowerCase().replace(/ /g, '-'),
-      formats: { png: [], gif: [], image: [], video: [] },
       related: [],
     };
     setEmojiList([emojiToAdd, ...emojiList]);
