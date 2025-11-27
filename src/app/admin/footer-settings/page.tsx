@@ -15,8 +15,10 @@ import { footerContent as initialFooterContent } from '@/lib/data';
 import { useState } from 'react';
 import type { FooterContent, LinkItem, SocialLink } from '@/lib/types';
 import { Trash2 } from 'lucide-react';
+import { useTranslations } from '@/context/translations-context';
 
 export default function FooterSettingsPage() {
+  const { t } = useTranslations();
   const { toast } = useToast();
   const [footerContent, setFooterContent] =
     useState<FooterContent>(initialFooterContent);
@@ -25,8 +27,8 @@ export default function FooterSettingsPage() {
     // In a real app, you would send this data to your backend to save it.
     console.log('Saving footer settings:', { footerContent });
     toast({
-      title: 'Settings Saved',
-      description: 'Your footer settings have been successfully saved.',
+      title: t('settings_toast_saved_title'),
+      description: t('settings_toast_saved_desc'),
     });
   };
 
@@ -64,24 +66,24 @@ export default function FooterSettingsPage() {
 
   return (
     <div className="mx-auto max-w-4xl flex-1 space-y-4 md:space-y-8">
-      <h1 className="text-3xl font-headline font-bold">Footer Settings</h1>
+      <h1 className="text-3xl font-headline font-bold">{t('footer_settings_title')}</h1>
       <Card>
         <CardHeader>
-          <CardTitle>Footer Links & Content</CardTitle>
+          <CardTitle>{t('footer_settings_title')}</CardTitle>
           <CardDescription>
-            Manage the links and content in your site's footer.
+            {t('footer_settings_links_desc')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-medium">Navigation Links</h3>
+              <h3 className="font-medium">{t('footer_settings_nav_links')}</h3>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => handleAddLink('navigation')}
               >
-                Add Link
+                {t('footer_settings_add_link_button')}
               </Button>
             </div>
             {footerContent.navigation.map((link, index) => (
@@ -89,7 +91,7 @@ export default function FooterSettingsPage() {
                 <div className="grid grid-cols-2 gap-2 flex-1">
                   <div className="space-y-1">
                     <Label htmlFor={`nav-label-${index}`} className="text-xs">
-                      Label
+                      {t('footer_settings_label_label')}
                     </Label>
                     <Input
                       id={`nav-label-${index}`}
@@ -106,7 +108,7 @@ export default function FooterSettingsPage() {
                   </div>
                   <div className="space-y-1">
                     <Label htmlFor={`nav-href-${index}`} className="text-xs">
-                      URL
+                      {t('footer_settings_url_label')}
                     </Label>
                     <Input
                       id={`nav-href-${index}`}
@@ -135,13 +137,13 @@ export default function FooterSettingsPage() {
           </div>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-medium">Legal Links</h3>
+              <h3 className="font-medium">{t('footer_settings_legal_links')}</h3>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => handleAddLink('legal')}
               >
-                Add Link
+                {t('footer_settings_add_link_button')}
               </Button>
             </div>
             {footerContent.legal.map((link, index) => (
@@ -149,7 +151,7 @@ export default function FooterSettingsPage() {
                 <div className="grid grid-cols-2 gap-2 flex-1">
                   <div className="space-y-1">
                     <Label htmlFor={`legal-label-${index}`} className="text-xs">
-                      Label
+                      {t('footer_settings_label_label')}
                     </Label>
                     <Input
                       id={`legal-label-${index}`}
@@ -166,7 +168,7 @@ export default function FooterSettingsPage() {
                   </div>
                   <div className="space-y-1">
                     <Label htmlFor={`legal-href-${index}`} className="text-xs">
-                      URL
+                      {t('footer_settings_url_label')}
                     </Label>
                     <Input
                       id={`legal-href-${index}`}
@@ -190,9 +192,9 @@ export default function FooterSettingsPage() {
           </div>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-medium">Social Links</h3>
+              <h3 className="font-medium">{t('footer_settings_social_links')}</h3>
               <Button variant="outline" size="sm" onClick={handleAddSocial}>
-                Add Social
+                {t('footer_settings_add_social_button')}
               </Button>
             </div>
             {footerContent.social.map((link, index) => (
@@ -203,7 +205,7 @@ export default function FooterSettingsPage() {
                       htmlFor={`social-icon-${index}`}
                       className="text-xs"
                     >
-                      Icon Name
+                      {t('footer_settings_icon_name_label')}
                     </Label>
                     <Input
                       id={`social-icon-${index}`}
@@ -223,7 +225,7 @@ export default function FooterSettingsPage() {
                       htmlFor={`social-label-${index}`}
                       className="text-xs"
                     >
-                      Aria Label
+                      {t('footer_settings_aria_label')}
                     </Label>
                     <Input
                       id={`social-label-${index}`}
@@ -240,7 +242,7 @@ export default function FooterSettingsPage() {
                   </div>
                   <div className="space-y-1">
                     <Label htmlFor={`social-href-${index}`} className="text-xs">
-                      URL
+                      {t('footer_settings_url_label')}
                     </Label>
                     <Input
                       id={`social-href-${index}`}
@@ -270,8 +272,10 @@ export default function FooterSettingsPage() {
         </CardContent>
       </Card>
       <div className="flex justify-end">
-        <Button onClick={handleSave}>Save Settings</Button>
+        <Button onClick={handleSave}>{t('settings_save_button')}</Button>
       </div>
     </div>
   );
 }
+
+    

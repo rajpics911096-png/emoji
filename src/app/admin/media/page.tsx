@@ -17,6 +17,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useTranslations } from '@/context/translations-context';
 
 
 type MediaFile = EmojiFormatFile & { format: string; emojiId: string; dateAdded: number; };
@@ -33,6 +34,7 @@ const initialFiles: MediaFile[] = emojis.flatMap((emoji, emojiIndex) =>
 );
 
 export default function MediaPage() {
+    const { t } = useTranslations();
     const { toast } = useToast();
     const [mediaFiles, setMediaFiles] = useState<MediaFile[]>(initialFiles);
     const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
@@ -54,8 +56,8 @@ export default function MediaPage() {
 
         setMediaFiles(prevFiles => [...newFiles, ...prevFiles]);
         toast({
-            title: "Files Uploaded",
-            description: `${files.length} file(s) have been added to the library.`
+            title: t('media_toast_files_uploaded_title'),
+            description: t('media_toast_files_uploaded_desc', { count: files.length.toString() })
         })
     };
     
@@ -79,7 +81,7 @@ export default function MediaPage() {
 
     const copyToClipboard = (url: string) => {
         navigator.clipboard.writeText(window.location.origin + url);
-        toast({ title: "URL Copied", description: "The file URL has been copied to your clipboard."});
+        toast({ title: t('media_toast_url_copied_title'), description: t('media_toast_url_copied_desc')});
     }
 
     const downloadFile = (url: string, name: string) => {
@@ -98,8 +100,8 @@ export default function MediaPage() {
             URL.revokeObjectURL(fileToRemove.url);
         }
         toast({
-            title: "File Deleted",
-            description: `"${fileToRemove.name}" has been deleted.`,
+            title: t('media_toast_file_deleted_title'),
+            description: t('media_toast_file_deleted_desc', { name: fileToRemove.name }),
             variant: 'destructive'
         });
     }
@@ -131,8 +133,8 @@ export default function MediaPage() {
         setMediaFiles(remainingFiles);
         
         toast({
-            title: "Files Deleted",
-            description: `${selectedFiles.length} file(s) have been deleted.`,
+            title: t('media_toast_files_deleted_title'),
+            description: t('media_toast_files_deleted_desc', { count: selectedFiles.length.toString() }),
             variant: 'destructive'
         });
 
@@ -162,15 +164,15 @@ export default function MediaPage() {
         <div>
             <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
                 <div>
-                    <h1 className="text-3xl font-headline font-bold">Media Library</h1>
-                    <p className="text-muted-foreground">Manage your uploaded files here.</p>
+                    <h1 className="text-3xl font-headline font-bold">{t('media_title')}</h1>
+                    <p className="text-muted-foreground">{t('media_description')}</p>
                 </div>
                 <div className="flex items-center gap-4 flex-wrap">
                     {selectedFiles.length > 0 && (
                         <div className="flex items-center gap-2">
                              <Button size="sm" variant="destructive" className="gap-1" onClick={handleDeleteSelected}>
                                 <Trash2 className="h-3.5 w-3.5" />
-                                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Delete ({selectedFiles.length})</span>
+                                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">{t('media_delete_selected_button', { count: selectedFiles.length.toString() })}</span>
                             </Button>
                         </div>
                     )}
@@ -179,28 +181,28 @@ export default function MediaPage() {
                             id="select-all"
                             checked={selectedFiles.length > 0 && selectedFiles.length === mediaFiles.length}
                             onCheckedChange={handleSelectAll}
-                            aria-label="Select all"
+                            aria-label={t('media_select_all')}
                             className='hidden sm:flex'
                         />
                         <Label htmlFor='select-all' className='hidden sm:block text-sm font-medium'>
-                            {isAllSelected ? 'Deselect All' : 'Select All'}
+                            {isAllSelected ? t('media_deselect_all') : t('media_select_all')}
                         </Label>
                     </div>
                      <Select value={sortOrder} onValueChange={setSortOrder}>
                         <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Sort by..." />
+                            <SelectValue placeholder={t('media_sort_by_placeholder')} />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="newest">Newest</SelectItem>
-                            <SelectItem value="oldest">Oldest</SelectItem>
-                            <SelectItem value="name_asc">Name (A-Z)</SelectItem>
-                            <SelectItem value="name_desc">Name (Z-A)</SelectItem>
+                            <SelectItem value="newest">{t('media_sort_newest')}</SelectItem>
+                            <SelectItem value="oldest">{t('media_sort_oldest')}</SelectItem>
+                            <SelectItem value="name_asc">{t('media_sort_name_asc')}</SelectItem>
+                            <SelectItem value="name_desc">{t('media_sort_name_desc')}</SelectItem>
                         </SelectContent>
                     </Select>
                     <Button size="sm" className="gap-1" asChild>
                         <label htmlFor="file-upload">
                             <Upload className="h-3.5 w-3.5" />
-                            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Upload File</span>
+                            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">{t('media_upload_button')}</span>
                         </label>
                     </Button>
                 </div>
@@ -237,15 +239,15 @@ export default function MediaPage() {
                                     <DropdownMenuContent align="end">
                                         <DropdownMenuItem onSelect={() => copyToClipboard(file.url)}>
                                             <Copy className="mr-2 h-4 w-4" />
-                                            <span>Copy URL</span>
+                                            <span>{t('media_toast_url_copied_title')}</span>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem onSelect={() => downloadFile(file.url, file.name)}>
                                             <Download className="mr-2 h-4 w-4" />
-                                            <span>Download</span>
+                                            <span>{t('downloadButton')}</span>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem onSelect={() => deleteFile(file)} className="text-destructive">
                                             <Trash2 className="mr-2 h-4 w-4" />
-                                            <span>Delete</span>
+                                            <span>{t('dialog_delete_button')}</span>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
@@ -258,10 +260,12 @@ export default function MediaPage() {
                 </div>
             ) : (
                 <div className="text-center py-16 border-2 border-dashed rounded-lg">
-                    <p className="text-xl text-muted-foreground">Your media library is empty.</p>
-                    <p className="text-muted-foreground">Upload some files to get started!</p>
+                    <p className="text-xl text-muted-foreground">{t('media_empty_library_title')}</p>
+                    <p className="text-muted-foreground">{t('media_empty_library_desc')}</p>
                 </div>
             )}
         </div>
     );
 }
+
+    

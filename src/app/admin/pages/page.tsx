@@ -20,9 +20,11 @@ import { AddPageDialog } from "./components/add-page-dialog";
 import { EditPageDialog } from "./components/edit-page-dialog";
 import Link from "next/link";
 import { pages as initialPagesData } from "@/lib/data";
+import { useTranslations } from "@/context/translations-context";
 
 
 export default function PagesPage() {
+  const { t } = useTranslations();
   const { toast } = useToast();
   const [pages, setPages] = useState<Page[]>(initialPagesData);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -32,8 +34,8 @@ export default function PagesPage() {
   const handleDelete = (pageId: string, pageTitle: string) => {
     setPages(pages.filter((page) => page.id !== pageId));
     toast({
-      title: "Page Deleted",
-      description: `"${pageTitle}" has been deleted.`,
+      title: t('pages_toast_deleted_title'),
+      description: t('pages_toast_deleted_desc', { title: pageTitle }),
     });
   };
 
@@ -49,8 +51,8 @@ export default function PagesPage() {
     };
     setPages([pageToAdd, ...pages]);
     toast({
-      title: "Page Added",
-      description: `"${newPage.title}" has been created.`,
+      title: t('pages_toast_added_title'),
+      description: t('pages_toast_added_desc', { title: newPage.title }),
     });
     setIsAddDialogOpen(false);
   };
@@ -58,8 +60,8 @@ export default function PagesPage() {
   const handleEditPage = (updatedPage: Page) => {
     setPages(pages.map(p => p.id === updatedPage.id ? updatedPage : p));
     toast({
-        title: "Page Updated",
-        description: `"${updatedPage.title}" has been updated.`,
+        title: t('pages_toast_updated_title'),
+        description: t('pages_toast_updated_desc', { title: updatedPage.title }),
     });
     setIsEditDialogOpen(false);
     setSelectedPage(null);
@@ -72,12 +74,12 @@ export default function PagesPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
               <div>
-                  <CardTitle>Pages</CardTitle>
-                  <CardDescription>Manage your website's custom pages here.</CardDescription>
+                  <CardTitle>{t('pages_title')}</CardTitle>
+                  <CardDescription>{t('pages_description')}</CardDescription>
               </div>
               <Button size="sm" className="gap-1" onClick={() => setIsAddDialogOpen(true)}>
                   <PlusCircle className="h-3.5 w-3.5" />
-                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Add Page</span>
+                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">{t('pages_add_button')}</span>
               </Button>
           </div>
         </CardHeader>
@@ -85,11 +87,11 @@ export default function PagesPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Slug</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>{t('pages_table_header_title')}</TableHead>
+                <TableHead>{t('pages_table_header_slug')}</TableHead>
+                <TableHead>{t('pages_table_header_status')}</TableHead>
                 <TableHead>
-                  <span className="sr-only">Actions</span>
+                  <span className="sr-only">{t('dialog_actions_label')}</span>
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -100,7 +102,7 @@ export default function PagesPage() {
                   <TableCell className="font-mono text-sm">/{page.slug}</TableCell>
                   <TableCell>
                       <Badge variant={page.status === 'published' ? 'default' : 'secondary'}>
-                          {page.status}
+                          {t(`pages_status_${page.status}`)}
                       </Badge>
                   </TableCell>
                   <TableCell>
@@ -112,16 +114,16 @@ export default function PagesPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuLabel>{t('dialog_actions_label')}</DropdownMenuLabel>
                         <DropdownMenuItem asChild>
                           <Link href={`/${page.slug}`} target="_blank">
                             <ExternalLink className="mr-2 h-4 w-4" />
-                            Preview
+                            {t('dialog_preview_button')}
                           </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleEditClick(page)}>Edit</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleEditClick(page)}>{t('dialog_edit_button')}</DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => handleDelete(page.id, page.title)} className="text-destructive">Delete</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleDelete(page.id, page.title)} className="text-destructive">{t('dialog_delete_button')}</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -147,3 +149,5 @@ export default function PagesPage() {
     </>
   );
 }
+
+    

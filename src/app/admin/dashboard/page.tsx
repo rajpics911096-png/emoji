@@ -6,8 +6,10 @@ import { Smile, FilePlus, Download, ArrowRight, Tags, PlusCircle } from "lucide-
 import { Button } from '@/components/ui/button';
 import { emojis, pages, categories } from '@/lib/data';
 import { useState, useEffect } from 'react';
+import { useTranslations } from '@/context/translations-context';
 
 export default function DashboardPage() {
+    const { t } = useTranslations();
     const [emojiCount, setEmojiCount] = useState(0);
     const [pageCount, setPageCount] = useState(0);
     const [categoryCount, setCategoryCount] = useState(0);
@@ -18,7 +20,6 @@ export default function DashboardPage() {
         setPageCount(pages.length);
         setCategoryCount(categories.length - 1); // Subtract "All" category
 
-        // Get download count from local storage
         const storedDownloads = localStorage.getItem('downloadCount');
         if (storedDownloads) {
             setDownloadCount(parseInt(storedDownloads, 10));
@@ -26,21 +27,21 @@ export default function DashboardPage() {
     }, []);
 
     const stats = [
-        { title: "Total Emojis", value: emojiCount.toLocaleString(), icon: Smile, change: "+20.1% from last month", color: "bg-blue-500" },
-        { title: "Total Pages", value: pageCount.toLocaleString(), icon: FilePlus, change: "+5 from last month", color: "bg-green-500" },
-        { title: "Total Categories", value: categoryCount.toLocaleString(), icon: Tags, change: "+2 from last month", color: "bg-yellow-500" },
-        { title: "Total Downloads", value: downloadCount.toLocaleString(), icon: Download, change: "+22% from last month", color: "bg-red-500" },
+        { title: t('dashboard_total_emojis'), value: emojiCount.toLocaleString(), icon: Smile, change: "20.1%", color: "bg-blue-500" },
+        { title: t('dashboard_total_pages'), value: pageCount.toLocaleString(), icon: FilePlus, change: "5", color: "bg-green-500" },
+        { title: t('dashboard_total_categories'), value: categoryCount.toLocaleString(), icon: Tags, change: "2", color: "bg-yellow-500" },
+        { title: t('dashboard_total_downloads'), value: downloadCount.toLocaleString(), icon: Download, change: "22%", color: "bg-red-500" },
     ];
 
     const quickActions = [
-        { label: 'Add New Emoji', href: '/admin/emojis', icon: PlusCircle },
-        { label: 'Add New Page', href: '/admin/pages', icon: FilePlus },
-        { label: 'Manage Categories', href: '/admin/categories', icon: ArrowRight },
+        { label: t('dashboard_add_emoji'), href: '/admin/emojis', icon: PlusCircle },
+        { label: t('dashboard_add_page'), href: '/admin/pages', icon: FilePlus },
+        { label: t('dashboard_manage_categories'), href: '/admin/categories', icon: ArrowRight },
     ];
 
     return (
         <div className="space-y-6 md:space-y-8">
-        <h1 className="text-3xl font-headline font-bold">Dashboard</h1>
+        <h1 className="text-3xl font-headline font-bold">{t('dashboard_title')}</h1>
         
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat) => (
@@ -53,7 +54,7 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                 <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-muted-foreground">{stat.change}</p>
+                <p className="text-xs text-muted-foreground">{t('dashboard_stat_change', { change: stat.change })}</p>
                 </CardContent>
             </Card>
             ))}
@@ -62,18 +63,18 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <Card className="lg:col-span-2">
                 <CardHeader>
-                    <CardTitle>Analytics Overview</CardTitle>
-                    <CardDescription>A summary of your website's performance.</CardDescription>
+                    <CardTitle>{t('dashboard_analytics_title')}</CardTitle>
+                    <CardDescription>{t('dashboard_analytics_desc')}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-muted-foreground text-center py-10">Charts and detailed analytics coming soon.</p>
+                    <p className="text-muted-foreground text-center py-10">{t('dashboard_analytics_placeholder')}</p>
                 </CardContent>
             </Card>
 
             <Card>
             <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-                <CardDescription>Quickly jump to common tasks.</CardDescription>
+                <CardTitle>{t('dashboard_quick_actions_title')}</CardTitle>
+                <CardDescription>{t('dashboard_quick_actions_desc')}</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col space-y-2">
                 {quickActions.map(action => (
@@ -90,3 +91,5 @@ export default function DashboardPage() {
         </div>
     );
 }
+
+    

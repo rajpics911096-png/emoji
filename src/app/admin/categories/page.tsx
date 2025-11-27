@@ -20,8 +20,10 @@ import { AddCategoryDialog } from "./components/add-category-dialog";
 import { EditCategoryDialog } from "./components/edit-category-dialog";
 import { SvgIcon } from "@/components/svg-icon";
 import Link from "next/link";
+import { useTranslations } from "@/context/translations-context";
 
 export default function CategoriesPage() {
+  const { t } = useTranslations();
   const { toast } = useToast();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -32,15 +34,15 @@ export default function CategoriesPage() {
     if (categoryId === 'all') {
         toast({
             variant: "destructive",
-            title: "Cannot Delete",
-            description: `The "All Emojis" category cannot be deleted.`,
+            title: t('categories_toast_cannot_delete_title'),
+            description: t('categories_toast_cannot_delete_desc'),
         });
         return;
     }
     setCategoryList(categoryList.filter((category) => category.id !== categoryId));
     toast({
-      title: "Category Deleted",
-      description: `"${categoryName}" has been deleted.`,
+      title: t('categories_toast_deleted_title'),
+      description: t('categories_toast_deleted_desc', { name: categoryName }),
     });
   };
 
@@ -56,8 +58,8 @@ export default function CategoriesPage() {
     };
     setCategoryList([categoryToAdd, ...categoryList]);
     toast({
-      title: "Category Added",
-      description: `"${newCategory.name}" has been added to the list.`,
+      title: t('categories_toast_added_title'),
+      description: t('categories_toast_added_desc', { name: newCategory.name }),
     });
     setIsAddDialogOpen(false);
   };
@@ -65,8 +67,8 @@ export default function CategoriesPage() {
   const handleEditCategory = (updatedCategory: EmojiCategory) => {
     setCategoryList(categoryList.map(c => c.id === updatedCategory.id ? updatedCategory : c));
     toast({
-        title: "Category Updated",
-        description: `"${updatedCategory.name}" has been updated.`,
+        title: t('categories_toast_updated_title'),
+        description: t('categories_toast_updated_desc', { name: updatedCategory.name }),
     });
     setIsEditDialogOpen(false);
     setSelectedCategory(null);
@@ -78,12 +80,12 @@ export default function CategoriesPage() {
       <CardHeader>
         <div className="flex items-center justify-between">
             <div>
-                <CardTitle>Categories</CardTitle>
-                <CardDescription>Manage your website&apos;s emoji categories here.</CardDescription>
+                <CardTitle>{t('categories_title')}</CardTitle>
+                <CardDescription>{t('categories_description')}</CardDescription>
             </div>
             <Button size="sm" className="gap-1" onClick={() => setIsAddDialogOpen(true)}>
                 <PlusCircle className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Add Category</span>
+                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">{t('categories_add_button')}</span>
             </Button>
         </div>
       </CardHeader>
@@ -91,11 +93,11 @@ export default function CategoriesPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[80px]">Icon</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>ID</TableHead>
+              <TableHead className="w-[80px]">{t('categories_table_header_icon')}</TableHead>
+              <TableHead>{t('categories_table_header_name')}</TableHead>
+              <TableHead>{t('categories_table_header_id')}</TableHead>
               <TableHead>
-                <span className="sr-only">Actions</span>
+                <span className="sr-only">{t('dialog_actions_label')}</span>
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -105,7 +107,7 @@ export default function CategoriesPage() {
                 <TableCell className="font-medium text-2xl">
                   <SvgIcon svg={category.icon} className="h-6 w-6" />
                 </TableCell>
-                <TableCell className="font-medium">{category.name}</TableCell>
+                <TableCell className="font-medium">{t(`category_${category.id}`)}</TableCell>
                 <TableCell className="font-mono text-sm">{category.id}</TableCell>
                 <TableCell>
                   <DropdownMenu>
@@ -116,16 +118,16 @@ export default function CategoriesPage() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuLabel>{t('dialog_actions_label')}</DropdownMenuLabel>
                       <DropdownMenuItem asChild>
                         <Link href={`/emojis/${category.id}`} target="_blank">
                           <ExternalLink className="mr-2 h-4 w-4" />
-                          Preview
+                          {t('dialog_preview_button')}
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleEditClick(category)}>Edit</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleEditClick(category)}>{t('dialog_edit_button')}</DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => handleDelete(category.id, category.name)} className="text-destructive">Delete</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleDelete(category.id, category.name)} className="text-destructive">{t('dialog_delete_button')}</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
@@ -151,3 +153,5 @@ export default function CategoriesPage() {
     </>
   );
 }
+
+    

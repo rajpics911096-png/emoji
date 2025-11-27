@@ -18,6 +18,7 @@ import * as z from "zod";
 import { categories } from "@/lib/data";
 import type { Emoji, EmojiFormatFile } from "@/lib/types";
 import { RichTextEditor } from "@/components/rich-text-editor";
+import { useTranslations } from "@/context/translations-context";
 
 const fileSchema = z.custom<FileList>().optional();
 
@@ -41,6 +42,7 @@ interface AddEmojiDialogProps {
 }
 
 export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDialogProps) {
+  const { t } = useTranslations();
   const {
     register,
     handleSubmit,
@@ -92,15 +94,15 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
       <DialogContent className="sm:max-w-4xl">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Add New Emoji</DialogTitle>
+            <DialogTitle>{t('add_emoji_dialog_title')}</DialogTitle>
             <DialogDescription>
-              Fill in the details below to add a new emoji to your collection.
+              {t('add_emoji_dialog_desc')}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto px-1">
             <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
               <Label htmlFor="emoji" className="text-left md:text-right">
-                Emoji
+                {t('emoji_form_emoji_label')}
               </Label>
               <div className="md:col-span-3">
                 <Input id="emoji" {...register("emoji")} className="w-20 text-2xl text-center p-0 h-12" />
@@ -109,7 +111,7 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
               <Label htmlFor="title" className="text-left md:text-right">
-                Title
+                {t('emoji_form_title_label')}
               </Label>
               <div className="md:col-span-3">
                 <Input id="title" {...register("title")} />
@@ -118,7 +120,7 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 items-start gap-4">
               <Label htmlFor="description" className="text-left md:text-right pt-2">
-                Description
+                {t('emoji_form_description_label')}
               </Label>
               <div className="md:col-span-3">
                 <Controller
@@ -136,7 +138,7 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
               <Label htmlFor="category" className="text-left md:text-right">
-                Category
+                {t('emoji_form_category_label')}
               </Label>
               <div className="md:col-span-3">
                 <Controller
@@ -145,12 +147,12 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
                     render={({ field }) => (
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <SelectTrigger>
-                                <SelectValue placeholder="Select a category" />
+                                <SelectValue placeholder={t('emoji_form_category_placeholder')} />
                             </SelectTrigger>
                             <SelectContent>
                                 {dialogCategories.map(cat => (
                                     <SelectItem key={cat.id} value={cat.id}>
-                                        {cat.name}
+                                        {t(`category_${cat.id}`)}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -161,7 +163,7 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
               </div>
             </div>
             <div className="col-span-1 md:col-span-4 space-y-4">
-                <h3 className="font-medium text-center text-sm text-muted-foreground pt-2">Upload Files</h3>
+                <h3 className="font-medium text-center text-sm text-muted-foreground pt-2">{t('emoji_form_upload_title')}</h3>
                 <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
                     <Label htmlFor="png" className="text-left md:text-right">PNG</Label>
                     <div className="md:col-span-3">
@@ -190,12 +192,14 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
+              {t('dialog_cancel_button')}
             </Button>
-            <Button type="submit">Add Emoji</Button>
+            <Button type="submit">{t('add_emoji_dialog_add_button')}</Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
   );
 }
+
+    

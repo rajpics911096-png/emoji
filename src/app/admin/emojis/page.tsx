@@ -20,6 +20,7 @@ import { AddEmojiDialog } from "./components/add-emoji-dialog";
 import type { Emoji } from "@/lib/types";
 import { EditEmojiDialog } from "./components/edit-emoji-dialog";
 import Link from "next/link";
+import { useTranslations } from "@/context/translations-context";
 
 type SortConfig = {
   key: keyof Emoji;
@@ -27,6 +28,7 @@ type SortConfig = {
 };
 
 export default function EmojisPage() {
+  const { t } = useTranslations();
   const { toast } = useToast();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -90,8 +92,8 @@ export default function EmojisPage() {
   const handleDelete = (emojiId: string, emojiTitle: string) => {
     setEmojiList(emojiList.filter((emoji) => emoji.id !== emojiId));
     toast({
-      title: "Emoji Deleted",
-      description: `"${emojiTitle}" has been deleted.`,
+      title: t('emojis_toast_deleted_title'),
+      description: t('emojis_toast_deleted_desc', { title: emojiTitle }),
     });
   };
 
@@ -109,8 +111,8 @@ export default function EmojisPage() {
     };
     setEmojiList([emojiToAdd, ...emojiList]);
     toast({
-      title: "Emoji Added",
-      description: `"${newEmoji.title}" has been added to the list.`,
+      title: t('emojis_toast_added_title'),
+      description: t('emojis_toast_added_desc', { title: newEmoji.title }),
     });
     setIsAddDialogOpen(false);
   };
@@ -118,8 +120,8 @@ export default function EmojisPage() {
   const handleEditEmoji = (updatedEmoji: Emoji) => {
     setEmojiList(emojiList.map(e => e.id === updatedEmoji.id ? updatedEmoji : e));
     toast({
-        title: "Emoji Updated",
-        description: `"${updatedEmoji.title}" has been updated.`,
+        title: t('emojis_toast_updated_title'),
+        description: t('emojis_toast_updated_desc', { title: updatedEmoji.title }),
     });
     setIsEditDialogOpen(false);
     setSelectedEmoji(null);
@@ -131,14 +133,14 @@ export default function EmojisPage() {
       <CardHeader>
         <div className="flex items-center justify-between">
             <div>
-                <CardTitle>Emojis</CardTitle>
+                <CardTitle>{t('emojis_title')}</CardTitle>
                 <CardDescription>
-                  Manage your website&apos;s emojis here. You currently have {emojiList.length} emojis.
+                  {t('emojis_description', { count: emojiList.length.toString() })}
                 </CardDescription>
             </div>
             <Button size="sm" className="gap-1" onClick={() => setIsAddDialogOpen(true)}>
                 <PlusCircle className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Add Emoji</span>
+                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">{t('emojis_add_button')}</span>
             </Button>
         </div>
       </CardHeader>
@@ -146,25 +148,25 @@ export default function EmojisPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[80px]">Emoji</TableHead>
+              <TableHead className="w-[80px]">{t('emojis_table_header_emoji')}</TableHead>
               <TableHead>
                 <Button variant="ghost" onClick={() => requestSort('title')} className="group px-0 h-auto hover:bg-transparent">
-                    Title {getSortIndicator('title')}
+                    {t('emojis_table_header_title')} {getSortIndicator('title')}
                 </Button>
               </TableHead>
               <TableHead>
                  <Button variant="ghost" onClick={() => requestSort('category')} className="group px-0 h-auto hover:bg-transparent">
-                    Category {getSortIndicator('category')}
+                    {t('emojis_table_header_category')} {getSortIndicator('category')}
                 </Button>
               </TableHead>
                <TableHead>
                  <Button variant="ghost" onClick={() => requestSort('views')} className="group px-0 h-auto hover:bg-transparent">
-                    Views {getSortIndicator('views')}
+                    {t('emojis_table_header_views')} {getSortIndicator('views')}
                 </Button>
               </TableHead>
-              <TableHead className="hidden md:table-cell">Formats</TableHead>
+              <TableHead className="hidden md:table-cell">{t('emojis_table_header_formats')}</TableHead>
               <TableHead>
-                <span className="sr-only">Actions</span>
+                <span className="sr-only">{t('dialog_actions_label')}</span>
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -173,7 +175,7 @@ export default function EmojisPage() {
               <TableRow key={emoji.id}>
                 <TableCell className="font-medium text-2xl">{emoji.emoji}</TableCell>
                 <TableCell className="font-medium">{emoji.title}</TableCell>
-                <TableCell className="capitalize">{emoji.category.replace(/-/g, ' ')}</TableCell>
+                <TableCell className="capitalize">{t(`category_${emoji.category}`)}</TableCell>
                 <TableCell>{emoji.views.toLocaleString()}</TableCell>
                 <TableCell className="hidden md:table-cell">
                     <div className="flex gap-1">
@@ -191,16 +193,16 @@ export default function EmojisPage() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuLabel>{t('dialog_actions_label')}</DropdownMenuLabel>
                       <DropdownMenuItem asChild>
                         <Link href={`/emoji/${emoji.id}`} target="_blank">
                           <ExternalLink className="mr-2 h-4 w-4" />
-                          Preview
+                          {t('dialog_preview_button')}
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleEditClick(emoji)}>Edit</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleEditClick(emoji)}>{t('dialog_edit_button')}</DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => handleDelete(emoji.id, emoji.title)} className="text-destructive">Delete</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleDelete(emoji.id, emoji.title)} className="text-destructive">{t('dialog_delete_button')}</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
@@ -226,3 +228,5 @@ export default function EmojisPage() {
     </>
   );
 }
+
+    

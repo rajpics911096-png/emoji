@@ -22,46 +22,48 @@ import {
   Library,
 } from "lucide-react";
 import { useSiteSettings } from "@/context/site-settings-context";
+import { useTranslations } from "@/context/translations-context";
 
 
 export function AdminSidebar() {
   const pathname = usePathname();
   const { settings } = useSiteSettings();
+  const { t } = useTranslations();
 
   const menuItems = [
     {
       href: "/admin/dashboard",
-      label: "Dashboard",
+      label: t('admin_dashboard'),
       icon: LayoutDashboard,
     },
     {
       href: "/admin/emojis",
-      label: "Emojis",
+      label: t('admin_emojis'),
       icon: Smile,
     },
     {
       href: "/admin/pages",
-      label: "Pages",
+      label: t('admin_pages'),
       icon: FileText,
     },
     {
       href: "/admin/media",
-      label: "Media",
+      label: t('admin_media'),
       icon: Library,
     },
     {
       href: "/admin/categories",
-      label: "Categories",
+      label: t('admin_categories'),
       icon: Tags,
     },
     {
       href: "/admin/settings",
-      label: "Settings",
+      label: t('admin_settings'),
       icon: Settings,
     },
     {
       href: "/admin/footer-settings",
-      label: "Footer Settings",
+      label: t('admin_footer_settings'),
       icon: FileText,
     },
   ];
@@ -75,7 +77,7 @@ export function AdminSidebar() {
             <h3 className="text-lg font-headline font-semibold text-sidebar-foreground">
               {settings.name}
             </h3>
-            <p className="text-xs text-sidebar-foreground/70">Admin Panel</p>
+            <p className="text-xs text-sidebar-foreground/70">{t('admin_sidebar_title')}</p>
           </div>
         </div>
       </SidebarHeader>
@@ -100,10 +102,10 @@ export function AdminSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Log Out">
+            <SidebarMenuButton asChild tooltip={t('admin_logout')}>
               <Link href="/">
                 <LogOut />
-                <span>Log Out</span>
+                <span>{t('admin_logout')}</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -112,3 +114,5 @@ export function AdminSidebar() {
     </Sidebar>
   );
 }
+
+    

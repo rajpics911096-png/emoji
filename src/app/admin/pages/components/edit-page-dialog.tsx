@@ -18,6 +18,7 @@ import type { Page } from "@/lib/types";
 import { useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RichTextEditor } from "@/components/rich-text-editor";
+import { useTranslations } from "@/context/translations-context";
 
 const pageSchema = z.object({
   title: z.string().min(1, "Title is required."),
@@ -36,6 +37,7 @@ interface EditPageDialogProps {
 }
 
 export function EditPageDialog({ isOpen, onOpenChange, onEditPage, page }: EditPageDialogProps) {
+  const { t } = useTranslations();
   const {
     register,
     handleSubmit,
@@ -66,15 +68,15 @@ export function EditPageDialog({ isOpen, onOpenChange, onEditPage, page }: EditP
       <DialogContent className="sm:max-w-4xl">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Edit Page</DialogTitle>
+            <DialogTitle>{t('edit_page_dialog_title')}</DialogTitle>
             <DialogDescription>
-              Update the details for this page. The slug cannot be changed.
+              {t('edit_page_dialog_desc')}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto px-1">
             <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
               <Label htmlFor="title" className="text-left md:text-right">
-                Title
+                {t('page_form_title_label')}
               </Label>
               <div className="md:col-span-3">
                 <Input id="title" {...register("title")} />
@@ -83,7 +85,7 @@ export function EditPageDialog({ isOpen, onOpenChange, onEditPage, page }: EditP
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
               <Label htmlFor="slug" className="text-left md:text-right">
-                Slug
+                {t('page_form_slug_label')}
               </Label>
               <div className="md:col-span-3">
                 <Input id="slug" {...register("slug")} readOnly disabled />
@@ -91,7 +93,7 @@ export function EditPageDialog({ isOpen, onOpenChange, onEditPage, page }: EditP
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 items-start gap-4">
               <Label htmlFor="content" className="text-left md:text-right pt-2">
-                Content
+                {t('page_form_content_label')}
               </Label>
               <div className="md:col-span-3">
                  <Controller
@@ -109,7 +111,7 @@ export function EditPageDialog({ isOpen, onOpenChange, onEditPage, page }: EditP
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
               <Label htmlFor="status" className="text-left md:text-right">
-                Status
+                {t('page_form_status_label')}
               </Label>
               <div className="md:col-span-3">
                  <Controller
@@ -118,11 +120,11 @@ export function EditPageDialog({ isOpen, onOpenChange, onEditPage, page }: EditP
                     render={({ field }) => (
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <SelectTrigger>
-                                <SelectValue placeholder="Select status" />
+                                <SelectValue placeholder={t('page_form_status_placeholder')} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="published">Published</SelectItem>
-                                <SelectItem value="draft">Draft</SelectItem>
+                                <SelectItem value="published">{t('pages_status_published')}</SelectItem>
+                                <SelectItem value="draft">{t('pages_status_draft')}</SelectItem>
                             </SelectContent>
                         </Select>
                     )}
@@ -133,12 +135,14 @@ export function EditPageDialog({ isOpen, onOpenChange, onEditPage, page }: EditP
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
+              {t('dialog_cancel_button')}
             </Button>
-            <Button type="submit">Save Changes</Button>
+            <Button type="submit">{t('dialog_save_changes_button')}</Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
   );
 }
+
+    

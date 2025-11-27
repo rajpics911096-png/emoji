@@ -22,6 +22,7 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import { FileType } from 'lucide-react';
 import { RichTextEditor } from "@/components/rich-text-editor";
+import { useTranslations } from "@/context/translations-context";
 
 
 const fileSchema = z.custom<FileList>().optional();
@@ -47,6 +48,7 @@ interface EditEmojiDialogProps {
 }
 
 export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji: initialEmoji }: EditEmojiDialogProps) {
+  const { t } = useTranslations();
   const [emoji, setEmoji] = useState<Emoji>(initialEmoji);
 
   const {
@@ -129,26 +131,26 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji: init
       <DialogContent className="sm:max-w-4xl">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Edit Emoji</DialogTitle>
+            <DialogTitle>{t('edit_emoji_dialog_title')}</DialogTitle>
             <DialogDescription>
-              Update the details for this emoji.
+              {t('edit_emoji_dialog_desc')}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto px-1">
             <div className="space-y-2">
-              <Label htmlFor="emoji">Emoji</Label>
+              <Label htmlFor="emoji">{t('emoji_form_emoji_label')}</Label>
               <Input id="emoji" {...register("emoji")} className="w-20 text-2xl text-center p-0 h-12" />
               {errors.emoji && <p className="text-destructive text-sm mt-1">{errors.emoji.message}</p>}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="title">Title</Label>
+              <Label htmlFor="title">{t('emoji_form_title_label')}</Label>
               <Input id="title" {...register("title")} />
               {errors.title && <p className="text-destructive text-sm mt-1">{errors.title.message}</p>}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t('emoji_form_description_label')}</Label>
               <Controller
                 name="description"
                 control={control}
@@ -163,19 +165,19 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji: init
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
+              <Label htmlFor="category">{t('emoji_form_category_label')}</Label>
               <Controller
                   name="category"
                   control={control}
                   render={({ field }) => (
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <SelectTrigger>
-                              <SelectValue placeholder="Select a category" />
+                              <SelectValue placeholder={t('emoji_form_category_placeholder')} />
                           </SelectTrigger>
                           <SelectContent>
                               {dialogCategories.map(cat => (
                                   <SelectItem key={cat.id} value={cat.id}>
-                                      {cat.name}
+                                      {t(`category_${cat.id}`)}
                                   </SelectItem>
                               ))}
                           </SelectContent>
@@ -186,7 +188,7 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji: init
             </div>
 
             <div className="space-y-4 pt-4">
-                <h3 className="font-medium text-center text-sm text-muted-foreground">Upload New Files</h3>
+                <h3 className="font-medium text-center text-sm text-muted-foreground">{t('emoji_form_upload_new_title')}</h3>
                  <div className="space-y-2">
                     <Label htmlFor="png">PNG</Label>
                     <Input id="png" type="file" {...register("png")} accept="image/png" multiple />
@@ -206,7 +208,7 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji: init
             </div>
 
             <div className="space-y-2 pt-4">
-              <h3 className="font-medium text-center text-sm text-muted-foreground">Uploaded Files</h3>
+              <h3 className="font-medium text-center text-sm text-muted-foreground">{t('emoji_form_uploaded_title')}</h3>
               {Object.entries(emoji.formats).map(([format, files]) => (
                 files && files.length > 0 && (
                   <div key={format}>
@@ -227,18 +229,20 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji: init
                   </div>
                 )
               ))}
-              {Object.values(emoji.formats).every(f => !f || f.length === 0) && <p className="text-sm text-center text-muted-foreground">No files uploaded yet.</p>}
+              {Object.values(emoji.formats).every(f => !f || f.length === 0) && <p className="text-sm text-center text-muted-foreground">{t('emoji_form_no_files_uploaded')}</p>}
             </div>
 
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
+              {t('dialog_cancel_button')}
             </Button>
-            <Button type="submit">Save Changes</Button>
+            <Button type="submit">{t('dialog_save_changes_button')}</Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
   );
 }
+
+    
