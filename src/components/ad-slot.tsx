@@ -12,7 +12,6 @@ interface AdSlotProps {
 export function AdSlot({ location, className }: AdSlotProps) {
   const { settings } = useSiteSettings();
   
-  // Ensure settings and adSettings are available before trying to find an ad
   const ad = settings?.adSettings?.find(
     (ad) => ad.location === location && ad.enabled
   );
@@ -21,5 +20,13 @@ export function AdSlot({ location, className }: AdSlotProps) {
     return null;
   }
 
-  return <div className={cn(className)} dangerouslySetInnerHTML={{ __html: ad.code }} />;
+  const alignmentStyles = {
+    left: 'text-left',
+    center: 'text-center',
+    right: 'text-right',
+  };
+
+  const alignClass = alignmentStyles[ad.align || 'center'];
+
+  return <div className={cn(alignClass, className)} dangerouslySetInnerHTML={{ __html: ad.code }} />;
 }

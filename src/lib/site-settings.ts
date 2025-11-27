@@ -37,7 +37,7 @@ export const defaultSiteSettings: SiteSettings = {
     </svg>`,
     downloadTimer: 10,
     adSettings: [
-        { location: 'header', code: `<div style="text-align:center; margin: 20px 0;">
+        { location: 'header', code: `<div style="margin: 20px 0;">
   <a href="https://example.com" target="_blank" title="Visit our website demo">
     <img src="https://placehold.co/728x90.png?text=Header+Ad+image+Photos" 
          alt="Demo Banner Ad" 
@@ -45,8 +45,8 @@ export const defaultSiteSettings: SiteSettings = {
          height="90" 
          style="border: 0; max-width: 100%; height: auto; margin: 0 auto;">
   </a>
-</div>`, enabled: true },
-        { location: 'footer', code: `<div style="text-align:center; margin: 20px 0;">
+</div>`, enabled: true, align: 'center' },
+        { location: 'footer', code: `<div style="margin: 20px 0;">
   <a href="https://example.com" target="_blank" title="Visit our website demo">
     <img src="https://placehold.co/728x90.png?text=Footer+Ad+image+Photos" 
          alt="Demo Banner Ad" 
@@ -54,8 +54,8 @@ export const defaultSiteSettings: SiteSettings = {
          height="90" 
          style="border: 0; max-width: 100%; height: auto; margin: 0 auto;">
   </a>
-</div>`, enabled: true },
-        { location: 'sidebar', code: `<div style="text-align:center; margin: 20px 0;">
+</div>`, enabled: true, align: 'center' },
+        { location: 'sidebar', code: `<div style="margin: 20px 0;">
   <a href="https://example.com" target="_blank" title="Visit our website demo">
     <img src="https://placehold.co/300x250.png?text=Sidebar+Ad+image+Photos" 
          alt="Demo Banner Ad" 
@@ -63,8 +63,8 @@ export const defaultSiteSettings: SiteSettings = {
          height="250" 
          style="border: 0; max-width: 100%; height: auto; margin: 0 auto;">
   </a>
-</div>`, enabled: true },
-        { location: 'below_emoji', code: `<div style="text-align:center; margin: 20px 0;">
+</div>`, enabled: true, align: 'center' },
+        { location: 'below_emoji', code: `<div style="margin: 20px 0;">
   <a href="https://example.com" target="_blank" title="Visit our website demo">
     <img src="https://placehold.co/468x60.png?text=Below+Emoji+Ad+image+Photos" 
          alt="Demo Banner Ad" 
@@ -72,8 +72,8 @@ export const defaultSiteSettings: SiteSettings = {
          height="60" 
          style="border: 0; max-width: 100%; height: auto; margin: 0 auto;">
   </a>
-</div>`, enabled: true },
-        { location: 'in_download_grid', code: `<div style="text-align:center; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+</div>`, enabled: true, align: 'center' },
+        { location: 'in_download_grid', code: `<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
   <a href="https://example.com" target="_blank" title="Visit our website demo">
     <img src="https://placehold.co/300x250.png?text=Grid+Ad" 
          alt="Demo Grid Ad" 
@@ -81,8 +81,8 @@ export const defaultSiteSettings: SiteSettings = {
          height="250" 
          style="border: 0; max-width: 100%; height: auto; margin: 0 auto;">
   </a>
-</div>`, enabled: true },
-        { location: 'below_download', code: `<div style="text-align:center; margin: 20px 0;">
+</div>`, enabled: true, align: 'center' },
+        { location: 'below_download', code: `<div style="margin: 20px 0;">
   <a href="https://example.com" target="_blank" title="Visit our website demo">
     <img src="https://placehold.co/468x60.png?text=Below+Download+Ad+image+Photos" 
          alt="Demo Banner Ad" 
@@ -90,6 +90,6 @@ export const defaultSiteSettings: SiteSettings = {
          height="60" 
          style="border: 0; max-width: 100%; height: auto; margin: 0 auto;">
   </a>
-</div>`, enabled: true },
+</div>`, enabled: true, align: 'center' },
     ]
 };

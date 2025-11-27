@@ -56,6 +56,7 @@ export type AdSetting = {
   location: string;
   code: string;
   enabled: boolean;
+  align?: 'left' | 'center' | 'right';
 };
 
 export type SiteSettings = {

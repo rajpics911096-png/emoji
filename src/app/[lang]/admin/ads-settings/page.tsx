@@ -51,6 +51,12 @@ export default function AdsSettingsPage() {
       newSettings[index].location = location;
       setAdSettings(newSettings);
   }
+
+  const handleAlignChange = (index: number, align: 'left' | 'center' | 'right') => {
+      const newSettings = [...adSettings];
+      newSettings[index].align = align;
+      setAdSettings(newSettings);
+  }
   
   const handleEnabledChange = (index: number, enabled: boolean) => {
     const newSettings = [...adSettings];
@@ -59,7 +65,7 @@ export default function AdsSettingsPage() {
   }
 
   const handleAddSlot = () => {
-    setAdSettings([...(adSettings || []), { location: 'custom', code: '', enabled: true }]);
+    setAdSettings([...(adSettings || []), { location: 'custom', code: '', enabled: true, align: 'center' }]);
   }
   
   const handleRemoveSlot = (index: number) => {
@@ -94,8 +100,8 @@ export default function AdsSettingsPage() {
                         <Trash2 className="h-4 w-4" />
                      </Button>
                 </div>
-              <div className="grid md:grid-cols-3 gap-4">
-                <div className="space-y-2">
+              <div className="grid md:grid-cols-2 gap-4">
+                 <div className="space-y-2">
                   <Label htmlFor={`ad-location-${index}`}>{t('ads_settings_location_label')}</Label>
                   <Select value={setting.location} onValueChange={(value) => handleLocationChange(index, value)}>
                     <SelectTrigger id={`ad-location-${index}`}>
@@ -109,6 +115,19 @@ export default function AdsSettingsPage() {
                       <SelectItem value="in_download_grid">In Download Grid</SelectItem>
                       <SelectItem value="below_download">Below Download</SelectItem>
                        <SelectItem value="custom">Custom</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor={`ad-align-${index}`}>Alignment</Label>
+                  <Select value={setting.align || 'center'} onValueChange={(value: 'left' | 'center' | 'right') => handleAlignChange(index, value)}>
+                    <SelectTrigger id={`ad-align-${index}`}>
+                      <SelectValue placeholder="Select alignment" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="left">Left</SelectItem>
+                      <SelectItem value="center">Center</SelectItem>
+                      <SelectItem value="right">Right</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
