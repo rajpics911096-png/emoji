@@ -1,10 +1,12 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getEmojiById, getRelatedEmojis, emojis } from '@/lib/data';
+import { getEmojiById, getRelatedEmojis, emojis, categories } from '@/lib/data';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { EmojiCard } from '@/components/emoji-card';
 import { EmojiView } from './components/emoji-view';
+import { SvgIcon } from '@/components/svg-icon';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export async function generateStaticParams() {
     return emojis.map((emoji) => ({
@@ -19,6 +21,7 @@ export default function EmojiPage({ params }: { params: { id: string } }) {
     notFound();
   }
 
+  const category = categories.find(c => c.id === emoji.category);
   const related = getRelatedEmojis(emoji);
 
   return (
@@ -30,11 +33,32 @@ export default function EmojiPage({ params }: { params: { id: string } }) {
             <div className="md:col-span-2">
                 <EmojiView emoji={emoji} />
             </div>
-            <aside>
-                <div>
-                    <h3 className="font-headline text-2xl font-semibold mb-2 text-primary">Description</h3>
-                    <p className="text-lg text-foreground/80 leading-relaxed">{emoji.description}</p>
-                </div>
+            <aside className="space-y-8">
+              <div className="space-y-4">
+                <h3 className="font-headline text-2xl font-semibold text-primary">
+                  Description
+                </h3>
+                <p className="text-lg text-foreground/80 leading-relaxed">
+                  {emoji.description}
+                </p>
+              </div>
+
+              {category && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Category</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Link href={`/emojis/${category.id}`} className="group flex items-center gap-4">
+                        <SvgIcon svg={category.icon} className="w-10 h-10 text-primary" />
+                        <div>
+                            <p className="font-semibold text-lg group-hover:text-primary transition-colors">{category.name}</p>
+                            <p className="text-sm text-muted-foreground">View all emojis in this category</p>
+                        </div>
+                    </Link>
+                  </CardContent>
+                </Card>
+              )}
             </aside>
           </div>
           {related.length > 0 && (
