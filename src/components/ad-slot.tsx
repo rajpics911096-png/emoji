@@ -1,12 +1,15 @@
+
 "use client";
 
 import { useSiteSettings } from "@/context/site-settings-context";
+import { cn } from "@/lib/utils";
 
 interface AdSlotProps {
   location: string;
+  className?: string;
 }
 
-export function AdSlot({ location }: AdSlotProps) {
+export function AdSlot({ location, className }: AdSlotProps) {
   const { settings } = useSiteSettings();
   
   // Ensure settings and adSettings are available before trying to find an ad
@@ -18,5 +21,5 @@ export function AdSlot({ location }: AdSlotProps) {
     return null;
   }
 
-  return <div dangerouslySetInnerHTML={{ __html: ad.code }} />;
+  return <div className={cn(className)} dangerouslySetInnerHTML={{ __html: ad.code }} />;
 }

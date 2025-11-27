@@ -106,6 +106,7 @@ export default function AdsSettingsPage() {
                       <SelectItem value="footer">{t('ads_settings_location_footer')}</SelectItem>
                       <SelectItem value="below_emoji">{t('ads_settings_location_below_emoji')}</SelectItem>
                       <SelectItem value="sidebar">{t('ads_settings_location_sidebar')}</SelectItem>
+                      <SelectItem value="in_download_grid">In Download Grid</SelectItem>
                        <SelectItem value="custom">Custom</SelectItem>
                     </SelectContent>
                   </Select>

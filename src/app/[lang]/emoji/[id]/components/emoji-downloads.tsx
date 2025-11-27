@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { Emoji } from '@/lib/types';
@@ -9,11 +9,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import { Video } from 'lucide-react';
 import { useTranslations } from '@/context/translations-context';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
+import { AdSlot } from '@/components/ad-slot';
 
 export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) {
   const { formats } = emoji;
@@ -82,7 +81,8 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
         </div>
         <TabsContent value={selectedFormat}>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
-            {filteredFiles.map((file, index) => (
+            {filteredFiles.flatMap((file, index) => {
+              const fileCard = (
                 <Card key={`${file.url}-${index}`} className="group overflow-hidden transition-shadow hover:shadow-lg">
                     <CardContent className="p-3 flex flex-col h-full">
                         <Link 
@@ -106,7 +106,13 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
                          </Button>
                     </CardContent>
                 </Card>
-            ))}
+              );
+
+              if ((index + 1) % 2 === 0) {
+                return [fileCard, <AdSlot key={`ad-${index}`} location="in_download_grid" className="flex items-center justify-center" />];
+              }
+              return fileCard;
+            })}
             </div>
         </TabsContent>
       </Tabs>
