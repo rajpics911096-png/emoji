@@ -1,7 +1,6 @@
 
 'use client';
 
-import { use } from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getEmojiById, getRelatedEmojis, emojis, categories } from '@/lib/data';
@@ -16,7 +15,7 @@ import { useEffect, useRef } from 'react';
 import { useTranslations } from '@/context/translations-context';
 
 export default function EmojiPage({ params }: { params: { id: string, lang: string } }) {
-  const { id, lang } = use(Promise.resolve(params));
+  const { id, lang } = params;
   const emoji = getEmojiById(id);
   const effectRan = useRef(false);
   const { t } = useTranslations();
