@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/table";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, PlusCircle } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { MoreHorizontal, PlusCircle, ExternalLink } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { categories as initialCategories } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
@@ -19,6 +19,7 @@ import type { EmojiCategory } from "@/lib/types";
 import { AddCategoryDialog } from "./components/add-category-dialog";
 import { EditCategoryDialog } from "./components/edit-category-dialog";
 import { SvgIcon } from "@/components/svg-icon";
+import Link from "next/link";
 
 export default function CategoriesPage() {
   const { toast } = useToast();
@@ -116,8 +117,15 @@ export default function CategoriesPage() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuItem asChild>
+                        <Link href={`/emojis/${category.id}`} target="_blank">
+                          <ExternalLink className="mr-2 h-4 w-4" />
+                          Preview
+                        </Link>
+                      </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleEditClick(category)}>Edit</DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleDelete(category.id, category.name)}>Delete</DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => handleDelete(category.id, category.name)} className="text-destructive">Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
