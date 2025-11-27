@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Table,
   TableBody,
@@ -12,8 +14,25 @@ import { Badge } from "@/components/ui/badge";
 import { MoreHorizontal, PlusCircle } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { emojis } from "@/lib/data";
+import { useToast } from "@/hooks/use-toast";
 
 export default function EmojisPage() {
+  const { toast } = useToast();
+
+  const handleAction = (action: string, emojiTitle: string) => {
+    toast({
+      title: `${action} Clicked`,
+      description: `You've clicked ${action} for "${emojiTitle}".`,
+    });
+  };
+
+  const handleAdd = () => {
+    toast({
+      title: "Add Emoji Clicked",
+      description: "You've clicked the 'Add Emoji' button.",
+    });
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -22,7 +41,7 @@ export default function EmojisPage() {
                 <CardTitle>Emojis</CardTitle>
                 <CardDescription>Manage your website&apos;s emojis here.</CardDescription>
             </div>
-            <Button size="sm" className="gap-1">
+            <Button size="sm" className="gap-1" onClick={handleAdd}>
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Add Emoji</span>
             </Button>
@@ -64,8 +83,8 @@ export default function EmojisPage() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
-                      <DropdownMenuItem>Delete</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleAction('Edit', emoji.title)}>Edit</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleAction('Delete', emoji.title)}>Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>

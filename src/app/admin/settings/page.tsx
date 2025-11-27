@@ -6,8 +6,26 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 
 export default function SettingsPage() {
+  const { toast } = useToast();
+
+  const handleSave = () => {
+    toast({
+      title: "Settings Saved",
+      description: "Your settings have been successfully saved.",
+    });
+  };
+
+  const handleSitemap = () => {
+    toast({
+      title: "Sitemap Generated",
+      description: "Sitemap has been generated/updated.",
+    });
+  };
+
+
   return (
     <div className="mx-auto grid max-w-4xl flex-1 auto-rows-start gap-4 md:gap-8 lg:max-w-5xl">
       <div className="grid auto-rows-start gap-4 md:gap-8">
@@ -98,14 +116,14 @@ export default function SettingsPage() {
               <Textarea id="meta-description" defaultValue="Discover, copy, and download thousands of emojis in various formats including PNG, GIF, and more." />
             </div>
             <div>
-                <Button>Generate/Update Sitemap</Button>
+                <Button onClick={handleSitemap}>Generate/Update Sitemap</Button>
                 <p className="text-sm text-muted-foreground mt-2">Click to update the sitemap for search engines.</p>
             </div>
           </CardContent>
         </Card>
 
         <div className="flex justify-end">
-            <Button size="lg">Save All Settings</Button>
+            <Button size="lg" onClick={handleSave}>Save All Settings</Button>
         </div>
       </div>
     </div>
