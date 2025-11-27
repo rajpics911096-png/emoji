@@ -19,6 +19,7 @@ import {
   Github, 
   Twitter, 
   Linkedin,
+  FileText,
 } from 'lucide-react';
 
 export const iconMap: { [key: string]: React.ComponentType<{ className?: string }> } = {
@@ -42,6 +43,7 @@ export const iconMap: { [key: string]: React.ComponentType<{ className?: string 
   'github': Github,
   'twitter': Twitter,
   'linkedin': Linkedin,
+  'file-text': FileText,
 };
 
 export const iconNames = Object.keys(iconMap);

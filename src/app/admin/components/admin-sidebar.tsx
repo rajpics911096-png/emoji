@@ -18,6 +18,7 @@ import {
   Smile,
   LogOut,
   Tags,
+  FileText,
 } from "lucide-react";
 
 export function AdminSidebar() {
@@ -43,6 +44,11 @@ export function AdminSidebar() {
       href: "/admin/settings",
       label: "Settings",
       icon: Settings,
+    },
+    {
+      href: "/admin/footer-settings",
+      label: "Footer Settings",
+      icon: FileText,
     },
   ];
 
