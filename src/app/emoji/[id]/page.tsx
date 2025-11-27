@@ -11,16 +11,21 @@ import { EmojiView } from './components/emoji-view';
 import { SvgIcon } from '@/components/svg-icon';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EmojiDownloads } from './components/emoji-downloads';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function EmojiPage({ params }: { params: { id: string } }) {
   const emoji = getEmojiById(params.id);
+  const effectRan = useRef(false);
 
   useEffect(() => {
-    if (emoji) {
+    if (emoji && !effectRan.current) {
       const views = JSON.parse(localStorage.getItem('emojiViews') || '{}');
       views[emoji.id] = (views[emoji.id] || emoji.views || 0) + 1;
       localStorage.setItem('emojiViews', JSON.stringify(views));
+      
+      return () => {
+        effectRan.current = true;
+      };
     }
   }, [emoji]);
 
