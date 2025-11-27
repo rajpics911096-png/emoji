@@ -32,6 +32,10 @@ export function LanguageSwitcher() {
         <SelectItem value="hi">हिन्दी</SelectItem>
         <SelectItem value="fr">Français</SelectItem>
         <SelectItem value="ja">日本語</SelectItem>
+        <SelectItem value="de">Deutsch</SelectItem>
+        <SelectItem value="pt">Português</SelectItem>
+        <SelectItem value="ru">Русский</SelectItem>
+        <SelectItem value="zh">中文</SelectItem>
       </SelectContent>
     </Select>
   );
