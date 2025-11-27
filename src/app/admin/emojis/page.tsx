@@ -11,14 +11,15 @@ import {
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MoreHorizontal, PlusCircle, ArrowUpDown } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { MoreHorizontal, PlusCircle, ArrowUpDown, ExternalLink } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { emojis as initialEmojis } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useMemo, useEffect } from "react";
 import { AddEmojiDialog } from "./components/add-emoji-dialog";
 import type { Emoji } from "@/lib/types";
 import { EditEmojiDialog } from "./components/edit-emoji-dialog";
+import Link from "next/link";
 
 type SortConfig = {
   key: keyof Emoji;
@@ -191,8 +192,15 @@ export default function EmojisPage() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuItem asChild>
+                        <Link href={`/emoji/${emoji.id}`} target="_blank">
+                          <ExternalLink className="mr-2 h-4 w-4" />
+                          Preview
+                        </Link>
+                      </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleEditClick(emoji)}>Edit</DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleDelete(emoji.id, emoji.title)}>Delete</DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => handleDelete(emoji.id, emoji.title)} className="text-destructive">Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
