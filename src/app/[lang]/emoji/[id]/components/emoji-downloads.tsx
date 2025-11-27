@@ -124,23 +124,25 @@ export function EmojiDownloads({ emoji }: { emoji: Emoji }) {
         {t('downloadsTitle')}
       </h2>
       <Tabs defaultValue={tabs[0].value}>
-        <ScrollArea className="w-full whitespace-nowrap">
-          <TabsList className="inline-flex h-auto p-1.5 bg-card/50 justify-start w-auto mx-auto mb-8 rounded-full">
-            {tabs.map(tab => (
-              <TabsTrigger 
-                key={tab.value} 
-                value={tab.value}
-                className={cn(
-                  "inline-flex items-center justify-center whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-                  "data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md data-[state=inactive]:bg-transparent data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-muted/80"
-                  )}
-              >
-                {tab.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
+        <div className="flex justify-center">
+            <ScrollArea className="w-auto whitespace-nowrap">
+            <TabsList className="inline-flex h-auto p-1.5 bg-card/50 justify-center w-auto mb-8 rounded-full">
+                {tabs.map(tab => (
+                <TabsTrigger 
+                    key={tab.value} 
+                    value={tab.value}
+                    className={cn(
+                    "inline-flex items-center justify-center whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+                    "data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md data-[state=inactive]:bg-transparent data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-muted/80"
+                    )}
+                >
+                    {tab.label}
+                </TabsTrigger>
+                ))}
+            </TabsList>
+            <ScrollBar orientation="horizontal" />
+            </ScrollArea>
+        </div>
         {tabs.map(tab => (
             <TabsContent key={tab.value} value={tab.value}>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
