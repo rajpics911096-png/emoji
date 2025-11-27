@@ -78,7 +78,7 @@ const FilePreview = ({ file, format }: { file: EmojiFormatFile; format: string }
     const isVideo = format === 'video' || file.type?.startsWith('video/');
 
     return (
-      <div className="aspect-square w-full max-w-lg mx-auto bg-muted flex items-center justify-center relative rounded-lg border overflow-hidden shadow-sm">
+      <div className="aspect-square w-full max-w-lg mx-auto bg-muted/50 flex items-center justify-center relative rounded-lg border overflow-hidden shadow-sm">
         {isImage ? (
             <Image src={file.url} alt={file.name} layout="fill" objectFit="contain" className="p-4" />
         ) : isVideo ? (
@@ -122,7 +122,7 @@ export default function FileDownloadPage() {
   return (
     <>
       <Header lang={lang} />
-      <main className="flex-1 py-8 md:py-12">
+      <main className="flex-1 py-8 md:py-12 bg-primary/5">
         <div className="container mx-auto px-4">
             <div className="mb-8">
                  <Button asChild variant="outline">
@@ -189,4 +189,3 @@ export default function FileDownloadPage() {
     </>
   );
 }
-
