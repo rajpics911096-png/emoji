@@ -126,7 +126,7 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji: init
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-3xl">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>Edit Emoji</DialogTitle>
