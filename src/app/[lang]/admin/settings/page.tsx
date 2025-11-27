@@ -10,7 +10,7 @@ import { useSiteSettings } from "@/context/site-settings-context";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslations } from "@/context/translations-context";
 import { useState } from "react";
-import { getAuth, updatePassword, verifyBeforeUpdateEmail, type User, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
+import { getAuth, updatePassword, updateEmail, type User, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { Separator } from "@/components/ui/separator";
 import {
   AlertDialog,
@@ -64,10 +64,10 @@ export default function SettingsPage() {
     const user = auth.currentUser;
     if (user) {
         try {
-            await verifyBeforeUpdateEmail(user, newEmail);
+            await updateEmail(user, newEmail);
             toast({
-                title: "Verification Email Sent",
-                description: `A verification link has been sent to ${newEmail}. Please check your inbox to complete the change.`,
+                title: "Email Updated",
+                description: `Your login email has been changed to ${newEmail}.`,
             });
             setNewEmail("");
         } catch (error: any) {
