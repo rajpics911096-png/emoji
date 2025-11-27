@@ -18,17 +18,26 @@ import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { AddEmojiDialog } from "./components/add-emoji-dialog";
 import type { Emoji } from "@/lib/types";
+import { EditEmojiDialog } from "./components/edit-emoji-dialog";
 
 export default function EmojisPage() {
   const { toast } = useToast();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [selectedEmoji, setSelectedEmoji] = useState<Emoji | null>(null);
   const [emojiList, setEmojiList] = useState<Emoji[]>(emojis);
 
-  const handleAction = (action: string, emojiTitle: string) => {
+  const handleDelete = (emojiId: string, emojiTitle: string) => {
+    setEmojiList(emojiList.filter((emoji) => emoji.id !== emojiId));
     toast({
-      title: `${action} Clicked`,
-      description: `You've clicked ${action} for "${emojiTitle}".`,
+      title: "Emoji Deleted",
+      description: `"${emojiTitle}" has been deleted.`,
     });
+  };
+
+  const handleEditClick = (emoji: Emoji) => {
+    setSelectedEmoji(emoji);
+    setIsEditDialogOpen(true);
   };
 
   const handleAddEmoji = (newEmoji: Omit<Emoji, 'id' | 'formats' | 'related'>) => {
@@ -45,7 +54,16 @@ export default function EmojisPage() {
     });
     setIsAddDialogOpen(false);
   };
-
+  
+  const handleEditEmoji = (updatedEmoji: Emoji) => {
+    setEmojiList(emojiList.map(e => e.id === updatedEmoji.id ? updatedEmoji : e));
+    toast({
+        title: "Emoji Updated",
+        description: `"${updatedEmoji.title}" has been updated.`,
+    });
+    setIsEditDialogOpen(false);
+    setSelectedEmoji(null);
+  };
 
   return (
     <>
@@ -98,8 +116,8 @@ export default function EmojisPage() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuItem onClick={() => handleAction('Edit', emoji.title)}>Edit</DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleAction('Delete', emoji.title)}>Delete</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleEditClick(emoji)}>Edit</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleDelete(emoji.id, emoji.title)}>Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
@@ -114,6 +132,14 @@ export default function EmojisPage() {
         onOpenChange={setIsAddDialogOpen}
         onAddEmoji={handleAddEmoji}
     />
+    {selectedEmoji && (
+        <EditEmojiDialog
+            isOpen={isEditDialogOpen}
+            onOpenChange={setIsEditDialogOpen}
+            onEditEmoji={handleEditEmoji}
+            emoji={selectedEmoji}
+        />
+    )}
     </>
   );
 }
