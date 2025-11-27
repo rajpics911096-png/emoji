@@ -1,3 +1,4 @@
+
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
@@ -102,6 +103,12 @@ export function AdminSidebar() {
       icon: FileText,
       activeMatch: '/admin/ads-txt',
     },
+    {
+      href: `/admin/settings`,
+      label: t('admin_settings'),
+      icon: Settings,
+      activeMatch: '/admin/settings',
+    },
   ];
 
   const cleanedPathname = pathname.substring(3); // Remove language code
@@ -139,18 +146,6 @@ export function AdminSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              isActive={cleanedPathname.startsWith('/admin/settings')}
-              tooltip={t('admin_settings')}
-            >
-              <Link href={`/${language}/admin/settings`}>
-                <Settings />
-                <span>{t('admin_settings')}</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton onClick={handleLogout} tooltip={t('admin_logout')}>
               <LogOut />
