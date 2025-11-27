@@ -2,10 +2,11 @@ import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Smile, Users, Eye, Download, PlusCircle, FilePlus, ArrowRight } from "lucide-react";
 import { Button } from '@/components/ui/button';
+import { emojis } from '@/lib/data';
 
 export default function DashboardPage() {
   const stats = [
-    { title: "Total Emojis", value: "1,250", icon: Smile, change: "+20.1% from last month", color: "bg-blue-500" },
+    { title: "Total Emojis", value: emojis.length.toLocaleString(), icon: Smile, change: "+20.1% from last month", color: "bg-blue-500" },
     { title: "Total Users", value: "23,456", icon: Users, change: "+180.1% from last month", color: "bg-green-500" },
     { title: "Page Views", value: "5,231,890", icon: Eye, change: "+19% from last month", color: "bg-yellow-500" },
     { title: "Total Downloads", value: "1,234,567", icon: Download, change: "+22% from last month", color: "bg-red-500" },
