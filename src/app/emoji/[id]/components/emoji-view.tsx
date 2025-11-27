@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -5,8 +6,9 @@ import type { Emoji, EmojiFormatFile } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
-import { Copy, Check, Download, FileType, HardDriveDownload, Image as ImageIcon, Film, FileArchive } from 'lucide-react';
+import { Copy, Check, Download, FileType, HardDriveDownload, Image as ImageIcon, Film, FileArchive, Grid, List } from 'lucide-react';
 import { downloadTimer } from '@/lib/data';
+import Image from 'next/image';
 
 interface EmojiViewProps {
   emoji: Emoji;
@@ -36,7 +38,7 @@ export function EmojiView({ emoji }: EmojiViewProps) {
     } else if (downloading && downloading.timer === 0) {
       const link = document.createElement('a');
       link.href = downloading.url;
-      link.setAttribute('download', downloading.url.split('/').pop() || 'download');
+      link.setAttribute('download', file.name);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -44,16 +46,58 @@ export function EmojiView({ emoji }: EmojiViewProps) {
     }
   }, [downloading]);
 
+  const allFiles = Object.entries(emoji.formats).flatMap(([format, files]) => files.map(file => ({ ...file, format })));
   const formatTabs = Object.entries(emoji.formats)
     .filter(([, files]) => files.length > 0)
     .map(([format]) => format);
+  
+  const tabs = allFiles.length > 0 ? ['all', ...formatTabs] : [];
 
   const formatIcons: { [key: string]: React.ReactNode } = {
+    all: <Grid className="mr-2 h-4 w-4" />,
     png: <ImageIcon className="mr-2 h-4 w-4" />,
     gif: <Film className="mr-2 h-4 w-4" />,
     image: <FileType className="mr-2 h-4 w-4" />,
     video: <FileArchive className="mr-2 h-4 w-4" />,
   };
+  
+  const FilePreview = ({ file, format }: { file: EmojiFormatFile, format: string }) => {
+    switch (format) {
+      case 'png':
+      case 'gif':
+      case 'image':
+        return <Image src={file.url} alt={file.name} width={128} height={128} className="w-32 h-32 object-contain bg-secondary/50 rounded-md" />;
+      case 'video':
+        return <video src={file.url} controls className="w-32 h-32 bg-secondary/50 rounded-md" />;
+      default:
+        return <div className="w-32 h-32 flex items-center justify-center bg-secondary/50 rounded-md"><FileType className="w-12 h-12 text-muted-foreground" /></div>;
+    }
+  };
+
+  const FileCard = ({ file, format }: { file: EmojiFormatFile, format: string }) => (
+    <div key={file.url} className="flex items-center justify-between p-3 bg-secondary/50 rounded-md">
+      <div className="flex items-center gap-4">
+        <FilePreview file={file} format={format} />
+        <div>
+          <p className="font-semibold">{file.name}</p>
+          <p className="text-sm text-muted-foreground">{file.size}</p>
+        </div>
+      </div>
+      <Button 
+        onClick={() => handleDownload(file)} 
+        disabled={!!downloading} 
+        className="w-40"
+      >
+        {downloading && downloading.url === file.url ? (
+            `Downloading in ${downloading.timer}s`
+        ) : (
+            <>
+                <Download className="mr-2 h-4 w-4" /> Download
+            </>
+        )}
+      </Button>
+    </div>
+  );
 
   return (
     <article>
@@ -78,47 +122,33 @@ export function EmojiView({ emoji }: EmojiViewProps) {
         <p className="text-lg text-foreground/80 leading-relaxed">{emoji.description}</p>
       </div>
       
-      {formatTabs.length > 0 && (
+      {tabs.length > 0 && (
         <div className="mt-10">
           <h2 className="text-2xl font-headline font-semibold mb-4">Downloads</h2>
-          <Tabs defaultValue={formatTabs[0]} className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
-              {Object.entries(emoji.formats).map(([format, files]) =>
-                files.length > 0 ? (
-                    <TabsTrigger key={format} value={format} className="capitalize">
-                      {formatIcons[format]} {format}
-                    </TabsTrigger>
-                ) : null
-              )}
+          <Tabs defaultValue={tabs[0]} className="w-full">
+            <TabsList className={`grid w-full grid-cols-${tabs.length}`}>
+              {tabs.map((tab) => (
+                <TabsTrigger key={tab} value={tab} className="capitalize">
+                    {formatIcons[tab]} {tab}
+                </TabsTrigger>
+              ))}
             </TabsList>
+            <TabsContent value="all">
+                <Card>
+                    <CardContent className="p-6 space-y-4">
+                        {allFiles.map(file => (
+                            <FileCard key={file.url} file={file} format={file.format} />
+                        ))}
+                    </CardContent>
+                </Card>
+            </TabsContent>
             {Object.entries(emoji.formats).map(([format, files]) =>
               files.length > 0 ? (
                 <TabsContent key={format} value={format}>
                   <Card>
                     <CardContent className="p-6 space-y-4">
-                      {files.map((file, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-secondary/50 rounded-md">
-                          <div className="flex items-center">
-                            <HardDriveDownload className="h-5 w-5 mr-3 text-primary"/>
-                            <div>
-                                <p className="font-semibold">{file.name}</p>
-                                <p className="text-sm text-muted-foreground">{file.size}</p>
-                            </div>
-                          </div>
-                          <Button 
-                            onClick={() => handleDownload(file)} 
-                            disabled={!!downloading} 
-                            className="w-40"
-                          >
-                            {downloading && downloading.url === file.url ? (
-                                `Downloading in ${downloading.timer}s`
-                            ) : (
-                                <>
-                                    <Download className="mr-2 h-4 w-4" /> Download
-                                </>
-                            )}
-                          </Button>
-                        </div>
+                      {files.map((file) => (
+                        <FileCard key={file.url} file={file} format={format} />
                       ))}
                     </CardContent>
                   </Card>
