@@ -85,12 +85,6 @@ export function AdminSidebar() {
       activeMatch: '/admin/categories',
     },
     {
-      href: `/admin/settings`,
-      label: t('admin_settings'),
-      icon: Settings,
-      activeMatch: '/admin/settings',
-    },
-    {
       href: `/admin/ads-settings`,
       label: t('admin_ads_settings'),
       icon: Megaphone,
@@ -145,6 +139,18 @@ export function AdminSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              isActive={cleanedPathname.startsWith('/admin/settings')}
+              tooltip={t('admin_settings')}
+            >
+              <Link href={`/${language}/admin/settings`}>
+                <Settings />
+                <span>{t('admin_settings')}</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton onClick={handleLogout} tooltip={t('admin_logout')}>
               <LogOut />
