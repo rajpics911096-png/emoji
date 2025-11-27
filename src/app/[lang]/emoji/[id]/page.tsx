@@ -52,7 +52,9 @@ export default function EmojiPage() {
           <div className="grid md:grid-cols-3 gap-8 md:gap-12">
             <div className="md:col-span-2">
                 <EmojiView emoji={emoji} />
-                <AdSlot location="below_emoji" />
+                <div className="my-8">
+                  <AdSlot location="below_emoji" />
+                </div>
                 <EmojiDownloads emoji={emoji} lang={lang} />
             </div>
             <aside className="space-y-8">
