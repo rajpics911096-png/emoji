@@ -97,6 +97,34 @@ export default function SettingsPage() {
     await performEmailChange();
   };
 
+  const performPasswordChange = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+        try {
+            await updatePassword(user, newPassword);
+            toast({
+                title: "Password Updated",
+                description: "Your password has been changed successfully.",
+            });
+            setNewPassword("");
+            setConfirmPassword("");
+        } catch (error: any) {
+            if (error.code === 'auth/requires-recent-login') {
+                setActionToRetry(() => performPasswordChange);
+                setShowReauthDialog(true);
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "Password Change Failed",
+                    description: error.message || "An error occurred.",
+                });
+            }
+        }
+    }
+  }
+
   const handleReauthenticateAndRetry = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -138,32 +166,7 @@ export default function SettingsPage() {
       });
       return;
     }
-
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if (user) {
-      try {
-        await updatePassword(user, newPassword);
-        toast({
-          title: "Password Updated",
-          description: "Your password has been changed successfully.",
-        });
-        setNewPassword("");
-        setConfirmPassword("");
-      } catch (error: any) {
-         if (error.code === 'auth/requires-recent-login') {
-            setActionToRetry(() => handleChangePassword);
-            setShowReauthDialog(true);
-        } else {
-            toast({
-              variant: "destructive",
-              title: "Password Change Failed",
-              description: error.message,
-            });
-        }
-      }
-    }
+    await performPasswordChange();
   };
 
   return (
