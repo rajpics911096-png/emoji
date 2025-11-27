@@ -41,3 +41,11 @@ export type FooterContent = {
   legal: LinkItem[];
   social: SocialLink[];
 };
+
+export type Page = {
+  id: string;
+  title: string;
+  slug: string;
+  status: 'published' | 'draft';
+  content?: string; // Content will be markdown or HTML
+}

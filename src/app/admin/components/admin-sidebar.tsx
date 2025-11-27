@@ -36,6 +36,11 @@ export function AdminSidebar() {
       icon: Smile,
     },
     {
+      href: "/admin/pages",
+      label: "Pages",
+      icon: FileText,
+    },
+    {
       href: "/admin/categories",
       label: "Categories",
       icon: Tags,
