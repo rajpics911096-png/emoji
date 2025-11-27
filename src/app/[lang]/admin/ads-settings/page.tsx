@@ -44,7 +44,18 @@ export default function AdsSettingsPage() {
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>`, enabled: true },
-    { location: 'footer', code: '', enabled: false },
+    { location: 'footer', code: `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9876543210987654"
+     crossorigin="anonymous"></script>
+<!-- Footer Ad -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9876543210987654"
+     data-ad-slot="0987654321"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>`, enabled: false },
   ]);
 
   const handleSave = () => {
