@@ -87,8 +87,8 @@ export default function Header() {
 
 
         <div className="flex items-center justify-end space-x-2">
-          <LanguageSwitcher />
           <ThemeToggle />
+          <LanguageSwitcher />
         </div>
       </div>
     </header>
