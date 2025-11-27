@@ -3,7 +3,7 @@
 
 import { notFound, useParams } from 'next/navigation';
 import Link from 'next/link';
-import { getEmojiById, getRelatedEmojis, emojis, categories } from '@/lib/data';
+import { getEmojiById, getRelatedEmojis, categories } from '@/lib/data';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { EmojiCard } from '@/components/emoji-card';
@@ -15,7 +15,7 @@ import { useEffect, useRef } from 'react';
 import { useTranslations } from '@/context/translations-context';
 
 export default function EmojiPage() {
-  const params = useParams<{ id: string, lang: string }>();
+  const params = useParams<{ id: string; lang: string }>();
   const { id, lang } = params;
   const emoji = getEmojiById(id);
   const effectRan = useRef(false);
@@ -35,12 +35,11 @@ export default function EmojiPage() {
     };
   }, [emoji]);
 
-
   if (!emoji) {
     notFound();
   }
 
-  const category = categories.find(c => c.id === emoji.category);
+  const category = categories.find((c) => c.id === emoji.category);
   const related = getRelatedEmojis(emoji);
 
   return (
@@ -50,7 +49,7 @@ export default function EmojiPage() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 md:gap-12">
             <div className="md:col-span-2">
-                <EmojiView emoji={emoji} />
+              <EmojiView emoji={emoji} />
             </div>
             <aside className="space-y-8">
               {category && (
@@ -59,22 +58,35 @@ export default function EmojiPage() {
                     <CardTitle>{t('categoryTitle')}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <Link href={`/${lang}/emojis/${category.id}`} className="group flex items-center gap-4">
-                        <SvgIcon svg={category.icon} className="w-10 h-10 text-primary" />
-                        <div>
-                            <p className="font-semibold text-lg group-hover:text-primary transition-colors">{t(`category_${category.id}`)}</p>
-                            <p className="text-sm text-muted-foreground">{t('viewAllInCategory')}</p>
-                        </div>
+                    <Link
+                      href={`/${lang}/emojis/${category.id}`}
+                      className="group flex items-center gap-4"
+                    >
+                      <SvgIcon
+                        svg={category.icon}
+                        className="w-10 h-10 text-primary"
+                      />
+                      <div>
+                        <p className="font-semibold text-lg group-hover:text-primary transition-colors">
+                          {t(`category_${category.id}`)}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {t('viewAllInCategory')}
+                        </p>
+                      </div>
                     </Link>
                   </CardContent>
                 </Card>
               )}
               <div className="space-y-4">
-                <div className="prose dark:prose-invert max-w-none text-foreground/80" dangerouslySetInnerHTML={{ __html: emoji.description }} />
+                <div
+                  className="prose dark:prose-invert max-w-none text-foreground/80"
+                  dangerouslySetInnerHTML={{ __html: emoji.description }}
+                />
               </div>
             </aside>
           </div>
-          
+
           <EmojiDownloads emoji={emoji} lang={lang} />
 
           {related.length > 0 && (
@@ -84,7 +96,11 @@ export default function EmojiPage() {
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
                 {related.map((relatedEmoji) => (
-                  <EmojiCard key={relatedEmoji.id} emoji={relatedEmoji} lang={lang} />
+                  <EmojiCard
+                    key={relatedEmoji.id}
+                    emoji={relatedEmoji}
+                    lang={lang}
+                  />
                 ))}
               </div>
             </section>

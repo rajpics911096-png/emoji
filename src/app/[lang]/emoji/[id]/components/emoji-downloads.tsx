@@ -114,4 +114,3 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
     </section>
   );
 }
-
