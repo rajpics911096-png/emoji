@@ -1,3 +1,5 @@
+"use client";
+
 import Link from 'next/link';
 import {
   Sheet,
@@ -9,10 +11,12 @@ import {
   Menu,
   Shield,
 } from 'lucide-react';
-import { Logo } from './icons';
+import { SvgIcon } from './svg-icon';
 import { categories } from '@/lib/data';
+import { useSiteSettings } from '@/context/site-settings-context';
 
 export default function Header() {
+  const { settings } = useSiteSettings();
   const navItems = categories.filter(c => c.id !== 'all');
 
   return (
@@ -20,9 +24,9 @@ export default function Header() {
       <div className="container flex h-16 items-center">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Logo className="h-6 w-6" />
+            <SvgIcon svg={settings.logo} className="h-6 w-6" />
             <span className="hidden font-bold sm:inline-block font-headline text-lg">
-              EmojiVerse
+              {settings.name}
             </span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
@@ -51,8 +55,8 @@ export default function Header() {
           </SheetTrigger>
           <SheetContent side="left">
             <Link href="/" className="flex items-center space-x-2">
-              <Logo className="h-6 w-6" />
-              <span className="font-bold font-headline text-lg">EmojiVerse</span>
+              <SvgIcon svg={settings.logo} className="h-6 w-6" />
+              <span className="font-bold font-headline text-lg">{settings.name}</span>
             </Link>
             <div className="mt-6 flex flex-col space-y-4">
               {navItems.map((item) => (

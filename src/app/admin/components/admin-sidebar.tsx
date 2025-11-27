@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { Logo } from "@/components/icons";
+import { SvgIcon } from "@/components/svg-icon";
 import {
   LayoutDashboard,
   Settings,
@@ -21,9 +21,12 @@ import {
   FileText,
   Library,
 } from "lucide-react";
+import { useSiteSettings } from "@/context/site-settings-context";
+
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const { settings } = useSiteSettings();
 
   const menuItems = [
     {
@@ -67,10 +70,10 @@ export function AdminSidebar() {
     <Sidebar>
       <SidebarHeader>
         <div className="flex items-center gap-2">
-          <Logo className="size-8 text-sidebar-primary" />
+          <SvgIcon svg={settings.logo} className="size-8 text-sidebar-primary" />
           <div className="flex flex-col">
             <h3 className="text-lg font-headline font-semibold text-sidebar-foreground">
-              EmojiVerse
+              {settings.name}
             </h3>
             <p className="text-xs text-sidebar-foreground/70">Admin Panel</p>
           </div>

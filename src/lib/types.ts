@@ -50,3 +50,9 @@ export type Page = {
   status: 'published' | 'draft';
   content?: string; // Content will be markdown or HTML
 }
+
+export type SiteSettings = {
+  name: string;
+  logo: string; // SVG code as a string
+  downloadTimer: number;
+};

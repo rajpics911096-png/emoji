@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { cn } from '@/lib/utils';
+import { SiteSettingsProvider } from '@/context/site-settings-context';
 
 export const metadata: Metadata = {
   title: 'EmojiVerse',
@@ -28,8 +29,10 @@ export default function RootLayout({
         />
       </head>
       <body className={cn('font-body antialiased min-h-screen flex flex-col')}>
-        {children}
-        <Toaster />
+        <SiteSettingsProvider>
+          {children}
+          <Toaster />
+        </SiteSettingsProvider>
       </body>
     </html>
   );

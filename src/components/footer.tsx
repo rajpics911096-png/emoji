@@ -1,7 +1,10 @@
+"use client";
+
 import Link from 'next/link';
-import { Logo } from './icons';
+import { SvgIcon } from './svg-icon';
 import { footerContent } from '@/lib/data';
 import { iconMap } from '@/lib/icon-map';
+import { useSiteSettings } from '@/context/site-settings-context';
 
 const SocialIcon = ({ iconName, className }: { iconName: string; className?: string }) => {
   const IconComponent = iconMap[iconName] || iconMap.twitter;
@@ -9,6 +12,7 @@ const SocialIcon = ({ iconName, className }: { iconName: string; className?: str
 };
 
 export default function Footer() {
+  const { settings } = useSiteSettings();
   const { navigation, legal, social } = footerContent;
   return (
     <footer className="bg-primary/5 border-t">
@@ -16,8 +20,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center space-x-2 mb-4">
-              <Logo className="h-8 w-8" />
-              <span className="font-bold text-xl font-headline">EmojiVerse</span>
+              <SvgIcon svg={settings.logo} className="h-8 w-8" />
+              <span className="font-bold text-xl font-headline">{settings.name}</span>
             </Link>
             <p className="text-sm text-foreground/70">
               The ultimate collection of emojis for every occasion.
@@ -52,7 +56,7 @@ export default function Footer() {
         </div>
         <div className="mt-12 pt-8 border-t border-border">
           <p className="text-center text-sm text-foreground/60">
-            © {new Date().getFullYear()} EmojiVerse. All rights reserved.
+            © {new Date().getFullYear()} {settings.name}. All rights reserved.
           </p>
         </div>
       </div>

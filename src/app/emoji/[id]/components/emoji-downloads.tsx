@@ -7,9 +7,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, File as FileIcon, Hourglass } from 'lucide-react';
 import Image from 'next/image';
-import { downloadTimer as defaultDownloadTimer } from '@/lib/data';
+import { useSiteSettings } from '@/context/site-settings-context';
+
 
 const DownloadButton = ({ file }: { file: EmojiFormatFile }) => {
+  const { settings } = useSiteSettings();
   const [timer, setTimer] = useState(0);
   const [isCountingDown, setIsCountingDown] = useState(false);
 
@@ -40,7 +42,7 @@ const DownloadButton = ({ file }: { file: EmojiFormatFile }) => {
   };
 
   const startCountdown = () => {
-    setTimer(defaultDownloadTimer);
+    setTimer(settings.downloadTimer);
     setIsCountingDown(true);
   };
 
@@ -88,7 +90,7 @@ const FilePreview = ({ file, format }: { file: EmojiFormatFile; format: string }
 };
 
 
-export function EmojiDownloads({ emoji }: EmojiDownloadsProps) {
+export function EmojiDownloads({ emoji }: { emoji: Emoji }) {
   const { formats } = emoji;
 
   const allFiles = useMemo(() => {
