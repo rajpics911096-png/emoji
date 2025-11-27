@@ -23,7 +23,7 @@ export default function DashboardPage() {
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
-          <Card key={stat.title} className="flex flex-col justify-between transform hover:-translate-y-1 transition-transform duration-300 ease-in-out hover:shadow-xl">
+          <Card key={stat.title}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
               <div className={`p-2 rounded-full text-primary-foreground ${stat.color}`}>
