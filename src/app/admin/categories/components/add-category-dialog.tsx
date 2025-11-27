@@ -47,7 +47,7 @@ export function AddCategoryDialog({ isOpen, onOpenChange, onAddCategory }: AddCa
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>Add New Category</DialogTitle>
@@ -55,7 +55,7 @@ export function AddCategoryDialog({ isOpen, onOpenChange, onAddCategory }: AddCa
               Fill in the details below to add a new category.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
+          <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto px-1">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">
                 Name

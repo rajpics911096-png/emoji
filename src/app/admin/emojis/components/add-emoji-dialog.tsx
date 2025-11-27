@@ -19,17 +19,17 @@ import * as z from "zod";
 import { categories } from "@/lib/data";
 import type { Emoji, EmojiFormatFile } from "@/lib/types";
 
-const fileSchema = z.custom<FileList>().transform(file => file.length > 0 ? file.item(0) : null);
+const fileSchema = z.custom<FileList>().optional();
 
 const emojiSchema = z.object({
   emoji: z.string().min(1, "Emoji character is required."),
   title: z.string().min(1, "Title is required."),
   description: z.string().min(1, "Description is required."),
   category: z.string().min(1, "Category is required."),
-  png: fileSchema.optional(),
-  gif: fileSchema.optional(),
-  image: fileSchema.optional(),
-  video: fileSchema.optional(),
+  png: fileSchema,
+  gif: fileSchema,
+  image: fileSchema,
+  video: fileSchema,
 });
 
 type EmojiFormData = z.infer<typeof emojiSchema>;
@@ -59,22 +59,18 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
         video: EmojiFormatFile[];
     } = { png: [], gif: [], image: [], video: [] };
 
-    if (data.png) {
-        const file = data.png;
-        newFormats.png.push({ name: file.name, size: `${(file.size / 1024).toFixed(2)} KB`, url: URL.createObjectURL(file) });
+    const processFiles = (files: FileList | undefined, format: keyof typeof newFormats) => {
+        if (files) {
+            Array.from(files).forEach(file => {
+                newFormats[format].push({ name: file.name, size: `${(file.size / 1024).toFixed(2)} KB`, url: URL.createObjectURL(file) });
+            });
+        }
     }
-    if (data.gif) {
-        const file = data.gif;
-        newFormats.gif.push({ name: file.name, size: `${(file.size / 1024).toFixed(2)} KB`, url: URL.createObjectURL(file) });
-    }
-    if (data.image) {
-        const file = data.image;
-        newFormats.image.push({ name: file.name, size: `${(file.size / 1024).toFixed(2)} KB`, url: URL.createObjectURL(file) });
-    }
-    if (data.video) {
-        const file = data.video;
-        newFormats.video.push({ name: file.name, size: `${(file.size / 1024).toFixed(2)} KB`, url: URL.createObjectURL(file) });
-    }
+
+    processFiles(data.png, 'png');
+    processFiles(data.gif, 'gif');
+    processFiles(data.image, 'image');
+    processFiles(data.video, 'video');
 
     onAddEmoji({
         emoji: data.emoji,
@@ -90,7 +86,7 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>Add New Emoji</DialogTitle>
@@ -98,7 +94,7 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
               Fill in the details below to add a new emoji to your collection.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
+          <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto px-1">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="emoji" className="text-right">
                 Emoji
@@ -157,25 +153,25 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
                 <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="png" className="text-right">PNG</Label>
                     <div className="col-span-3">
-                        <Input id="png" type="file" {...register("png")} accept="image/png" />
+                        <Input id="png" type="file" {...register("png")} accept="image/png" multiple />
                     </div>
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="gif" className="text-right">GIF</Label>
                     <div className="col-span-3">
-                        <Input id="gif" type="file" {...register("gif")} accept="image/gif" />
+                        <Input id="gif" type="file" {...register("gif")} accept="image/gif" multiple />
                     </div>
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="image" className="text-right">Image</Label>
                     <div className="col-span-3">
-                        <Input id="image" type="file" {...register("image")} accept="image/jpeg,image/webp" />
+                        <Input id="image" type="file" {...register("image")} accept="image/jpeg,image/webp" multiple />
                     </div>
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="video" className="text-right">Video</Label>
                     <div className="col-span-3">
-                        <Input id="video" type="file" {...register("video")} accept="video/mp4,video/webm" />
+                        <Input id="video" type="file" {...register("video")} accept="video/mp4,video/webm" multiple />
                     </div>
                 </div>
             </div>

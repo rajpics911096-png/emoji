@@ -61,7 +61,7 @@ export function EditCategoryDialog({ isOpen, onOpenChange, onEditCategory, categ
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>Edit Category</DialogTitle>
@@ -69,7 +69,7 @@ export function EditCategoryDialog({ isOpen, onOpenChange, onEditCategory, categ
               Update the details for this category.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
+          <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto px-1">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">
                 Name
