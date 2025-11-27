@@ -8,7 +8,6 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import IntelligentSearchBar from '@/components/intelligent-search-bar';
 import { useTranslations } from '@/context/translations-context';
-import { use } from 'react';
 
 export default function CategoryPage({
   params,
@@ -17,7 +16,7 @@ export default function CategoryPage({
   params: { category: string, lang: string };
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-  const { category: categorySlug, lang } = use(Promise.resolve(params));
+  const { category: categorySlug, lang } = params;
   const { t } = useTranslations();
   const category = categories.find((c) => c.id === categorySlug);
   if (!category) {
@@ -69,3 +68,4 @@ export default function CategoryPage({
     </>
   );
 }
+

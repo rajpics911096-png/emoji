@@ -11,11 +11,11 @@ import { EmojiView } from './components/emoji-view';
 import { SvgIcon } from '@/components/svg-icon';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EmojiDownloads } from './components/emoji-downloads';
-import { useEffect, useRef, use } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslations } from '@/context/translations-context';
 
 export default function EmojiPage({ params }: { params: { id: string, lang: string } }) {
-  const { id, lang } = use(Promise.resolve(params));
+  const { id, lang } = params;
   const emoji = getEmojiById(id);
   const effectRan = useRef(false);
   const { t } = useTranslations();
@@ -98,3 +98,4 @@ export default function EmojiPage({ params }: { params: { id: string, lang: stri
     </>
   );
 }
+
