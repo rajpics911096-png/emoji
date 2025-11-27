@@ -90,8 +90,8 @@ const FilePreview = ({ file, format }: { file: EmojiFormatFile; format: string }
 
 
 export default function FileDownloadPage() {
-  const params = useParams<{ id: string; lang: string; format: string; filename: string }>();
-  const { id, lang, format, filename } = use(Promise.resolve(params));
+  const params = use(Promise.resolve(useParams<{ id: string; lang: string; format: string; filename: string }>()));
+  const { id, lang, format, filename } = params;
   
   const { t } = useTranslations();
   const emoji = getEmojiById(id);
@@ -135,20 +135,19 @@ export default function FileDownloadPage() {
                 <div className="w-full max-w-2xl space-y-4">
                     <div className="text-center">
                         <h1 className="text-3xl font-headline font-bold">{file.name}</h1>
-                        <p className="text-muted-foreground">Part of the {emoji.title} collection</p>
                     </div>
                     <FilePreview file={file} format={format} />
                     <DownloadButton file={file} />
                 </div>
                 
-                <div className="w-full max-w-2xl space-y-8">
+                <div className="w-full max-w-4xl space-y-8">
                     {relatedFiles.length > 0 && (
                         <Card>
                           <CardHeader>
                             <CardTitle>{t('relatedFilesTitle')}</CardTitle>
                           </CardHeader>
                           <CardContent>
-                            <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+                            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2">
                                 {relatedFiles.map(relatedFile => (
                                     <Link key={relatedFile.url} href={`/${lang}/emoji/${id}/${relatedFile.format}/${encodeURIComponent(relatedFile.name)}`}>
                                         <Card className="group aspect-square flex items-center justify-center p-1 hover:bg-muted/50 transition-colors">
@@ -170,7 +169,7 @@ export default function FileDownloadPage() {
                         <CardTitle>{t('exploreCategories')}</CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                           {categories.map((cat) => (
                             <Link key={cat.id} href={`/${lang}/emojis/${cat.id}`} className="group flex flex-col items-center gap-2 p-3 rounded-md hover:bg-muted/50 transition-colors">
                               <SvgIcon svg={cat.icon} className="w-8 h-8 text-primary" />
