@@ -30,7 +30,7 @@ export default function AdsSettingsPage() {
   const { t } = useTranslations();
   const { toast } = useToast();
   const { settings, setSettings } = useSiteSettings();
-  const [adSettings, setAdSettings] = useState<AdSetting[]>(settings.adSettings);
+  const [adSettings, setAdSettings] = useState<AdSetting[]>(settings.adSettings || []);
 
   const handleSave = () => {
     setSettings({ ...settings, adSettings });
@@ -79,7 +79,7 @@ export default function AdsSettingsPage() {
           <CardDescription>{t('ads_settings_description')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {adSettings.map((setting, index) => (
+          {(adSettings || []).map((setting, index) => (
             <Card key={index} className="p-4">
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2">
