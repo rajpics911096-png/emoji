@@ -151,7 +151,7 @@ export default function FileDownloadPage() {
                           <CardContent>
                             <div className="grid grid-cols-3 gap-2">
                                 {relatedFiles.map(relatedFile => (
-                                    <Link key={relatedFile.url} href={`/${lang}/emoji/${id}/${relatedFile.format}/${encodeURIComponent(relatedFile.name)}`} target="_blank">
+                                    <Link key={relatedFile.url} href={`/${lang}/emoji/${id}/${relatedFile.format}/${encodeURIComponent(relatedFile.name)}`}>
                                         <Card className="group aspect-square flex items-center justify-center p-1 hover:bg-muted/50 transition-colors">
                                            {relatedFile.format === 'video' ? (
                                                 <Video className="w-6 h-6 text-muted-foreground" />

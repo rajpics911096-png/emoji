@@ -87,7 +87,6 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
                     <CardContent className="p-3 flex flex-col h-full">
                         <Link 
                             href={`/${lang}/emoji/${emoji.id}/${file.format}/${encodeURIComponent(file.name)}`}
-                            target="_blank"
                             className="flex-grow"
                         >
                             <div className="aspect-square bg-muted flex items-center justify-center relative rounded-md overflow-hidden mb-3">
@@ -100,7 +99,7 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
                             <p className="text-sm font-medium truncate" title={file.name}>{file.name}</p>
                         </Link>
                          <Button asChild size="sm" className="w-full mt-2">
-                             <Link href={`/${lang}/emoji/${emoji.id}/${file.format}/${encodeURIComponent(file.name)}`} target="_blank">
+                             <Link href={`/${lang}/emoji/${emoji.id}/${file.format}/${encodeURIComponent(file.name)}`}>
                                 <Download className="mr-2 h-4 w-4" />
                                 {t('downloadButton')}
                             </Link>
