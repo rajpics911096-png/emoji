@@ -12,7 +12,6 @@ import {
   Menu,
 } from 'lucide-react';
 import { SvgIcon } from './svg-icon';
-import { categories } from '@/lib/data';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { ThemeToggle } from './theme-toggle';
 import { LanguageSwitcher } from './language-switcher';
@@ -23,7 +22,6 @@ export default function Header({ lang }: { lang: string }) {
   const { settings } = useSiteSettings();
   const { t } = useTranslations();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const navItems = categories.filter(c => c.id !== 'all');
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -45,16 +43,7 @@ export default function Header({ lang }: { lang: string }) {
                 <span className="font-bold font-headline text-lg">{settings.name}</span>
                 </Link>
                 <div className="mt-6 flex flex-col space-y-4">
-                {navItems.map((item) => (
-                    <Link
-                    key={item.id}
-                    href={`/${lang}/emojis/${item.id}`}
-                    className="text-lg font-medium transition-colors hover:text-primary"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                    {t(`category_${item.id}`)}
-                    </Link>
-                ))}
+                  {/* Category links removed from mobile menu */}
                 </div>
             </SheetContent>
             </Sheet>
@@ -68,15 +57,7 @@ export default function Header({ lang }: { lang: string }) {
             </span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
-            {navItems.map((item) => (
-              <Link
-                key={item.id}
-                href={`/${lang}/emojis/${item.id}`}
-                className="transition-colors hover:text-primary"
-              >
-                {t(`category_${item.id}`)}
-              </Link>
-            ))}
+            {/* Category links removed from desktop menu */}
           </nav>
         </div>
         
