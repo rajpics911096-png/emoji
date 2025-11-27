@@ -1,15 +1,13 @@
+
+'use client';
+
 import { notFound } from 'next/navigation';
 import { categories, getEmojisByCategory } from '@/lib/data';
 import { EmojiCard } from '@/components/emoji-card';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import IntelligentSearchBar from '@/components/intelligent-search-bar';
-
-export async function generateStaticParams() {
-  return categories.map((category) => ({
-    category: category.id,
-  }));
-}
+import { useTranslations } from '@/context/translations-context';
 
 export default function CategoryPage({
   params,
@@ -18,6 +16,11 @@ export default function CategoryPage({
   params: { category: string };
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
+  const { t } = useTranslations();
+  // Note: generateStaticParams is server-side, so we can't use the hook there.
+  // We find the category client-side to get the translated name if needed,
+  // though category.name is used directly from data which is not translated yet.
+  // For full dynamic translation of categories, they would also need to be in the translation file.
   const category = categories.find((c) => c.id === params.category);
   if (!category) {
     notFound();
@@ -42,7 +45,7 @@ export default function CategoryPage({
                 {category.name}
             </h1>
             <p className="mt-3 text-lg md:text-xl max-w-2xl mx-auto text-foreground/80">
-                Browse all emojis in the &quot;{category.name}&quot; category.
+                {t('categoryDescription', { categoryName: category.name })}
             </p>
         </div>
         
@@ -58,7 +61,7 @@ export default function CategoryPage({
           </div>
         ) : (
           <div className="text-center py-16">
-            <p className="text-xl text-muted-foreground">No emojis found for &quot;{searchTerm}&quot; in this category.</p>
+            <p className="text-xl text-muted-foreground">{t('categoryNoResults', { searchTerm: searchTerm })}</p>
           </div>
         )}
       </main>

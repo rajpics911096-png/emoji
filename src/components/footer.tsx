@@ -5,6 +5,7 @@ import { SvgIcon } from './svg-icon';
 import { footerContent } from '@/lib/data';
 import { iconMap } from '@/lib/icon-map';
 import { useSiteSettings } from '@/context/site-settings-context';
+import { useTranslations } from '@/context/translations-context';
 
 const SocialIcon = ({ iconName, className }: { iconName: string; className?: string }) => {
   const IconComponent = iconMap[iconName] || iconMap.twitter;
@@ -13,6 +14,7 @@ const SocialIcon = ({ iconName, className }: { iconName: string; className?: str
 
 export default function Footer() {
   const { settings } = useSiteSettings();
+  const { t } = useTranslations();
   const { navigation, legal, social } = footerContent;
   return (
     <footer className="bg-primary/5 border-t">
@@ -24,11 +26,11 @@ export default function Footer() {
               <span className="font-bold text-xl font-headline">{settings.name}</span>
             </Link>
             <p className="text-sm text-foreground/70">
-              The ultimate collection of emojis for every occasion.
+              {t('footerTagline')}
             </p>
           </div>
           <div>
-            <h3 className="font-headline font-semibold mb-4">Navigation</h3>
+            <h3 className="font-headline font-semibold mb-4">{t('footerNavigation')}</h3>
             <ul className="space-y-2">
               {navigation.map((item, index) => (
                  <li key={index}><Link href={item.href} className="text-sm hover:text-primary transition-colors">{item.label}</Link></li>
@@ -36,7 +38,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="font-headline font-semibold mb-4">Legal</h3>
+            <h3 className="font-headline font-semibold mb-4">{t('footerLegal')}</h3>
             <ul className="space-y-2">
               {legal.map((item, index) => (
                   <li key={index}><Link href={item.href} className="text-sm hover:text-primary transition-colors">{item.label}</Link></li>
@@ -44,7 +46,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="font-headline font-semibold mb-4">Connect</h3>
+            <h3 className="font-headline font-semibold mb-4">{t('footerConnect')}</h3>
             <div className="flex space-x-4">
               {social.map((item, index) => (
                 <Link key={index} href={item.href} aria-label={item['aria-label']}>
@@ -56,7 +58,7 @@ export default function Footer() {
         </div>
         <div className="mt-12 pt-8 border-t border-border">
           <p className="text-center text-sm text-foreground/60">
-            © {new Date().getFullYear()} {settings.name}. All rights reserved.
+            © {new Date().getFullYear()} {settings.name}. {t('footerRights')}
           </p>
         </div>
       </div>

@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/command";
 import { useDebounce } from "@/hooks/use-debounce";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "@/context/translations-context";
 
 export default function IntelligentSearchBar() {
   const [query, setQuery] = useState("");
@@ -25,6 +26,7 @@ export default function IntelligentSearchBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const { t } = useTranslations();
 
   const handleSearch = (searchQuery: string) => {
     if (!searchQuery) {
@@ -67,7 +69,7 @@ export default function IntelligentSearchBar() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search for an emoji by name or keyword..."
+              placeholder={t('searchPlaceholder')}
               className="pl-10 h-12 text-base"
               value={query}
               onChange={handleInputChange}
@@ -75,15 +77,15 @@ export default function IntelligentSearchBar() {
               onBlur={() => setTimeout(() => setIsOpen(false), 200)}
             />
         </div>
-        <Button type="submit" size="lg" className="h-12">Search</Button>
+        <Button type="submit" size="lg" className="h-12">{t('searchButton')}</Button>
       </form>
        <div className={cn("absolute top-full mt-2 w-full z-10", isOpen ? "block" : "hidden")}>
           <Command className="rounded-lg border shadow-md">
             <CommandList>
-              {isPending && <CommandLoading>Searching...</CommandLoading>}
-              {!isPending && !results.length && query && <CommandEmpty>No results found.</CommandEmpty>}
+              {isPending && <CommandLoading>{t('searchLoading')}</CommandLoading>}
+              {!isPending && !results.length && query && <CommandEmpty>{t('searchNoResults')}</CommandEmpty>}
               {results.length > 0 && (
-                 <CommandGroup heading="Results">
+                 <CommandGroup heading={t('searchResults')}>
                     {results.map((emoji) => (
                       <CommandItem
                         key={emoji.id}

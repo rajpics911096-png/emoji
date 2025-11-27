@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import type { Emoji } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Copy, Check } from 'lucide-react';
+import { useTranslations } from '@/context/translations-context';
 
 interface EmojiViewProps {
   emoji: Emoji;
@@ -12,6 +13,7 @@ interface EmojiViewProps {
 
 export function EmojiView({ emoji }: EmojiViewProps) {
   const [isCopied, setIsCopied] = useState(false);
+  const { t } = useTranslations();
 
   const handleCopy = () => {
     navigator.clipboard.writeText(emoji.emoji);
@@ -27,11 +29,11 @@ export function EmojiView({ emoji }: EmojiViewProps) {
             <Button onClick={handleCopy} size="lg" className="w-48 transition-all">
                 {isCopied ? (
                 <>
-                    <Check className="mr-2 h-5 w-5" /> Copied!
+                    <Check className="mr-2 h-5 w-5" /> {t('copyButtonCopied')}
                 </>
                 ) : (
                 <>
-                    <Copy className="mr-2 h-5 w-5" /> Copy Emoji
+                    <Copy className="mr-2 h-5 w-5" /> {t('copyButton')}
                 </>
                 )}
             </Button>

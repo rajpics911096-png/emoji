@@ -8,10 +8,12 @@ import { Button } from '@/components/ui/button';
 import { Download, File as FileIcon, Hourglass } from 'lucide-react';
 import Image from 'next/image';
 import { useSiteSettings } from '@/context/site-settings-context';
+import { useTranslations } from '@/context/translations-context';
 
 
 const DownloadButton = ({ file }: { file: EmojiFormatFile }) => {
   const { settings } = useSiteSettings();
+  const { t } = useTranslations();
   const [timer, setTimer] = useState(0);
   const [isCountingDown, setIsCountingDown] = useState(false);
 
@@ -51,12 +53,12 @@ const DownloadButton = ({ file }: { file: EmojiFormatFile }) => {
       {isCountingDown ? (
         <>
           <Hourglass className="mr-2 h-4 w-4 animate-spin" />
-          Downloading in {timer}s
+          {t('downloadingIn', { seconds: timer.toString() })}
         </>
       ) : (
         <>
           <Download className="mr-2 h-4 w-4" />
-          Download
+          {t('downloadButton')}
         </>
       )}
     </Button>
@@ -92,6 +94,7 @@ const FilePreview = ({ file, format }: { file: EmojiFormatFile; format: string }
 
 export function EmojiDownloads({ emoji }: { emoji: Emoji }) {
   const { formats } = emoji;
+  const { t } = useTranslations();
 
   const allFiles = useMemo(() => {
     return (Object.keys(formats) as (keyof typeof formats)[]).flatMap(format => 
@@ -100,11 +103,11 @@ export function EmojiDownloads({ emoji }: { emoji: Emoji }) {
   }, [formats]);
 
   const tabs = [
-    { value: 'all', label: 'All', files: allFiles },
+    { value: 'all', label: t('downloadsTabAll'), files: allFiles },
     { value: 'png', label: 'PNG', files: formats.png.map(f => ({...f, format: 'png'})) },
     { value: 'gif', label: 'GIF', files: formats.gif.map(f => ({...f, format: 'gif'})) },
-    { value: 'image', label: 'Images', files: formats.image.map(f => ({...f, format: 'image'})) },
-    { value: 'video', label: 'Videos', files: formats.video.map(f => ({...f, format: 'video'})) },
+    { value: 'image', label: t('downloadsTabImages'), files: formats.image.map(f => ({...f, format: 'image'})) },
+    { value: 'video', label: t('downloadsTabVideos'), files: formats.video.map(f => ({...f, format: 'video'})) },
   ].filter(tab => tab.files.length > 0);
 
   if (allFiles.length === 0) {
@@ -114,7 +117,7 @@ export function EmojiDownloads({ emoji }: { emoji: Emoji }) {
   return (
     <section className="mt-16 md:mt-24">
       <h2 className="text-3xl font-headline font-bold text-center mb-10">
-        Downloads
+        {t('downloadsTitle')}
       </h2>
       <Tabs defaultValue={tabs[0].value}>
         <TabsList className="grid w-full grid-cols-none justify-center sm:grid-cols-5 mb-8">

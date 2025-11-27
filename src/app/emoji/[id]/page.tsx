@@ -12,10 +12,12 @@ import { SvgIcon } from '@/components/svg-icon';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EmojiDownloads } from './components/emoji-downloads';
 import { useEffect, useRef } from 'react';
+import { useTranslations } from '@/context/translations-context';
 
 export default function EmojiPage({ params }: { params: { id: string } }) {
   const emoji = getEmojiById(params.id);
   const effectRan = useRef(false);
+  const { t } = useTranslations();
 
   useEffect(() => {
     if (emoji && !effectRan.current) {
@@ -49,7 +51,7 @@ export default function EmojiPage({ params }: { params: { id: string } }) {
             <aside className="space-y-8">
               <div className="space-y-4">
                 <h3 className="font-headline text-2xl font-semibold text-primary">
-                  Description
+                  {t('descriptionTitle')}
                 </h3>
                 <div className="prose dark:prose-invert max-w-none text-foreground/80" dangerouslySetInnerHTML={{ __html: emoji.description }} />
               </div>
@@ -57,14 +59,14 @@ export default function EmojiPage({ params }: { params: { id: string } }) {
               {category && (
                 <Card>
                   <CardHeader>
-                    <CardTitle>Category</CardTitle>
+                    <CardTitle>{t('categoryTitle')}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <Link href={`/emojis/${category.id}`} className="group flex items-center gap-4">
                         <SvgIcon svg={category.icon} className="w-10 h-10 text-primary" />
                         <div>
                             <p className="font-semibold text-lg group-hover:text-primary transition-colors">{category.name}</p>
-                            <p className="text-sm text-muted-foreground">View all emojis in this category</p>
+                            <p className="text-sm text-muted-foreground">{t('viewAllInCategory')}</p>
                         </div>
                     </Link>
                   </CardContent>
@@ -78,7 +80,7 @@ export default function EmojiPage({ params }: { params: { id: string } }) {
           {related.length > 0 && (
             <section className="mt-16 md:mt-24">
               <h2 className="text-3xl font-headline font-bold text-center mb-10">
-                Related Emojis
+                {t('relatedEmojisTitle')}
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
                 {related.map((relatedEmoji) => (
