@@ -122,9 +122,9 @@ export default function FileDownloadPage() {
   return (
     <>
       <Header lang={lang} />
-      <main className="flex-1 py-8 md:py-12 bg-muted/20 dark:bg-background">
+      <main className="flex-1 py-8 md:py-12 bg-gray-100 dark:bg-gray-900">
         <div className="container mx-auto px-4">
-            <div className="mb-6">
+            <div className="mb-4">
                  <Button asChild variant="ghost" className="text-primary hover:text-primary/80">
                     <Link href={`/${lang}/emoji/${id}`}>
                         <ArrowLeft className="mr-2 h-4 w-4" />
@@ -133,22 +133,21 @@ export default function FileDownloadPage() {
                  </Button>
             </div>
             
-            <div className="flex flex-col items-center gap-6 md:gap-10">
-                <div className="w-full max-w-lg text-center">
-                  <h1 className="text-3xl font-headline font-bold mb-2">{file.name}</h1>
-                  <div className="flex items-center justify-center gap-4 text-muted-foreground mb-6">
-                    <Badge variant="outline" className="capitalize">{format}</Badge>
-                    <Badge variant="outline">{file.size}</Badge>
-                  </div>
-
+            <div className="flex flex-col items-center gap-10">
+                <div className="w-full max-w-lg">
                   <FilePreview file={file} format={format} />
-                  
-                  <div className="mt-6">
-                    <DownloadButton file={file} />
-                  </div>
                 </div>
                 
-                <Separator className="my-4 md:my-6" />
+                <div className="w-full max-w-lg text-center">
+                    <h1 className="text-3xl font-headline font-bold mb-2">{file.name}</h1>
+                    <div className="flex items-center justify-center gap-4 text-muted-foreground mb-6">
+                        <Badge variant="outline" className="capitalize">{format}</Badge>
+                        <Badge variant="outline">{file.size}</Badge>
+                    </div>
+                    <DownloadButton file={file} />
+                </div>
+                
+                <Separator className="my-4" />
                 
                 <div className="w-full max-w-5xl space-y-12">
                     {relatedFiles.length > 0 && (
@@ -189,3 +188,4 @@ export default function FileDownloadPage() {
     </>
   );
 }
+
