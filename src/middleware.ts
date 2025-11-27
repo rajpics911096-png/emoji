@@ -8,6 +8,7 @@ function getLocale(request: NextRequest): string | undefined {
   const negotiatorHeaders: Record<string, string> = {}
   request.headers.forEach((value, key) => (negotiatorHeaders[key] = value))
 
+  // @ts-ignore locales are readonly
   const locales: string[] = i18n.locales
   const languages = new Negotiator({ headers: negotiatorHeaders }).languages(
     locales
@@ -37,5 +38,10 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   // Matcher ignoring `/_next/` and `/api/`
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: [
+    // Skip all internal paths (_next)
+    '/((?!_next|api|.*\\..*).*)',
+    // Optional: only run on root (/) URL
+    // '/'
+  ],
 }
