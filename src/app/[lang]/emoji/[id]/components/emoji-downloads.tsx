@@ -1,7 +1,8 @@
 
 "use client";
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { Emoji } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,58 +10,108 @@ import Image from 'next/image';
 import { Video } from 'lucide-react';
 import { useTranslations } from '@/context/translations-context';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Download } from 'lucide-react';
 
 export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) {
   const { formats } = emoji;
   const { t } = useTranslations();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+  
+  const selectedFormat = searchParams.get('format') || 'all';
 
-  const allFiles = useMemo(() => {
-    return (Object.keys(formats) as (keyof typeof formats)[]).flatMap(format => 
-        formats[format].map(file => ({ ...file, format }))
-    );
+  const handleTabChange = (value: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (value === 'all') {
+      params.delete('format');
+    } else {
+      params.set('format', value);
+    }
+    replace(`${pathname}?${params.toString()}`);
+  };
+
+  const fileTypes = useMemo(() => {
+    const types = new Set(['all']);
+    if (formats.png.length > 0) types.add('png');
+    if (formats.gif.length > 0) types.add('gif');
+    const otherImages = formats.image.filter(f => !['image/png', 'image/gif'].includes(f.type || ''));
+    if (otherImages.length > 0) types.add('images');
+    if (formats.video.length > 0) types.add('videos');
+    return Array.from(types);
   }, [formats]);
 
-  if (allFiles.length === 0) {
+  const filteredFiles = useMemo(() => {
+    switch (selectedFormat) {
+      case 'png':
+        return formats.png.map(f => ({ ...f, format: 'png' }));
+      case 'gif':
+        return formats.gif.map(f => ({ ...f, format: 'gif' }));
+      case 'images':
+        return formats.image.filter(f => !['image/png', 'image/gif'].includes(f.type || '')).map(f => ({...f, format: 'image'}));
+      case 'videos':
+        return formats.video.map(f => ({ ...f, format: 'video' }));
+      default:
+        return (Object.keys(formats) as (keyof typeof formats)[])
+          .flatMap(format => formats[format].map(file => ({ ...file, format })));
+    }
+  }, [formats, selectedFormat]);
+
+  if (fileTypes.length <= 1) {
     return null;
   }
 
   return (
-    <section className="mt-12 md:mt-20">
-      <h2 className="text-3xl font-headline font-bold text-center mb-8">
-        {t('downloadsTitle')}
-      </h2>
-      <ScrollArea>
-        <div className="grid grid-flow-col auto-cols-max gap-4 pb-4">
-          {allFiles.map((file, index) => (
-            <Link 
-                key={`${file.url}-${index}`} 
-                href={`/${lang}/emoji/${emoji.id}/${file.format}/${encodeURIComponent(file.name)}`}
-                target="_blank"
-                className="w-40"
-            >
-              <Card className="group overflow-hidden transition-shadow hover:shadow-lg">
-                <CardContent className="p-0">
-                  <div className="aspect-square bg-muted flex items-center justify-center relative">
-                    {file.format === 'video' || file.type?.startsWith('video/') ? (
-                        <Video className="w-12 h-12 text-muted-foreground" />
-                    ) : (
-                        <Image src={file.url} alt={file.name} layout="fill" objectFit="contain" className="p-2" />
-                    )}
-                  </div>
-                  <div className="p-2">
-                    <p className="text-xs font-medium truncate" title={file.name}>{file.name}</p>
-                    <p className="text-xs text-muted-foreground">{file.size}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
+    <section className="mt-12 md:mt-16">
+      <Tabs defaultValue={selectedFormat} onValueChange={handleTabChange} className="w-full">
+        <div className="flex justify-center mb-8">
+            <TabsList className="bg-card/50 rounded-full p-1.5 h-auto">
+                {fileTypes.map(format => (
+                <TabsTrigger 
+                    key={format} 
+                    value={format}
+                    className="capitalize rounded-full text-sm font-semibold h-auto px-6 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
+                >
+                    {t(`downloadsTab${format.charAt(0).toUpperCase() + format.slice(1)}`)}
+                </TabsTrigger>
+                ))}
+            </TabsList>
         </div>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
+        <TabsContent value={selectedFormat}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+            {filteredFiles.map((file, index) => (
+                <Card key={`${file.url}-${index}`} className="group overflow-hidden transition-shadow hover:shadow-lg">
+                    <CardContent className="p-3 flex flex-col h-full">
+                        <Link 
+                            href={`/${lang}/emoji/${emoji.id}/${file.format}/${encodeURIComponent(file.name)}`}
+                            target="_blank"
+                            className="flex-grow"
+                        >
+                            <div className="aspect-square bg-muted flex items-center justify-center relative rounded-md overflow-hidden mb-3">
+                                {file.format === 'video' || file.type?.startsWith('video/') ? (
+                                    <video src={file.url} muted loop playsInline className="w-full h-full object-contain" />
+                                ) : (
+                                    <Image src={file.url} alt={file.name} layout="fill" objectFit="contain" className="p-2" />
+                                )}
+                            </div>
+                            <p className="text-sm font-medium truncate" title={file.name}>{file.name}</p>
+                        </Link>
+                         <Button asChild size="sm" className="w-full mt-2">
+                             <Link href={`/${lang}/emoji/${emoji.id}/${file.format}/${encodeURIComponent(file.name)}`} target="_blank">
+                                <Download className="mr-2 h-4 w-4" />
+                                {t('downloadButton')}
+                            </Link>
+                         </Button>
+                    </CardContent>
+                </Card>
+            ))}
+            </div>
+        </TabsContent>
+      </Tabs>
     </section>
   );
 }
 
-
-    
