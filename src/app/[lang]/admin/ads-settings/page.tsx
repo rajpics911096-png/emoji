@@ -68,6 +68,18 @@ export default function AdsSettingsPage() {
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>`, enabled: true },
+ { location: 'below_emoji', code: `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4455667788990011"
+     crossorigin="anonymous"></script>
+<!-- Below Emoji Ad -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-4455667788990011"
+     data-ad-slot="4455667788"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>`, enabled: false },
   ]);
 
   const handleSave = () => {
