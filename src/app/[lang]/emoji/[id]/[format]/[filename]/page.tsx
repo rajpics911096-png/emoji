@@ -9,12 +9,14 @@ import Footer from '@/components/footer';
 import { SvgIcon } from '@/components/svg-icon';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Download, File as FileIcon, Hourglass, ArrowLeft, Video } from 'lucide-react';
+import { Download, File as FileIcon, Hourglass, ArrowLeft, Video, Info } from 'lucide-react';
 import Image from 'next/image';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { useTranslations } from '@/context/translations-context';
 import { useState, useEffect, useMemo, use } from 'react';
 import type { EmojiFormatFile } from '@/lib/types';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 
 const DownloadButton = ({ file }: { file: EmojiFormatFile }) => {
   const { settings } = useSiteSettings();
@@ -76,7 +78,7 @@ const FilePreview = ({ file, format }: { file: EmojiFormatFile; format: string }
     const isVideo = format === 'video' || file.type?.startsWith('video/');
 
     return (
-      <div className="aspect-square bg-muted flex items-center justify-center relative rounded-lg border overflow-hidden shadow-sm">
+      <div className="aspect-square w-full max-w-lg mx-auto bg-muted flex items-center justify-center relative rounded-lg border overflow-hidden shadow-sm">
         {isImage ? (
             <Image src={file.url} alt={file.name} layout="fill" objectFit="contain" className="p-4" />
         ) : isVideo ? (
@@ -132,53 +134,53 @@ export default function FileDownloadPage() {
             </div>
             
             <div className="flex flex-col items-center gap-8 md:gap-12">
-                <div className="w-full max-w-2xl space-y-4">
-                    <div className="text-center">
-                        <h1 className="text-3xl font-headline font-bold">{file.name}</h1>
-                    </div>
-                    <FilePreview file={file} format={format} />
+                <div className="w-full max-w-lg text-center">
+                  <h1 className="text-3xl font-headline font-bold mb-2">{file.name}</h1>
+                  <div className="flex items-center justify-center gap-4 text-muted-foreground mb-6">
+                    <Badge variant="outline" className="capitalize">{format}</Badge>
+                    <Badge variant="outline">{file.size}</Badge>
+                  </div>
+
+                  <FilePreview file={file} format={format} />
+                  
+                  <div className="mt-6">
                     <DownloadButton file={file} />
+                  </div>
                 </div>
                 
-                <div className="w-full max-w-4xl space-y-8">
+                <Separator className="my-8" />
+                
+                <div className="w-full max-w-5xl space-y-12">
                     {relatedFiles.length > 0 && (
-                        <Card>
-                          <CardHeader>
-                            <CardTitle>{t('relatedFilesTitle')}</CardTitle>
-                          </CardHeader>
-                          <CardContent>
-                            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2">
-                                {relatedFiles.map(relatedFile => (
-                                    <Link key={relatedFile.url} href={`/${lang}/emoji/${id}/${relatedFile.format}/${encodeURIComponent(relatedFile.name)}`}>
-                                        <Card className="group aspect-square flex items-center justify-center p-1 hover:bg-muted/50 transition-colors">
-                                           {relatedFile.type?.startsWith('video') ? (
-                                                <Video className="w-6 h-6 text-muted-foreground" />
-                                            ) : (
-                                                <Image src={relatedFile.url} alt={relatedFile.name} width={40} height={40} objectFit="contain" />
-                                            )}
-                                        </Card>
-                                    </Link>
-                                ))}
-                            </div>
-                          </CardContent>
-                        </Card>
+                        <section>
+                          <h2 className="text-2xl font-headline font-bold text-center mb-6">{t('relatedFilesTitle')}</h2>
+                          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2">
+                              {relatedFiles.map(relatedFile => (
+                                  <Link key={relatedFile.url} href={`/${lang}/emoji/${id}/${relatedFile.format}/${encodeURIComponent(relatedFile.name)}`}>
+                                      <Card className="group aspect-square flex items-center justify-center p-1 hover:bg-muted/50 transition-colors">
+                                         {relatedFile.type?.startsWith('video') ? (
+                                              <Video className="w-6 h-6 text-muted-foreground" />
+                                          ) : (
+                                              <Image src={relatedFile.url} alt={relatedFile.name} width={40} height={40} objectFit="contain" />
+                                          )}
+                                      </Card>
+                                  </Link>
+                              ))}
+                          </div>
+                        </section>
                     )}
 
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>{t('exploreCategories')}</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                          {categories.map((cat) => (
-                            <Link key={cat.id} href={`/${lang}/emojis/${cat.id}`} className="group flex flex-col items-center gap-2 p-3 rounded-md hover:bg-muted/50 transition-colors">
-                              <SvgIcon svg={cat.icon} className="w-8 h-8 text-primary" />
-                              <p className="font-semibold text-sm text-center group-hover:text-primary transition-colors">{t(cat.name)}</p>
-                            </Link>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
+                    <section>
+                      <h2 className="text-2xl font-headline font-bold text-center mb-6">{t('exploreCategories')}</h2>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        {categories.map((cat) => (
+                          <Link key={cat.id} href={`/${lang}/emojis/${cat.id}`} className="group flex flex-col items-center gap-2 p-3 rounded-md hover:bg-muted/50 transition-colors border">
+                            <SvgIcon svg={cat.icon} className="w-8 h-8 text-primary" />
+                            <p className="font-semibold text-sm text-center group-hover:text-primary transition-colors">{t(cat.name)}</p>
+                          </Link>
+                        ))}
+                      </div>
+                    </section>
                 </div>
             </div>
         </div>
