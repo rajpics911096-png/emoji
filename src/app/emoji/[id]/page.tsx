@@ -1,3 +1,6 @@
+
+'use client';
+
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getEmojiById, getRelatedEmojis, emojis, categories } from '@/lib/data';
@@ -8,15 +11,19 @@ import { EmojiView } from './components/emoji-view';
 import { SvgIcon } from '@/components/svg-icon';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EmojiDownloads } from './components/emoji-downloads';
-
-export async function generateStaticParams() {
-    return emojis.map((emoji) => ({
-      id: emoji.id,
-    }));
-  }
+import { useEffect } from 'react';
 
 export default function EmojiPage({ params }: { params: { id: string } }) {
   const emoji = getEmojiById(params.id);
+
+  useEffect(() => {
+    if (emoji) {
+      const views = JSON.parse(localStorage.getItem('emojiViews') || '{}');
+      views[emoji.id] = (views[emoji.id] || emoji.views || 0) + 1;
+      localStorage.setItem('emojiViews', JSON.stringify(views));
+    }
+  }, [emoji]);
+
 
   if (!emoji) {
     notFound();

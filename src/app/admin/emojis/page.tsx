@@ -15,7 +15,7 @@ import { MoreHorizontal, PlusCircle, ArrowUpDown } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { emojis as initialEmojis } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { AddEmojiDialog } from "./components/add-emoji-dialog";
 import type { Emoji } from "@/lib/types";
 import { EditEmojiDialog } from "./components/edit-emoji-dialog";
@@ -32,6 +32,16 @@ export default function EmojisPage() {
   const [selectedEmoji, setSelectedEmoji] = useState<Emoji | null>(null);
   const [emojiList, setEmojiList] = useState<Emoji[]>(initialEmojis);
   const [sortConfig, setSortConfig] = useState<SortConfig | null>({ key: 'views', direction: 'descending' });
+
+  useEffect(() => {
+    const views = JSON.parse(localStorage.getItem('emojiViews') || '{}');
+    setEmojiList(prevList =>
+      prevList.map(emoji => ({
+        ...emoji,
+        views: views[emoji.id] || emoji.views,
+      }))
+    );
+  }, []);
 
   const sortedEmojiList = useMemo(() => {
     let sortableItems = [...emojiList];
