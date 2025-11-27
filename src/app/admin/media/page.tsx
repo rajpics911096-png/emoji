@@ -1,7 +1,6 @@
-
 "use client";
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MoreVertical, Upload, Copy, Download, Trash2, File as FileIcon, X } from "lucide-react";
@@ -17,12 +16,19 @@ import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-type MediaFile = EmojiFormatFile & { format: string; emojiId: string; };
 
-const initialFiles: MediaFile[] = emojis.flatMap(emoji => 
-    Object.entries(emoji.formats).flatMap(([format, files]) => 
-        files.map(file => ({ ...file, format, emojiId: emoji.id }))
+type MediaFile = EmojiFormatFile & { format: string; emojiId: string; dateAdded: number; };
+
+const initialFiles: MediaFile[] = emojis.flatMap((emoji, emojiIndex) => 
+    Object.entries(emoji.formats).flatMap(([format, files], formatIndex) => 
+        files.map((file, fileIndex) => ({ 
+            ...file, 
+            format, 
+            emojiId: emoji.id,
+            dateAdded: Date.now() - (emojiIndex * 10000 + formatIndex * 1000 + fileIndex), // Simulate different added dates
+        }))
     )
 );
 
@@ -30,6 +36,8 @@ export default function MediaPage() {
     const { toast } = useToast();
     const [mediaFiles, setMediaFiles] = useState<MediaFile[]>(initialFiles);
     const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
+    const [sortOrder, setSortOrder] = useState('newest');
+
 
     const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
@@ -40,7 +48,8 @@ export default function MediaPage() {
             size: `${(file.size / 1024).toFixed(2)} KB`,
             url: URL.createObjectURL(file),
             format: file.type.split('/')[0] || 'file',
-            emojiId: 'local-upload'
+            emojiId: 'local-upload',
+            dateAdded: Date.now(),
         }));
 
         setMediaFiles(prevFiles => [...newFiles, ...prevFiles]);
@@ -49,6 +58,24 @@ export default function MediaPage() {
             description: `${files.length} file(s) have been added to the library.`
         })
     };
+    
+    const sortedMediaFiles = useMemo(() => {
+        return [...mediaFiles].sort((a, b) => {
+            switch (sortOrder) {
+                case 'newest':
+                    return b.dateAdded - a.dateAdded;
+                case 'oldest':
+                    return a.dateAdded - b.dateAdded;
+                case 'name_asc':
+                    return a.name.localeCompare(b.name);
+                case 'name_desc':
+                    return b.name.localeCompare(a.name);
+                default:
+                    return 0;
+            }
+        });
+    }, [mediaFiles, sortOrder]);
+
 
     const copyToClipboard = (url: string) => {
         navigator.clipboard.writeText(window.location.origin + url);
@@ -130,16 +157,15 @@ export default function MediaPage() {
     };
     
     const isAllSelected = selectedFiles.length > 0 && selectedFiles.length === mediaFiles.length;
-    const isIndeterminate = selectedFiles.length > 0 && selectedFiles.length < mediaFiles.length;
 
     return (
         <div>
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
                 <div>
                     <h1 className="text-3xl font-headline font-bold">Media Library</h1>
                     <p className="text-muted-foreground">Manage your uploaded files here.</p>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 flex-wrap">
                     {selectedFiles.length > 0 && (
                         <div className="flex items-center gap-2">
                              <Button size="sm" variant="destructive" className="gap-1" onClick={handleDeleteSelected}>
@@ -151,7 +177,7 @@ export default function MediaPage() {
                     <div className="flex items-center gap-2">
                         <Checkbox
                             id="select-all"
-                            checked={isAllSelected}
+                            checked={selectedFiles.length > 0 && selectedFiles.length === mediaFiles.length}
                             onCheckedChange={handleSelectAll}
                             aria-label="Select all"
                             className='hidden sm:flex'
@@ -160,6 +186,17 @@ export default function MediaPage() {
                             {isAllSelected ? 'Deselect All' : 'Select All'}
                         </Label>
                     </div>
+                     <Select value={sortOrder} onValueChange={setSortOrder}>
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Sort by..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="newest">Newest</SelectItem>
+                            <SelectItem value="oldest">Oldest</SelectItem>
+                            <SelectItem value="name_asc">Name (A-Z)</SelectItem>
+                            <SelectItem value="name_desc">Name (Z-A)</SelectItem>
+                        </SelectContent>
+                    </Select>
                     <Button size="sm" className="gap-1" asChild>
                         <label htmlFor="file-upload">
                             <Upload className="h-3.5 w-3.5" />
@@ -172,9 +209,9 @@ export default function MediaPage() {
 
             {mediaFiles.length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                    {mediaFiles.map((file, index) => (
+                    {sortedMediaFiles.map((file, index) => (
                         <Card 
-                            key={`${file.emojiId}-${file.format}-${file.name}-${index}`}
+                            key={`${file.url}-${file.name}-${file.emojiId}-${index}`}
                             className="group relative cursor-pointer"
                             onClick={() => handleSelectFile(file.url)}
                             data-state={selectedFiles.includes(file.url) ? 'selected' : 'unselected'}
