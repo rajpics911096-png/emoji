@@ -20,15 +20,17 @@ export default function EmojiPage({ params }: { params: { id: string } }) {
   const { t } = useTranslations();
 
   useEffect(() => {
-    if (emoji && !effectRan.current) {
+    if (process.env.NODE_ENV === 'development' && effectRan.current) return;
+    if (emoji) {
       const views = JSON.parse(localStorage.getItem('emojiViews') || '{}');
       views[emoji.id] = (views[emoji.id] || emoji.views || 0) + 1;
       localStorage.setItem('emojiViews', JSON.stringify(views));
-      
-      return () => {
-        effectRan.current = true;
-      };
     }
+    return () => {
+      if (process.env.NODE_ENV === 'development') {
+        effectRan.current = true;
+      }
+    };
   }, [emoji]);
 
 
@@ -65,7 +67,7 @@ export default function EmojiPage({ params }: { params: { id: string } }) {
                     <Link href={`/emojis/${category.id}`} className="group flex items-center gap-4">
                         <SvgIcon svg={category.icon} className="w-10 h-10 text-primary" />
                         <div>
-                            <p className="font-semibold text-lg group-hover:text-primary transition-colors">{category.name}</p>
+                            <p className="font-semibold text-lg group-hover:text-primary transition-colors">{t(`category_${category.id}`)}</p>
                             <p className="text-sm text-muted-foreground">{t('viewAllInCategory')}</p>
                         </div>
                     </Link>

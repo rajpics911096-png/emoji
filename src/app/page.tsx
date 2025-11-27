@@ -60,7 +60,7 @@ export default function Home() {
                     <CardContent className="p-6 flex flex-col items-center justify-center">
                       <SvgIcon svg={category.icon} className="w-12 h-12 mb-4 text-primary transition-colors group-hover:text-accent-foreground" />
                       <h3 className="text-lg font-headline font-semibold">
-                        {category.name}
+                        {t(`category_${category.id}`)}
                       </h3>
                     </CardContent>
                   </Card>

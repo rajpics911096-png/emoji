@@ -17,14 +17,12 @@ export default function CategoryPage({
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
   const { t } = useTranslations();
-  // Note: generateStaticParams is server-side, so we can't use the hook there.
-  // We find the category client-side to get the translated name if needed,
-  // though category.name is used directly from data which is not translated yet.
-  // For full dynamic translation of categories, they would also need to be in the translation file.
   const category = categories.find((c) => c.id === params.category);
   if (!category) {
     notFound();
   }
+
+  const categoryName = t(`category_${category.id}`);
 
   let emojiList = getEmojisByCategory(params.category);
   const searchTerm = searchParams?.search as string;
@@ -42,10 +40,10 @@ export default function CategoryPage({
       <main className="flex-1 container mx-auto py-8 px-4">
         <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-headline font-bold text-primary tracking-tighter">
-                {category.name}
+                {categoryName}
             </h1>
             <p className="mt-3 text-lg md:text-xl max-w-2xl mx-auto text-foreground/80">
-                {t('categoryDescription', { categoryName: category.name })}
+                {t('categoryDescription', { categoryName: categoryName })}
             </p>
         </div>
         

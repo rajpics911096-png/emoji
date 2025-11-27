@@ -15,9 +15,11 @@ import { categories } from '@/lib/data';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { ThemeToggle } from './theme-toggle';
 import { LanguageSwitcher } from './language-switcher';
+import { useTranslations } from '@/context/translations-context';
 
 export default function Header() {
   const { settings } = useSiteSettings();
+  const { t } = useTranslations();
   const navItems = categories.filter(c => c.id !== 'all');
 
   return (
@@ -37,7 +39,7 @@ export default function Header() {
                 href={`/emojis/${item.id}`}
                 className="transition-colors hover:text-primary"
               >
-                {item.name}
+                {t(`category_${item.id}`)}
               </Link>
             ))}
           </nav>
@@ -66,7 +68,7 @@ export default function Header() {
                   href={`/emojis/${item.id}`}
                   className="text-lg font-medium transition-colors hover:text-primary"
                 >
-                  {item.name}
+                  {t(`category_${item.id}`)}
                 </Link>
               ))}
             </div>
