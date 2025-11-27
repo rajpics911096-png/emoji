@@ -10,7 +10,7 @@ import { useSiteSettings } from "@/context/site-settings-context";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslations } from "@/context/translations-context";
 import { useState } from "react";
-import { getAuth, updatePassword, updateEmail, type User, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
+import { getAuth, updatePassword, verifyBeforeUpdateEmail, type User, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { Separator } from "@/components/ui/separator";
 import {
   AlertDialog,
@@ -33,6 +33,7 @@ export default function SettingsPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showReauthDialog, setShowReauthDialog] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
+  const [actionToRetry, setActionToRetry] = useState<(() => Promise<void>) | null>(null);
 
 
   const handleSave = () => {
@@ -57,6 +58,32 @@ export default function SettingsPage() {
       description: t('settings_toast_sitemap_desc'),
     });
   };
+  
+  const performEmailChange = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+        try {
+            await verifyBeforeUpdateEmail(user, newEmail);
+            toast({
+                title: "Verification Email Sent",
+                description: `A verification link has been sent to ${newEmail}. Please check your inbox to complete the change.`,
+            });
+            setNewEmail("");
+        } catch (error: any) {
+            if (error.code === 'auth/requires-recent-login') {
+                setActionToRetry(() => performEmailChange);
+                setShowReauthDialog(true);
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "Email Change Failed",
+                    description: error.message || "An error occurred.",
+                });
+            }
+        }
+    }
+  };
 
   const handleChangeEmail = async () => {
     if (!newEmail) {
@@ -67,32 +94,10 @@ export default function SettingsPage() {
       });
       return;
     }
-
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (user) {
-      try {
-        await updateEmail(user, newEmail);
-        toast({
-          title: "Email Updated",
-          description: "Your login email has been changed successfully.",
-        });
-        setNewEmail("");
-      } catch (error: any) {
-        if (error.code === 'auth/requires-recent-login') {
-            setShowReauthDialog(true);
-        } else {
-            toast({
-              variant: "destructive",
-              title: "Email Change Failed",
-              description: error.message || "An error occurred.",
-            });
-        }
-      }
-    }
+    await performEmailChange();
   };
 
-  const handleReauthenticateAndChangeEmail = async () => {
+  const handleReauthenticateAndRetry = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
 
@@ -100,20 +105,17 @@ export default function SettingsPage() {
       const credential = EmailAuthProvider.credential(user.email, currentPassword);
       try {
         await reauthenticateWithCredential(user, credential);
-        // Now try updating the email again
-        await updateEmail(user, newEmail);
-        toast({
-          title: "Email Updated Successfully",
-          description: "Your login email has been changed.",
-        });
         setShowReauthDialog(false);
-        setNewEmail("");
         setCurrentPassword("");
+        if (actionToRetry) {
+          await actionToRetry();
+          setActionToRetry(null);
+        }
       } catch (error: any) {
         toast({
           variant: "destructive",
           title: "Authentication Failed",
-          description: error.message || "Could not update email. Please check your password.",
+          description: error.message || "Could not re-authenticate. Please check your password.",
         });
       }
     }
@@ -150,11 +152,16 @@ export default function SettingsPage() {
         setNewPassword("");
         setConfirmPassword("");
       } catch (error: any) {
-        toast({
-          variant: "destructive",
-          title: "Password Change Failed",
-          description: error.message,
-        });
+         if (error.code === 'auth/requires-recent-login') {
+            setActionToRetry(() => handleChangePassword);
+            setShowReauthDialog(true);
+        } else {
+            toast({
+              variant: "destructive",
+              title: "Password Change Failed",
+              description: error.message,
+            });
+        }
       }
     }
   };
@@ -290,7 +297,7 @@ export default function SettingsPage() {
             <AlertDialogHeader>
             <AlertDialogTitle>Please Re-authenticate</AlertDialogTitle>
             <AlertDialogDescription>
-                To change your email, please enter your current password to confirm your identity.
+                This is a sensitive operation. To continue, please enter your current password to confirm your identity.
             </AlertDialogDescription>
             </AlertDialogHeader>
             <div className="space-y-2">
@@ -305,7 +312,7 @@ export default function SettingsPage() {
             </div>
             <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleReauthenticateAndChangeEmail}>Confirm</AlertDialogAction>
+            <AlertDialogAction onClick={handleReauthenticateAndRetry}>Confirm</AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>
