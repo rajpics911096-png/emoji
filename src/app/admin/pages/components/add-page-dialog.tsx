@@ -11,13 +11,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import type { Page } from "@/lib/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useMemo } from "react";
+import { RichTextEditor } from "@/components/rich-text-editor";
 
 const pageSchema = z.object({
   title: z.string().min(1, "Title is required."),
@@ -67,7 +67,7 @@ export function AddPageDialog({ isOpen, onOpenChange, onAddPage }: AddPageDialog
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-4xl">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>Add New Page</DialogTitle>
@@ -99,7 +99,16 @@ export function AddPageDialog({ isOpen, onOpenChange, onAddPage }: AddPageDialog
                 Content
               </Label>
               <div className="col-span-3">
-                <Textarea id="content" {...register("content")} placeholder="Write your page content here... (Supports Markdown)" rows={10} />
+                <Controller
+                    name="content"
+                    control={control}
+                    render={({ field }) => (
+                      <RichTextEditor
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    )}
+                  />
                 {errors.content && <p className="text-destructive text-sm mt-1">{errors.content.message}</p>}
               </div>
             </div>
