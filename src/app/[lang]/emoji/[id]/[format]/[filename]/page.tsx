@@ -122,7 +122,7 @@ export default function FileDownloadPage() {
   return (
     <>
       <Header lang={lang} />
-      <main className="flex-1 py-8 md:py-12 bg-primary/5">
+      <main className="flex-1 py-8 md:py-12 bg-muted/20">
         <div className="container mx-auto px-4">
             <div className="mb-8">
                  <Button asChild variant="outline">
