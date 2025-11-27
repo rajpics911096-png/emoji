@@ -8,7 +8,9 @@ interface AdSlotProps {
 
 export function AdSlot({ location }: AdSlotProps) {
   const { settings } = useSiteSettings();
-  const ad = settings.adSettings.find(
+  
+  // Ensure settings and adSettings are available before trying to find an ad
+  const ad = settings?.adSettings?.find(
     (ad) => ad.location === location && ad.enabled
   );
 
