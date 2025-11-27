@@ -3,19 +3,18 @@
 
 import { notFound, useParams } from 'next/navigation';
 import Link from 'next/link';
-import { getEmojiById, emojis, categories } from '@/lib/data';
+import { getEmojiById, categories } from '@/lib/data';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { SvgIcon } from '@/components/svg-icon';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Download, File as FileIcon, Hourglass, ArrowLeft } from 'lucide-react';
+import { Download, File as FileIcon, Hourglass, ArrowLeft, Video } from 'lucide-react';
 import Image from 'next/image';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { useTranslations } from '@/context/translations-context';
 import { useState, useEffect, useMemo } from 'react';
-import type { Emoji, EmojiFormatFile } from '@/lib/types';
-import { EmojiCard } from '@/components/emoji-card';
+import type { EmojiFormatFile } from '@/lib/types';
 
 const DownloadButton = ({ file }: { file: EmojiFormatFile }) => {
   const { settings } = useSiteSettings();
@@ -98,7 +97,7 @@ export default function FileDownloadPage() {
 
   const file = useMemo(() => {
     if (!emoji) return null;
-    const formatKey = format as keyof Emoji['formats'];
+    const formatKey = format as keyof typeof emoji.formats;
     const files = emoji.formats[formatKey];
     if (!files) return null;
     return files.find(f => encodeURIComponent(f.name) === filename) || null;
@@ -190,22 +189,3 @@ export default function FileDownloadPage() {
     </>
   );
 }
-
-export function generateStaticParams() {
-    const params: { id: string; format: string; filename: string }[] = [];
-    emojis.forEach(emoji => {
-        Object.keys(emoji.formats).forEach(format => {
-            const formatKey = format as keyof typeof emoji.formats;
-            emoji.formats[formatKey].forEach(file => {
-                params.push({
-                    id: emoji.id,
-                    format: format,
-                    filename: encodeURIComponent(file.name)
-                })
-            })
-        })
-    })
-    return params;
-}
-
-    
