@@ -195,7 +195,7 @@ export default function EmojisPage() {
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>{t('dialog_actions_label')}</DropdownMenuLabel>
                       <DropdownMenuItem asChild>
-                        <Link href={`/${language}/emoji/${emoji.id}`} target="_blank">
+                        <Link href={`/${language}/emojis/all`} target="_blank">
                           <ExternalLink className="mr-2 h-4 w-4" />
                           {t('dialog_preview_button')}
                         </Link>
