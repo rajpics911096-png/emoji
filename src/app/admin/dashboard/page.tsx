@@ -2,30 +2,34 @@
 
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
-import { Smile, Users, Eye, Download, PlusCircle, FilePlus, ArrowRight, Tags } from "lucide-react";
+import { Smile, FilePlus, Download, ArrowRight, Tags } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { emojis, pages, categories } from '@/lib/data';
 import { useState, useEffect } from 'react';
 
 export default function DashboardPage() {
-    // This is a temporary solution to simulate dynamic data fetching.
-    // In a real app, this would be fetched from a server.
     const [emojiCount, setEmojiCount] = useState(0);
     const [pageCount, setPageCount] = useState(0);
     const [categoryCount, setCategoryCount] = useState(0);
+    const [downloadCount, setDownloadCount] = useState(0);
 
     useEffect(() => {
         setEmojiCount(emojis.length);
         setPageCount(pages.length);
-        // Subtracting 1 for the "All" category which is not a real user-added category
-        setCategoryCount(categories.length - 1);
+        setCategoryCount(categories.length - 1); // Subtract "All" category
+
+        // Get download count from local storage
+        const storedDownloads = localStorage.getItem('downloadCount');
+        if (storedDownloads) {
+            setDownloadCount(parseInt(storedDownloads, 10));
+        }
     }, []);
 
     const stats = [
         { title: "Total Emojis", value: emojiCount.toLocaleString(), icon: Smile, change: "+20.1% from last month", color: "bg-blue-500" },
         { title: "Total Pages", value: pageCount.toLocaleString(), icon: FilePlus, change: "+5 from last month", color: "bg-green-500" },
         { title: "Total Categories", value: categoryCount.toLocaleString(), icon: Tags, change: "+2 from last month", color: "bg-yellow-500" },
-        { title: "Total Downloads", value: "1,234,567", icon: Download, change: "+22% from last month", color: "bg-red-500" },
+        { title: "Total Downloads", value: downloadCount.toLocaleString(), icon: Download, change: "+22% from last month", color: "bg-red-500" },
     ];
 
     const quickActions = [

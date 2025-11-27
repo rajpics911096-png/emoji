@@ -9,10 +9,6 @@ import { Download, File as FileIcon, Hourglass } from 'lucide-react';
 import Image from 'next/image';
 import { downloadTimer as defaultDownloadTimer } from '@/lib/data';
 
-interface EmojiDownloadsProps {
-  emoji: Emoji;
-}
-
 const DownloadButton = ({ file }: { file: EmojiFormatFile }) => {
   const [timer, setTimer] = useState(0);
   const [isCountingDown, setIsCountingDown] = useState(false);
@@ -28,7 +24,7 @@ const DownloadButton = ({ file }: { file: EmojiFormatFile }) => {
       setIsCountingDown(false);
     }
     return () => clearInterval(intervalId);
-  }, [isCountingDown, timer]);
+  }, [isCountingDown, timer, file]);
   
   const handleDownload = () => {
     const link = document.createElement('a');
@@ -37,6 +33,10 @@ const DownloadButton = ({ file }: { file: EmojiFormatFile }) => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    
+    // Increment download count in local storage
+    const currentCount = parseInt(localStorage.getItem('downloadCount') || '0', 10);
+    localStorage.setItem('downloadCount', (currentCount + 1).toString());
   };
 
   const startCountdown = () => {
