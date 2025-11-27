@@ -22,6 +22,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import Link from "next/link";
 
 
 export default function SettingsPage() {
@@ -51,16 +52,6 @@ export default function SettingsPage() {
       description: t('settings_toast_reset_desc'),
     });
   }
-
-  const handleSitemap = () => {
-    // In a real application, this would trigger a server action
-    // to regenerate the sitemap file. For this prototype, we'll just show a toast.
-    // The sitemap is already being generated dynamically at /sitemap.xml
-    toast({
-      title: t('settings_toast_sitemap_title'),
-      description: t('settings_toast_sitemap_desc'),
-    });
-  };
   
   const performEmailChange = async () => {
     const auth = getAuth();
@@ -284,8 +275,10 @@ export default function SettingsPage() {
           </div>
           <div className="space-y-2">
             <Label>{t('settings_sitemap_label')}</Label>
-            <Button onClick={handleSitemap} variant="outline" className="w-full">
-              Sitemap Generation
+            <Button variant="outline" className="w-full" asChild>
+              <Link href="/sitemap.xml" target="_blank">
+                Sitemap Generation
+              </Link>
             </Button>
             <p className="text-sm text-muted-foreground">
               {t('settings_sitemap_desc')}
