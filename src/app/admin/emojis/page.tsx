@@ -15,9 +15,14 @@ import { MoreHorizontal, PlusCircle } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { emojis } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { AddEmojiDialog } from "./components/add-emoji-dialog";
+import type { Emoji } from "@/lib/types";
 
 export default function EmojisPage() {
   const { toast } = useToast();
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [emojiList, setEmojiList] = useState<Emoji[]>(emojis);
 
   const handleAction = (action: string, emojiTitle: string) => {
     toast({
@@ -26,14 +31,24 @@ export default function EmojisPage() {
     });
   };
 
-  const handleAdd = () => {
+  const handleAddEmoji = (newEmoji: Omit<Emoji, 'id' | 'formats' | 'related'>) => {
+    const emojiToAdd: Emoji = {
+      ...newEmoji,
+      id: newEmoji.title.toLowerCase().replace(/ /g, '-'),
+      formats: { png: [], gif: [], image: [], video: [] },
+      related: [],
+    };
+    setEmojiList([emojiToAdd, ...emojiList]);
     toast({
-      title: "Add Emoji Clicked",
-      description: "You've clicked the 'Add Emoji' button.",
+      title: "Emoji Added",
+      description: `"${newEmoji.title}" has been added to the list.`,
     });
+    setIsAddDialogOpen(false);
   };
 
+
   return (
+    <>
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
@@ -41,7 +56,7 @@ export default function EmojisPage() {
                 <CardTitle>Emojis</CardTitle>
                 <CardDescription>Manage your website&apos;s emojis here.</CardDescription>
             </div>
-            <Button size="sm" className="gap-1" onClick={handleAdd}>
+            <Button size="sm" className="gap-1" onClick={() => setIsAddDialogOpen(true)}>
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Add Emoji</span>
             </Button>
@@ -61,7 +76,7 @@ export default function EmojisPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {emojis.map((emoji) => (
+            {emojiList.map((emoji) => (
               <TableRow key={emoji.id}>
                 <TableCell className="font-medium text-2xl">{emoji.emoji}</TableCell>
                 <TableCell className="font-medium">{emoji.title}</TableCell>
@@ -94,5 +109,11 @@ export default function EmojisPage() {
         </Table>
       </CardContent>
     </Card>
+    <AddEmojiDialog 
+        isOpen={isAddDialogOpen}
+        onOpenChange={setIsAddDialogOpen}
+        onAddEmoji={handleAddEmoji}
+    />
+    </>
   );
 }
