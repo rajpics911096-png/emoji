@@ -56,6 +56,18 @@ export default function AdsSettingsPage() {
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>`, enabled: false },
+    { location: 'sidebar', code: `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1122334455667788"
+     crossorigin="anonymous"></script>
+<!-- Sidebar Ad -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1122334455667788"
+     data-ad-slot="1122334455"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>`, enabled: true },
   ]);
 
   const handleSave = () => {
