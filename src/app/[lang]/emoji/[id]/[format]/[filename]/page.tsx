@@ -174,7 +174,7 @@ export default function FileDownloadPage() {
                           {categories.map((cat) => (
                             <Link key={cat.id} href={`/${lang}/emojis/${cat.id}`} className="group flex flex-col items-center gap-2 p-3 rounded-md hover:bg-muted/50 transition-colors">
                               <SvgIcon svg={cat.icon} className="w-8 h-8 text-primary" />
-                              <p className="font-semibold text-sm text-center group-hover:text-primary transition-colors">{t(`category_${cat.id}`)}</p>
+                              <p className="font-semibold text-sm text-center group-hover:text-primary transition-colors">{t(cat.name)}</p>
                             </Link>
                           ))}
                         </div>
