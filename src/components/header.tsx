@@ -17,11 +17,13 @@ import { ThemeToggle } from './theme-toggle';
 import { LanguageSwitcher } from './language-switcher';
 import { useTranslations } from '@/context/translations-context';
 import { useState } from 'react';
+import { categories } from '@/lib/data';
 
 export default function Header({ lang }: { lang: string }) {
   const { settings } = useSiteSettings();
   const { t } = useTranslations();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navCategories = categories.filter(c => c.id !== 'all').slice(0, 5);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -43,7 +45,16 @@ export default function Header({ lang }: { lang: string }) {
                 <span className="font-bold font-headline text-lg">{settings.name}</span>
                 </Link>
                 <div className="mt-6 flex flex-col space-y-4">
-                  {/* Category links removed from mobile menu */}
+                  {navCategories.map((category) => (
+                    <Link
+                      key={category.id}
+                      href={`/${lang}/emojis/${category.id}`}
+                      className="text-lg font-medium text-foreground/80 hover:text-primary transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {t(category.name)}
+                    </Link>
+                  ))}
                 </div>
             </SheetContent>
             </Sheet>
@@ -57,7 +68,15 @@ export default function Header({ lang }: { lang: string }) {
             </span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
-            {/* Category links removed from desktop menu */}
+             {navCategories.map((category) => (
+                <Link
+                  key={category.id}
+                  href={`/${lang}/emojis/${category.id}`}
+                  className="transition-colors hover:text-foreground/80 text-foreground/60"
+                >
+                  {t(category.name)}
+                </Link>
+              ))}
           </nav>
         </div>
         
