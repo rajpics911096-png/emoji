@@ -1,4 +1,4 @@
-import type { Emoji, EmojiCategory, FooterContent } from './types';
+import type { Emoji, EmojiCategory, FooterContent, Page } from './types';
 
 export const categories: EmojiCategory[] = [
     { id: 'all', name: 'All Emojis', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smile"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>' },
@@ -195,6 +195,12 @@ export const emojis: Emoji[] = [
     },
     related: ['rocket', 'airplane']
   }
+];
+
+export const pages: Page[] = [
+    { id: 'about-us', title: 'About Us', slug: 'about-us', status: 'published', content: '<h1>About Us</h1><p>This is the about us page. Welcome!</p>' },
+    { id: 'contact-us', title: 'Contact Us', slug: 'contact-us', status: 'draft', content: '<h1>Contact Us</h1><p>This is the contact us page. Get in touch!</p>' },
+    { id: 'privacy-policy', title: 'Privacy Policy', slug: 'privacy-policy', status: 'published', content: '<h1>Privacy Policy</h1><p>This is the privacy policy page. We respect your privacy.</p>' },
 ];
 
 export function getEmojiById(id: string) {

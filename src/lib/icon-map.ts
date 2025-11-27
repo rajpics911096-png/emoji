@@ -21,6 +21,8 @@ import {
   Linkedin,
   FileText,
   Library,
+  PlusCircle,
+  ArrowRight,
 } from 'lucide-react';
 
 export const iconMap: { [key: string]: React.ComponentType<{ className?: string }> } = {
@@ -46,6 +48,8 @@ export const iconMap: { [key: string]: React.ComponentType<{ className?: string 
   'linkedin': Linkedin,
   'file-text': FileText,
   'library': Library,
+  'plus-circle': PlusCircle,
+  'arrow-right': ArrowRight,
 };
 
 export const iconNames = Object.keys(iconMap);

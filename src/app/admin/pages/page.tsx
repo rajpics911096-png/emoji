@@ -19,16 +19,12 @@ import { Badge } from "@/components/ui/badge";
 import { AddPageDialog } from "./components/add-page-dialog";
 import { EditPageDialog } from "./components/edit-page-dialog";
 import Link from "next/link";
+import { pages as initialPagesData } from "@/lib/data";
 
-const initialPages: Page[] = [
-    { id: 'about-us', title: 'About Us', slug: 'about-us', status: 'published', content: '<h1>About Us</h1><p>This is the about us page. Welcome!</p>' },
-    { id: 'contact-us', title: 'Contact Us', slug: 'contact-us', status: 'draft', content: '<h1>Contact Us</h1><p>This is the contact us page. Get in touch!</p>' },
-    { id: 'privacy-policy', title: 'Privacy Policy', slug: 'privacy-policy', status: 'published', content: '<h1>Privacy Policy</h1><p>This is the privacy policy page. We respect your privacy.</p>' },
-]
 
 export default function PagesPage() {
   const { toast } = useToast();
-  const [pages, setPages] = useState<Page[]>(initialPages);
+  const [pages, setPages] = useState<Page[]>(initialPagesData);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedPage, setSelectedPage] = useState<Page | null>(null);
