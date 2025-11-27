@@ -20,6 +20,7 @@ import {
   Tags,
   FileText,
   Library,
+  Megaphone,
 } from "lucide-react";
 import { useSiteSettings } from "@/context/site-settings-context";
 import { useTranslations } from "@/context/translations-context";
@@ -66,6 +67,12 @@ export function AdminSidebar() {
       label: t('admin_settings'),
       icon: Settings,
       activeMatch: '/admin/settings',
+    },
+    {
+      href: `/admin/ads-settings`,
+      label: t('admin_ads_settings'),
+      icon: Megaphone,
+      activeMatch: '/admin/ads-settings',
     },
     {
       href: `/admin/footer-settings`,

@@ -52,6 +52,7 @@ const translations = {
         admin_media: 'Media',
         admin_categories: 'Categories',
         admin_settings: 'Settings',
+        admin_ads_settings: 'ADS Settings',
         admin_footer_settings: 'Footer Settings',
         admin_logout: 'Log Out',
         admin_sidebar_title: 'Admin Panel',
@@ -166,6 +167,8 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
+        ads_settings_description: 'Manage your ad settings here.',
+        ads_settings_placeholder: 'ADS settings form will be here.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -277,6 +280,7 @@ const translations = {
         admin_media: 'Medios',
         admin_categories: 'Categorías',
         admin_settings: 'Ajustes',
+        admin_ads_settings: 'Ajustes de ADS',
         admin_footer_settings: 'Ajustes del Pie de Página',
         admin_logout: 'Cerrar Sesión',
         admin_sidebar_title: 'Panel de Admin',
@@ -382,7 +386,7 @@ const translations = {
         settings_download_timer_desc: 'Establece el tiempo de cuenta atrás en segundos para las descargas de archivos.',
         settings_sitemap_label: 'Generar Sitemap',
         settings_sitemap_button: 'Generar',
-        settings_sitemap_desc: 'Genera o actualiza manualmente el sitemap.',
+        settings_sitemap_desc: 'Genera o actualiza manually el sitemap.',
         settings_reset_button: 'Restablecer a Predeterminado',
         settings_save_button: 'Guardar Ajustes',
         settings_toast_saved_title: 'Ajustes Guardados',
@@ -391,6 +395,8 @@ const translations = {
         settings_toast_reset_desc: 'Tus ajustes se han restablecido a los valores predeterminados.',
         settings_toast_sitemap_title: 'Sitemap Generado',
         settings_toast_sitemap_desc: 'El sitemap ha sido generado/actualizado.',
+        ads_settings_description: 'Gestiona tus ajustes de anuncios aquí.',
+        ads_settings_placeholder: 'El formulario de ajustes de ADS estará aquí.',
 
         // Footer Settings page
         footer_settings_title: 'Ajustes del Pie de Página',
@@ -502,6 +508,7 @@ const translations = {
         admin_media: 'मीडिया',
         admin_categories: 'श्रेणियाँ',
         admin_settings: 'सेटिंग्स',
+        admin_ads_settings: 'ADS सेटिंग्स',
         admin_footer_settings: 'फुटर सेटिंग्स',
         admin_logout: 'लॉग आउट',
         admin_sidebar_title: 'एडमिन पैनल',
@@ -616,6 +623,8 @@ const translations = {
         settings_toast_reset_desc: 'आपकी सेटings डिफ़ॉल्ट पर रीसेट कर दी गई हैं।',
         settings_toast_sitemap_title: 'साइटमैप उत्पन्न हुआ',
         settings_toast_sitemap_desc: 'साइटमैप उत्पन्न/अपडेट किया गया है।',
+        ads_settings_description: 'अपनी विज्ञापन सेटिंग्स यहाँ प्रबंधित करें।',
+        ads_settings_placeholder: 'ADS सेटिंग्स फ़ॉर्म यहाँ होगा।',
 
         // Footer Settings page
         footer_settings_title: 'फुटर सेटिंग्स',
@@ -727,6 +736,7 @@ const translations = {
         admin_media: 'Médias',
         admin_categories: 'Catégories',
         admin_settings: 'Paramètres',
+        admin_ads_settings: 'Paramètres ADS',
         admin_footer_settings: 'Paramètres du pied de page',
         admin_logout: 'Se déconnecter',
         admin_sidebar_title: 'Panneau d\'administration',
@@ -841,6 +851,8 @@ const translations = {
         settings_toast_reset_desc: 'Vos paramètres ont été réinitialisés aux valeurs par défaut.',
         settings_toast_sitemap_title: 'Sitemap généré',
         settings_toast_sitemap_desc: 'Le sitemap a été généré/mis à jour.',
+        ads_settings_description: 'Gérez vos paramètres publicitaires ici.',
+        ads_settings_placeholder: 'Le formulaire de paramètres ADS sera ici.',
 
         // Footer Settings page
         footer_settings_title: 'Paramètres du pied de page',
@@ -952,6 +964,7 @@ const translations = {
         admin_media: 'メディア',
         admin_categories: 'カテゴリー',
         admin_settings: '設定',
+        admin_ads_settings: 'ADS 設定',
         admin_footer_settings: 'フッター設定',
         admin_logout: 'ログアウト',
         admin_sidebar_title: '管理パネル',
@@ -1066,6 +1079,8 @@ const translations = {
         settings_toast_reset_desc: '設定はデフォルトにリセットされました。',
         settings_toast_sitemap_title: 'サイトマップが生成されました',
         settings_toast_sitemap_desc: 'サイトマップが生成/更新されました。',
+        ads_settings_description: '広告設定をここで管理します。',
+        ads_settings_placeholder: 'ADS 設定フォームはここに表示されます。',
 
         // Footer Settings page
         footer_settings_title: 'フッター設定',
@@ -1177,6 +1192,7 @@ const translations = {
         admin_media: 'Medien',
         admin_categories: 'Kategorien',
         admin_settings: 'Einstellungen',
+        admin_ads_settings: 'ADS-Einstellungen',
         admin_footer_settings: 'Fußzeileneinstellungen',
         admin_logout: 'Abmelden',
         admin_sidebar_title: 'Admin-Panel',
@@ -1291,6 +1307,8 @@ const translations = {
         settings_toast_reset_desc: 'Ihre Einstellungen wurden auf die Standardwerte zurückgesetzt.',
         settings_toast_sitemap_title: 'Sitemap generiert',
         settings_toast_sitemap_desc: 'Die Sitemap wurde generiert/aktualisiert.',
+        ads_settings_description: 'Verwalten Sie hier Ihre Anzeigeneinstellungen.',
+        ads_settings_placeholder: 'Das ADS-Einstellungsformular wird hier sein.',
 
         // Footer Settings page
         footer_settings_title: 'Fußzeileneinstellungen',
@@ -1402,6 +1420,7 @@ const translations = {
         admin_media: 'Mídia',
         admin_categories: 'Categorias',
         admin_settings: 'Configurações',
+        admin_ads_settings: 'Configurações de ADS',
         admin_footer_settings: 'Configurações do Rodapé',
         admin_logout: 'Sair',
         admin_sidebar_title: 'Painel de Admin',
@@ -1516,6 +1535,8 @@ const translations = {
         settings_toast_reset_desc: 'Suas configurações foram redefinidas para os padrões.',
         settings_toast_sitemap_title: 'Sitemap Gerado',
         settings_toast_sitemap_desc: 'O sitemap foi gerado/atualizado.',
+        ads_settings_description: 'Gerencie suas configurações de anúncios aqui.',
+        ads_settings_placeholder: 'O formulário de configurações de ADS estará aqui.',
 
         // Footer Settings page
         footer_settings_title: 'Configurações do Rodapé',
@@ -1627,6 +1648,7 @@ const translations = {
         admin_media: 'Медиа',
         admin_categories: 'Категории',
         admin_settings: 'Настройки',
+        admin_ads_settings: 'Настройки ADS',
         admin_footer_settings: 'Настройки подвала',
         admin_logout: 'Выйти',
         admin_sidebar_title: 'Панель администратора',
@@ -1741,6 +1763,8 @@ const translations = {
         settings_toast_reset_desc: 'Ваши настройки сброшены до значений по умолчанию.',
         settings_toast_sitemap_title: 'Sitemap создан',
         settings_toast_sitemap_desc: 'Sitemap был создан/обновлен.',
+        ads_settings_description: 'Управляйте настройками рекламы здесь.',
+        ads_settings_placeholder: 'Форма настроек ADS будет здесь.',
 
         // Footer Settings page
         footer_settings_title: 'Настройки подвала',
@@ -1852,6 +1876,7 @@ const translations = {
         admin_media: '媒体',
         admin_categories: '类别',
         admin_settings: '设置',
+        admin_ads_settings: 'ADS 设置',
         admin_footer_settings: '页脚设置',
         admin_logout: '登出',
         admin_sidebar_title: '管理面板',
@@ -1966,6 +1991,8 @@ const translations = {
         settings_toast_reset_desc: '您的设置已重置为默认值。',
         settings_toast_sitemap_title: '站点地图已生成',
         settings_toast_sitemap_desc: '站点地图已生成/更新。',
+        ads_settings_description: '在此处管理您的广告设置。',
+        ads_settings_placeholder: 'ADS 设置表单将在此处。',
 
         // Footer Settings page
         footer_settings_title: '页脚设置',
@@ -2077,6 +2104,7 @@ const translations = {
         admin_media: 'Media',
         admin_categories: 'Categories',
         admin_settings: 'Settings',
+        admin_ads_settings: 'ADS Settings',
         admin_footer_settings: 'Footer Settings',
         admin_logout: 'Log Out',
         admin_sidebar_title: 'Admin Panel',
@@ -2191,6 +2219,8 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
+        ads_settings_description: 'Manage your ad settings here.',
+        ads_settings_placeholder: 'ADS settings form will be here.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -2302,6 +2332,7 @@ const translations = {
         admin_media: 'Media',
         admin_categories: 'Categories',
         admin_settings: 'Settings',
+        admin_ads_settings: 'ADS Settings',
         admin_footer_settings: 'Footer Settings',
         admin_logout: 'Log Out',
         admin_sidebar_title: 'Admin Panel',
@@ -2416,6 +2447,8 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
+        ads_settings_description: 'Manage your ad settings here.',
+        ads_settings_placeholder: 'ADS settings form will be here.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -2527,6 +2560,7 @@ const translations = {
         admin_media: 'Media',
         admin_categories: 'Categories',
         admin_settings: 'Settings',
+        admin_ads_settings: 'ADS Settings',
         admin_footer_settings: 'Footer Settings',
         admin_logout: 'Log Out',
         admin_sidebar_title: 'Admin Panel',
@@ -2641,6 +2675,8 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
+        ads_settings_description: 'Manage your ad settings here.',
+        ads_settings_placeholder: 'ADS settings form will be here.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -2752,6 +2788,7 @@ const translations = {
         admin_media: 'Media',
         admin_categories: 'Categories',
         admin_settings: 'Settings',
+        admin_ads_settings: 'ADS Settings',
         admin_footer_settings: 'Footer Settings',
         admin_logout: 'Log Out',
         admin_sidebar_title: 'Admin Panel',
@@ -2866,6 +2903,8 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
+        ads_settings_description: 'Manage your ad settings here.',
+        ads_settings_placeholder: 'ADS settings form will be here.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -2977,6 +3016,7 @@ const translations = {
         admin_media: 'Media',
         admin_categories: 'Categories',
         admin_settings: 'Settings',
+        admin_ads_settings: 'ADS Settings',
         admin_footer_settings: 'Footer Settings',
         admin_logout: 'Log Out',
         admin_sidebar_title: 'Admin Panel',
@@ -3091,6 +3131,8 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
+        ads_settings_description: 'Manage your ad settings here.',
+        ads_settings_placeholder: 'ADS settings form will be here.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -3202,6 +3244,7 @@ const translations = {
         admin_media: 'Media',
         admin_categories: 'Categories',
         admin_settings: 'Settings',
+        admin_ads_settings: 'ADS Settings',
         admin_footer_settings: 'Footer Settings',
         admin_logout: 'Log Out',
         admin_sidebar_title: 'Admin Panel',
@@ -3316,6 +3359,8 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
+        ads_settings_description: 'Manage your ad settings here.',
+        ads_settings_placeholder: 'ADS settings form will be here.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -3427,6 +3472,7 @@ const translations = {
         admin_media: 'Media',
         admin_categories: 'Categories',
         admin_settings: 'Settings',
+        admin_ads_settings: 'ADS Settings',
         admin_footer_settings: 'Footer Settings',
         admin_logout: 'Log Out',
         admin_sidebar_title: 'Admin Panel',
@@ -3541,6 +3587,8 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
+        ads_settings_description: 'Manage your ad settings here.',
+        ads_settings_placeholder: 'ADS settings form will be here.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -3652,6 +3700,7 @@ const translations = {
         admin_media: 'Media',
         admin_categories: 'Categories',
         admin_settings: 'Settings',
+        admin_ads_settings: 'ADS Settings',
         admin_footer_settings: 'Footer Settings',
         admin_logout: 'Log Out',
         admin_sidebar_title: 'Admin Panel',
@@ -3766,6 +3815,8 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
+        ads_settings_description: 'Manage your ad settings here.',
+        ads_settings_placeholder: 'ADS settings form will be here.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -3877,6 +3928,7 @@ const translations = {
         admin_media: 'Media',
         admin_categories: 'Categories',
         admin_settings: 'Settings',
+        admin_ads_settings: 'ADS Settings',
         admin_footer_settings: 'Footer Settings',
         admin_logout: 'Log Out',
         admin_sidebar_title: 'Admin Panel',
@@ -3991,6 +4043,8 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
+        ads_settings_description: 'Manage your ad settings here.',
+        ads_settings_placeholder: 'ADS settings form will be here.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -4102,6 +4156,7 @@ const translations = {
         admin_media: 'Media',
         admin_categories: 'Categories',
         admin_settings: 'Settings',
+        admin_ads_settings: 'ADS Settings',
         admin_footer_settings: 'Footer Settings',
         admin_logout: 'Log Out',
         admin_sidebar_title: 'Admin Panel',
@@ -4216,6 +4271,8 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
+        ads_settings_description: 'Manage your ad settings here.',
+        ads_settings_placeholder: 'ADS settings form will be here.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
@@ -4327,6 +4384,7 @@ const translations = {
         admin_media: 'Media',
         admin_categories: 'Categories',
         admin_settings: 'Settings',
+        admin_ads_settings: 'ADS Settings',
         admin_footer_settings: 'Footer Settings',
         admin_logout: 'Log Out',
         admin_sidebar_title: 'Admin Panel',
@@ -4441,6 +4499,8 @@ const translations = {
         settings_toast_reset_desc: 'Your settings have been reset to the defaults.',
         settings_toast_sitemap_title: 'Sitemap Generated',
         settings_toast_sitemap_desc: 'Sitemap has been generated/updated.',
+        ads_settings_description: 'Manage your ad settings here.',
+        ads_settings_placeholder: 'ADS settings form will be here.',
 
         // Footer Settings page
         footer_settings_title: 'Footer Settings',
