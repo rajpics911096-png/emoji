@@ -7,6 +7,7 @@ import { footerContent } from '@/lib/data';
 import { iconMap } from '@/lib/icon-map';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { useTranslations } from '@/context/translations-context';
+import { AdSlot } from './ad-slot';
 
 const SocialIcon = ({ iconName, className }: { iconName: string; className?: string }) => {
   const IconComponent = iconMap[iconName] || iconMap.twitter;
@@ -18,6 +19,8 @@ export default function Footer({ lang }: { lang: string }) {
   const { t } = useTranslations();
   const { navigation, legal, social } = footerContent;
   return (
+    <>
+    <AdSlot location="footer" />
     <footer className="bg-primary/5 border-t">
       <div className="container mx-auto py-12 px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
@@ -64,5 +67,6 @@ export default function Footer({ lang }: { lang: string }) {
         </div>
       </div>
     </footer>
+    </>
   );
 }

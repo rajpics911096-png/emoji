@@ -35,4 +35,42 @@ export const defaultSiteSettings: SiteSettings = {
       </defs>
     </svg>`,
     downloadTimer: 10,
+    adSettings: [
+        { location: 'header', code: `<div style="text-align:center; margin: 20px 0;">
+  <a href="https://example.com" target="_blank" title="Visit our website demo">
+    <img src="https://via.placeholder.com/728x90.png?text=Header+Ad" 
+         alt="Demo Banner Ad" 
+         width="728" 
+         height="90" 
+         style="border: 0; max-width: 100%; height: auto; margin: 0 auto;">
+  </a>
+</div>`, enabled: true },
+        { location: 'footer', code: `<div style="text-align:center; margin: 20px 0;">
+  <a href="https://example.com" target="_blank" title="Visit our website demo">
+    <img src="https://via.placeholder.com/728x90.png?text=Footer+Ad" 
+         alt="Demo Banner Ad" 
+         width="728" 
+         height="90" 
+         style="border: 0; max-width: 100%; height: auto; margin: 0 auto;">
+  </a>
+</div>`, enabled: true },
+        { location: 'sidebar', code: `<div style="text-align:center; margin: 20px 0;">
+  <a href="https://example.com" target="_blank" title="Visit our website demo">
+    <img src="https://via.placeholder.com/300x250.png?text=Sidebar+Ad" 
+         alt="Demo Banner Ad" 
+         width="300" 
+         height="250" 
+         style="border: 0; max-width: 100%; height: auto; margin: 0 auto;">
+  </a>
+</div>`, enabled: true },
+        { location: 'below_emoji', code: `<div style="text-align:center; margin: 20px 0;">
+  <a href="https://example.com" target="_blank" title="Visit our website demo">
+    <img src="https://via.placeholder.com/468x60.png?text=Below+Emoji+Ad" 
+         alt="Demo Banner Ad" 
+         width="468" 
+         height="60" 
+         style="border: 0; max-width: 100%; height: auto; margin: 0 auto;">
+  </a>
+</div>`, enabled: true },
+    ]
 };

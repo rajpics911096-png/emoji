@@ -18,69 +18,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslations } from '@/context/translations-context';
-
-type AdSetting = {
-  location: string;
-  code: string;
-  enabled: boolean;
-};
+import type { AdSetting } from '@/lib/types';
+import { useSiteSettings } from '@/context/site-settings-context';
+import { Trash2 } from 'lucide-react';
 
 export default function AdsSettingsPage() {
   const { t } = useTranslations();
   const { toast } = useToast();
-  const [adSettings, setAdSettings] = useState<AdSetting[]>([
-    { location: 'header', code: `<a target="_blank" href="https://amp.dev/documentation/examples/style-layout/banner_ad/index.html">
-   <amp-img src="https://amp.dev/static/samples/img/amp-300x250.jpg"
-            width="300"
-            height="250"
-            layout="responsive"
-            alt="a4a image"></amp-img>
- </a>`, enabled: true },
-    { location: 'footer', code: `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9876543210987654"
-     crossorigin="anonymous"></script>
-<!-- Footer Ad -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-9876543210987654"
-     data-ad-slot="0987654321"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>`, enabled: false },
-    { location: 'sidebar', code: `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1122334455667788"
-     crossorigin="anonymous"></script>
-<!-- Sidebar Ad -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-1122334455667788"
-     data-ad-slot="1122334455"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>`, enabled: true },
- { location: 'below_emoji', code: `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4455667788990011"
-     crossorigin="anonymous"></script>
-<!-- Below Emoji Ad -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-4455667788990011"
-     data-ad-slot="4455667788"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>`, enabled: false },
-  ]);
+  const { settings, setSettings } = useSiteSettings();
+  const [adSettings, setAdSettings] = useState<AdSetting[]>(settings.adSettings);
 
   const handleSave = () => {
-    // In a real app, you would save this to a database.
-    // For now, we'll just log it and show a toast.
-    console.log('Saving ad settings:', adSettings);
+    setSettings({ ...settings, adSettings });
     toast({
       title: t('settings_toast_saved_title'),
       description: t('ads_settings_saved_desc'),
@@ -97,6 +50,12 @@ export default function AdsSettingsPage() {
       const newSettings = [...adSettings];
       newSettings[index].location = location;
       setAdSettings(newSettings);
+  }
+  
+  const handleEnabledChange = (index: number, enabled: boolean) => {
+    const newSettings = [...adSettings];
+    newSettings[index].enabled = enabled;
+    setAdSettings(newSettings);
   }
 
   const handleAddSlot = () => {
@@ -122,8 +81,18 @@ export default function AdsSettingsPage() {
         <CardContent className="space-y-6">
           {adSettings.map((setting, index) => (
             <Card key={index} className="p-4">
-                <div className="flex justify-end mb-2">
-                     <Button variant="ghost" size="sm" onClick={() => handleRemoveSlot(index)}>{t('dialog_delete_button')}</Button>
+                <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-2">
+                        <Switch 
+                            id={`ad-enabled-${index}`}
+                            checked={setting.enabled}
+                            onCheckedChange={(checked) => handleEnabledChange(index, checked)}
+                        />
+                         <Label htmlFor={`ad-enabled-${index}`}>{setting.enabled ? "Enabled" : "Disabled"}</Label>
+                    </div>
+                     <Button variant="ghost" size="icon" onClick={() => handleRemoveSlot(index)} className="text-muted-foreground hover:text-destructive">
+                        <Trash2 className="h-4 w-4" />
+                     </Button>
                 </div>
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="space-y-2">
@@ -137,6 +106,7 @@ export default function AdsSettingsPage() {
                       <SelectItem value="footer">{t('ads_settings_location_footer')}</SelectItem>
                       <SelectItem value="below_emoji">{t('ads_settings_location_below_emoji')}</SelectItem>
                       <SelectItem value="sidebar">{t('ads_settings_location_sidebar')}</SelectItem>
+                       <SelectItem value="custom">Custom</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

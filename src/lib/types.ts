@@ -52,8 +52,15 @@ export type Page = {
   content?: string; // Content will be markdown or HTML
 }
 
+export type AdSetting = {
+  location: string;
+  code: string;
+  enabled: boolean;
+};
+
 export type SiteSettings = {
   name: string;
   logo: string; // SVG code as a string
   downloadTimer: number;
+  adSettings: AdSetting[];
 };

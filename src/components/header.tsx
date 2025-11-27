@@ -18,6 +18,7 @@ import { LanguageSwitcher } from './language-switcher';
 import { useTranslations } from '@/context/translations-context';
 import { useState } from 'react';
 import { categories } from '@/lib/data';
+import { AdSlot } from './ad-slot';
 
 export default function Header({ lang }: { lang: string }) {
   const { settings } = useSiteSettings();
@@ -26,6 +27,7 @@ export default function Header({ lang }: { lang: string }) {
   const navCategories = categories.filter(c => c.id !== 'all').slice(0, 5);
 
   return (
+    <>
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
         <div className="flex items-center md:hidden">
@@ -96,5 +98,7 @@ export default function Header({ lang }: { lang: string }) {
         </div>
       </div>
     </header>
+    <AdSlot location="header" />
+    </>
   );
 }

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { getEmojiById, getRelatedEmojis, categories } from '@/lib/data';
 import Header from '@/components/header';
@@ -13,7 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EmojiDownloads } from './components/emoji-downloads';
 import { useEffect, useRef } from 'react';
 import { useTranslations } from '@/context/translations-context';
-import { useParams } from 'next/navigation';
+import { AdSlot } from '@/components/ad-slot';
 
 export default function EmojiPage() {
   const params = useParams<{ id: string; lang: string }>();
@@ -51,9 +51,11 @@ export default function EmojiPage() {
           <div className="grid md:grid-cols-3 gap-8 md:gap-12">
             <div className="md:col-span-2 space-y-8">
               <EmojiView emoji={emoji} />
+              <AdSlot location="below_emoji" />
               <EmojiDownloads emoji={emoji} lang={lang} />
             </div>
             <aside className="space-y-8">
+              <AdSlot location="sidebar" />
               <div className="space-y-4">
                 <h3 className="font-headline text-2xl font-semibold text-primary">
                   {t('descriptionTitle')}
@@ -80,7 +82,7 @@ export default function EmojiPage() {
                       />
                       <div>
                         <p className="font-semibold text-lg group-hover:text-primary transition-colors">
-                          {t(category.name)}
+                          {t(`category_${category.id}`)}
                         </p>
                         <p className="text-sm text-muted-foreground">
                           {t('viewAllInCategory')}
