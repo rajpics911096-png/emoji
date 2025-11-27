@@ -10,14 +10,15 @@ import {
 } from "@/components/ui/table";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, PlusCircle } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { MoreHorizontal, PlusCircle, ExternalLink } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import type { Page } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { AddPageDialog } from "./components/add-page-dialog";
 import { EditPageDialog } from "./components/edit-page-dialog";
+import Link from "next/link";
 
 const initialPages: Page[] = [
     { id: 'about-us', title: 'About Us', slug: 'about-us', status: 'published', content: 'This is the about us page.' },
@@ -116,8 +117,15 @@ export default function PagesPage() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem asChild>
+                          <Link href={`/${page.slug}`} target="_blank">
+                            <ExternalLink className="mr-2 h-4 w-4" />
+                            Preview
+                          </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleEditClick(page)}>Edit</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleDelete(page.id, page.title)}>Delete</DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={() => handleDelete(page.id, page.title)} className="text-destructive">Delete</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
