@@ -52,6 +52,16 @@ export default function EmojiPage() {
               <EmojiView emoji={emoji} />
             </div>
             <aside className="space-y-8">
+              <div className="space-y-4">
+                <h3 className="font-headline text-2xl font-semibold text-primary">
+                  {t('descriptionTitle')}
+                </h3>
+                <div
+                  className="prose dark:prose-invert max-w-none text-foreground/80"
+                  dangerouslySetInnerHTML={{ __html: emoji.description }}
+                />
+              </div>
+
               {category && (
                 <Card>
                   <CardHeader>
@@ -68,7 +78,7 @@ export default function EmojiPage() {
                       />
                       <div>
                         <p className="font-semibold text-lg group-hover:text-primary transition-colors">
-                          {t(`category_${category.id}`)}
+                          {t(category.name)}
                         </p>
                         <p className="text-sm text-muted-foreground">
                           {t('viewAllInCategory')}
@@ -78,12 +88,6 @@ export default function EmojiPage() {
                   </CardContent>
                 </Card>
               )}
-              <div className="space-y-4">
-                <div
-                  className="prose dark:prose-invert max-w-none text-foreground/80"
-                  dangerouslySetInnerHTML={{ __html: emoji.description }}
-                />
-              </div>
             </aside>
           </div>
 

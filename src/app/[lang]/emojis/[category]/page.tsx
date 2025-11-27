@@ -20,7 +20,7 @@ export default function CategoryPage() {
     notFound();
   }
 
-  const categoryName = t(`category_${category.id}`);
+  const categoryName = t(category.name);
 
   let emojiList = getEmojisByCategory(categorySlug);
   const searchTerm = searchParams.get('search');
