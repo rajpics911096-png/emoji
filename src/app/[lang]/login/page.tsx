@@ -1,8 +1,9 @@
+
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -28,8 +29,7 @@ export default function LoginPage() {
   const { t, language } = useTranslations();
   const { settings } = useSiteSettings();
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleLogin = async () => {
     setIsLoading(true);
     const auth = getAuth();
     try {
@@ -46,6 +46,27 @@ export default function LoginPage() {
     }
   };
 
+  const handleSignUp = async () => {
+    setIsLoading(true);
+    const auth = getAuth();
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+       toast({
+        title: "Account Created",
+        description: "Your account has been created successfully. You are now logged in.",
+      });
+      router.push(`/${language}/admin`);
+    } catch (error: any) {
+       toast({
+        variant: "destructive",
+        title: "Sign Up Failed",
+        description: error.message,
+      });
+    } finally {
+        setIsLoading(false);
+    }
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-sm">
@@ -56,7 +77,6 @@ export default function LoginPage() {
           <CardTitle className="text-2xl font-headline">{t('admin_sidebar_title')}</CardTitle>
           <CardDescription>Enter your credentials to access the admin panel.</CardDescription>
         </CardHeader>
-        <form onSubmit={handleLogin}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -82,12 +102,15 @@ export default function LoginPage() {
               />
             </div>
           </CardContent>
-          <CardFooter>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+          <CardFooter className="flex-col gap-4">
+            <Button onClick={handleLogin} className="w-full" disabled={isLoading}>
               {isLoading ? "Signing In..." : "Sign In"}
             </Button>
+            <p className="text-xs text-muted-foreground">First time? Enter details and click Sign Up.</p>
+            <Button onClick={handleSignUp} variant="outline" className="w-full" disabled={isLoading}>
+              {isLoading ? "Creating Account..." : "Sign Up & Log In"}
+            </Button>
           </CardFooter>
-        </form>
       </Card>
     </div>
   );
