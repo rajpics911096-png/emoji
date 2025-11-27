@@ -11,9 +11,11 @@ import { EmojiView } from './components/emoji-view';
 import { SvgIcon } from '@/components/svg-icon';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EmojiDownloads } from './components/emoji-downloads';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useTranslations } from '@/context/translations-context';
 import { AdSlot } from '@/components/ad-slot';
+import { JsonLd } from '@/components/json-ld';
+import type { Thing } from 'schema-dts';
 
 export default function EmojiPage() {
   const params = useParams<{ id: string, lang: string }>();
@@ -36,6 +38,21 @@ export default function EmojiPage() {
     };
   }, [emoji]);
 
+  const jsonLdData: Thing = useMemo(() => {
+    if (!emoji) return {};
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+    const emojiImage = emoji.formats.png[0] || emoji.formats.image[0];
+
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'Thing',
+        name: emoji.title,
+        description: emoji.description,
+        image: emojiImage ? `${baseUrl}${emojiImage.url}` : undefined,
+        url: `${baseUrl}/${lang}/emoji/${emoji.id}`,
+    };
+  }, [emoji, lang]);
+
 
   if (!emoji) {
     notFound();
@@ -46,6 +63,7 @@ export default function EmojiPage() {
 
   return (
     <>
+      <JsonLd data={jsonLdData} />
       <Header lang={lang} />
       <main className="flex-1 py-12 md:py-16">
         <div className="container mx-auto px-4">
