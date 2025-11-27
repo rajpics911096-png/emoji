@@ -12,20 +12,20 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, PlusCircle } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { categories } from "@/lib/data";
+import { categories as initialCategories } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import type { EmojiCategory } from "@/lib/types";
 import { AddCategoryDialog } from "./components/add-category-dialog";
 import { EditCategoryDialog } from "./components/edit-category-dialog";
-import { iconMap } from "@/lib/icon-map";
+import { SvgIcon } from "@/components/svg-icon";
 
 export default function CategoriesPage() {
   const { toast } = useToast();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<EmojiCategory | null>(null);
-  const [categoryList, setCategoryList] = useState<EmojiCategory[]>(categories);
+  const [categoryList, setCategoryList] = useState<EmojiCategory[]>(initialCategories);
 
   const handleDelete = (categoryId: string, categoryName: string) => {
     if (categoryId === 'all') {
@@ -48,11 +48,10 @@ export default function CategoriesPage() {
     setIsEditDialogOpen(true);
   };
 
-  const handleAddCategory = (newCategory: Omit<EmojiCategory, 'id' | 'icon'> & { icon: string }) => {
+  const handleAddCategory = (newCategory: Omit<EmojiCategory, 'id'>) => {
     const categoryToAdd: EmojiCategory = {
       ...newCategory,
       id: newCategory.name.toLowerCase().replace(/ /g, '-'),
-      icon: iconMap[newCategory.icon] || iconMap['smile'],
     };
     setCategoryList([categoryToAdd, ...categoryList]);
     toast({
@@ -100,11 +99,11 @@ export default function CategoriesPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {categoryList.map((category) => {
-              const Icon = category.icon;
-              return (
+            {categoryList.map((category) => (
               <TableRow key={category.id}>
-                <TableCell className="font-medium text-2xl"><Icon className="h-6 w-6" /></TableCell>
+                <TableCell className="font-medium text-2xl">
+                  <SvgIcon svg={category.icon} className="h-6 w-6" />
+                </TableCell>
                 <TableCell className="font-medium">{category.name}</TableCell>
                 <TableCell className="font-mono text-sm">{category.id}</TableCell>
                 <TableCell>
@@ -123,7 +122,7 @@ export default function CategoriesPage() {
                   </DropdownMenu>
                 </TableCell>
               </TableRow>
-            )})}
+            ))}
           </TableBody>
         </Table>
       </CardContent>

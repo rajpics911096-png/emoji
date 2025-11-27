@@ -1,29 +1,15 @@
 import type { Emoji, EmojiCategory } from './types';
-import {
-  Smile,
-  Cat,
-  Pizza,
-  Swords,
-  Plane,
-  Lamp,
-  Sigma,
-  Flag,
-} from 'lucide-react';
 
 export const categories: EmojiCategory[] = [
-  { id: 'all', name: 'All Emojis', icon: Smile },
-  {
-    id: 'smileys-and-people',
-    name: 'Smileys & People',
-    icon: Smile,
-  },
-  { id: 'animals-and-nature', name: 'Animals & Nature', icon: Cat },
-  { id: 'food-and-drink', name: 'Food & Drink', icon: Pizza },
-  { id: 'activities', name: 'Activities', icon: Swords },
-  { id: 'travel-and-places', name: 'Travel & Places', icon: Plane },
-  { id: 'objects', name: 'Objects', icon: Lamp },
-  { id: 'symbols', name: 'Symbols', icon: Sigma },
-  { id: 'flags', name: 'Flags', icon: Flag },
+    { id: 'all', name: 'All Emojis', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smile"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>' },
+    { id: 'smileys-and-people', name: 'Smileys & People', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smile"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>' },
+    { id: 'animals-and-nature', name: 'Animals & Nature', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cat"><path d="M12 5c.67 0 1.35.09 2 .26 1.78.46 3.1 1.42 4.02 2.74.3.42.58.9.58 1.42v2.24c0 .42-.1.83-.3 1.2-.42.8-1.02 1.5-1.7 2.06-.88.74-2.15 1.2-3.6 1.2s-2.72-.46-3.6-1.2c-.68-.56-1.28-1.26-1.7-2.06-.2-.37-.3-.78-.3-1.2V9.42c0-.52.28-1 .58-1.42.92-1.32 2.24-2.28 4.02-2.74.65-.17 1.33-.26 2-.26m0-4c-2.29 0-4.5.54-6.4 1.6-2.18 1.2-3.6 3.2-3.6 5.4v2.4c0 1.38.45 2.73 1.28 3.82.88 1.14 2.1 2 3.52 2.5 2.13.75 4.47.75 6.6 0 1.42-.5 2.64-1.36 3.52-2.5.83-1.09 1.28-2.44 1.28-3.82V9c0-2.2-1.42-4.2-3.6-5.4C16.5 1.54 14.29 1 12 1z"/><path d="M12 16c-1.66 0-3-1.34-3-3"/><path d="M12.5 8.5A.5.5 0 0 1 12 9a.5.5 0 0 1-.5-.5.5.5 0 0 1 .5-.5.5.5 0 0 1 .5.5"/><path d="M15.5 9.5a.5.5 0 0 1-.5.5.5.5 0 0 1-.5-.5.5.5 0 0 1 .5-.5.5.5 0 0 1 .5.5"/><path d="M8.5 9.5a.5.5 0 0 1-.5.5.5.5 0 0 1-.5-.5.5.5 0 0 1 .5-.5.5.5 0 0 1 .5.5"/></svg>' },
+    { id: 'food-and-drink', name: 'Food & Drink', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pizza"><path d="M15 11h.01"/><path d="M11 15h.01"/><path d="M16 16h.01"/><path d="m2 16 2.2-1.2a1 1 0 0 1 1.32 1.08l-1.5 5.5A1 1 0 0 1 3 22H2a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1Z"/><path d="M22 14.2V16a1 1 0 0 1-1 1h-1a1 1 0 0 1-1.08-1.32L20 16l-5.5-3.08a1 1 0 0 1-1.08-1.32L14.8 6l-1.12-2.3A1 1 0 0 1 14.6 2h0a1 1 0 0 1 .92.68L17 6.6l3.4 1.9a2 2 0 0 1 1.6 1.8v.2a2 2 0 0 1-1.6 1.8Z"/></svg>' },
+    { id: 'activities', name: 'Activities', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-swords"><g><path d="M14.5 3.5c3 0 5.5 2.5 5.5 5.5 0 2.2-1.3 4-3 5-1.7 1-3.8 1-5.5 0-1.7-1-3-2.8-3-5 0-3 2.5-5.5 5.5-5.5Z"/><path d="m2 22 4.5-4.5"/><path d="m10.5 10.5 4.5 4.5"/><path d="m16.5 3.5 4.5 4.5"/><path d="m3.5 16.5 4.5-4.5"/></g></svg>' },
+    { id: 'travel-and-places', name: 'Travel & Places', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plane"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1.5-1.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>' },
+    { id: 'objects', name: 'Objects', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lamp"><path d="m13 18-3 4h10l-3-4Z"/><path d="M14 14.056V3.6a.4.4 0 0 0-.64-.32l-5.2 3.9a.4.4 0 0 0 0 .64l5.2 3.9a.4.4 0 0 0 .64-.32Z"/><path d="M10.7 14h6.6"/><path d="M14 18.01V22"/></svg>' },
+    { id: 'symbols', name: 'Symbols', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sigma"><path d="M18 7V4H6l6 8-6 8h12v-3"/></svg>' },
+    { id: 'flags', name: 'Flags', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flag"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>' },
 ];
 
 export const emojis: Emoji[] = [

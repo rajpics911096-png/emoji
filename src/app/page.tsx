@@ -4,12 +4,14 @@ import {
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { categories, emojis } from '@/lib/data';
+import { categories } from '@/lib/data';
+import { emojis } from '@/lib/data';
 import { EmojiCard } from '@/components/emoji-card';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import IntelligentSearchBar from '@/components/intelligent-search-bar';
 import { Card, CardContent } from '@/components/ui/card';
+import { SvgIcon } from '@/components/svg-icon';
 
 export default function Home() {
   const featuredEmojis = emojis.slice(0, 8);
@@ -51,7 +53,7 @@ export default function Home() {
                 <Link key={category.id} href={`/emojis/${category.id}`}>
                   <Card className="group transform hover:-translate-y-2 transition-transform duration-300 ease-in-out hover:shadow-xl">
                     <CardContent className="p-6 flex flex-col items-center justify-center">
-                      <category.icon className="w-12 h-12 mb-4 text-primary transition-colors group-hover:text-accent-foreground" />
+                      <SvgIcon svg={category.icon} className="w-12 h-12 mb-4 text-primary transition-colors group-hover:text-accent-foreground" />
                       <h3 className="text-lg font-headline font-semibold">
                         {category.name}
                       </h3>

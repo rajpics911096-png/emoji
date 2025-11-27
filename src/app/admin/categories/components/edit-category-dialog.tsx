@@ -11,17 +11,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useForm, Controller } from "react-hook-form";
+import { Textarea } from "@/components/ui/textarea";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import type { EmojiCategory } from "@/lib/types";
 import { useEffect } from "react";
-import { iconMap, iconNames, getIconName } from "@/lib/icon-map";
 
 const categorySchema = z.object({
   name: z.string().min(1, "Category name is required."),
-  icon: z.string().min(1, "Icon is required."),
+  icon: z.string().min(1, "Icon SVG code is required."),
 });
 
 type CategoryFormData = z.infer<typeof categorySchema>;
@@ -37,14 +36,13 @@ export function EditCategoryDialog({ isOpen, onOpenChange, onEditCategory, categ
   const {
     register,
     handleSubmit,
-    control,
     reset,
     formState: { errors },
   } = useForm<CategoryFormData>({
     resolver: zodResolver(categorySchema),
     defaultValues: {
       name: category.name,
-      icon: getIconName(category.icon),
+      icon: category.icon,
     },
   });
   
@@ -52,13 +50,13 @@ export function EditCategoryDialog({ isOpen, onOpenChange, onEditCategory, categ
     if (category) {
       reset({
         name: category.name,
-        icon: getIconName(category.icon),
+        icon: category.icon,
       });
     }
   }, [category, reset]);
 
   const onSubmit = (data: CategoryFormData) => {
-    onEditCategory({ ...category, name: data.name, icon: iconMap[data.icon] || category.icon });
+    onEditCategory({ ...category, ...data });
   };
 
   return (
@@ -81,35 +79,12 @@ export function EditCategoryDialog({ isOpen, onOpenChange, onEditCategory, categ
                 {errors.name && <p className="text-destructive text-sm mt-1">{errors.name.message}</p>}
               </div>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="icon" className="text-right">
-                Icon
+            <div className="grid grid-cols-4 items-start gap-4">
+              <Label htmlFor="icon" className="text-right pt-2">
+                Icon (SVG)
               </Label>
               <div className="col-span-3">
-                <Controller
-                    name="icon"
-                    control={control}
-                    render={({ field }) => (
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select an icon" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {iconNames.map(iconName => {
-                                    const Icon = iconMap[iconName];
-                                    return (
-                                        <SelectItem key={iconName} value={iconName}>
-                                            <div className="flex items-center gap-2">
-                                                <Icon className="h-5 w-5" />
-                                                <span className="capitalize">{iconName.replace(/-/g, ' ')}</span>
-                                            </div>
-                                        </SelectItem>
-                                    )
-                                })}
-                            </SelectContent>
-                        </Select>
-                    )}
-                />
+                <Textarea id="icon" {...register("icon")} placeholder="Paste SVG code here" rows={4} />
                 {errors.icon && <p className="text-destructive text-sm mt-1">{errors.icon.message}</p>}
               </div>
             </div>

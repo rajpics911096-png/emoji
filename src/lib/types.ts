@@ -22,5 +22,5 @@ export type Emoji = {
 export type EmojiCategory = {
   id: string;
   name: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: string;
 };
