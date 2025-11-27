@@ -36,6 +36,7 @@ export const defaultSiteSettings: SiteSettings = {
       </defs>
     </svg>`,
     downloadTimer: 10,
+    adsTxtContent: '',
     adSettings: [
         { location: 'header', code: `<div style="margin: 20px 0;">
   <a href="https://example.com" target="_blank" title="Visit our website demo">

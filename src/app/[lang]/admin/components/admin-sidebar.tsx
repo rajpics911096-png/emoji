@@ -80,6 +80,12 @@ export function AdminSidebar() {
       icon: FileText,
       activeMatch: '/admin/footer-settings',
     },
+     {
+      href: `/admin/ads-txt`,
+      label: "Ads.txt",
+      icon: FileText,
+      activeMatch: '/admin/ads-txt',
+    },
   ];
 
   const cleanedPathname = pathname.substring(3); // Remove language code
