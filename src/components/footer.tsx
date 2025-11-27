@@ -12,7 +12,7 @@ const SocialIcon = ({ iconName, className }: { iconName: string; className?: str
   return <IconComponent className={className} />;
 };
 
-export default function Footer() {
+export default function Footer({ lang }: { lang: string }) {
   const { settings } = useSiteSettings();
   const { t } = useTranslations();
   const { navigation, legal, social } = footerContent;
@@ -21,7 +21,7 @@ export default function Footer() {
       <div className="container mx-auto py-12 px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
-            <Link href="/" className="flex items-center space-x-2 mb-4">
+            <Link href={`/${lang}`} className="flex items-center space-x-2 mb-4">
               <SvgIcon svg={settings.logo} className="h-8 w-8" />
               <span className="font-bold text-xl font-headline">{settings.name}</span>
             </Link>
@@ -33,7 +33,7 @@ export default function Footer() {
             <h3 className="font-headline font-semibold mb-4">{t('footerNavigation')}</h3>
             <ul className="space-y-2">
               {navigation.map((item, index) => (
-                 <li key={index}><Link href={item.href} className="text-sm hover:text-primary transition-colors">{item.label}</Link></li>
+                 <li key={index}><Link href={item.href.startsWith('/') ? `/${lang}${item.href}`: item.href} className="text-sm hover:text-primary transition-colors">{t(item.label)}</Link></li>
               ))}
             </ul>
           </div>
@@ -41,7 +41,7 @@ export default function Footer() {
             <h3 className="font-headline font-semibold mb-4">{t('footerLegal')}</h3>
             <ul className="space-y-2">
               {legal.map((item, index) => (
-                  <li key={index}><Link href={item.href} className="text-sm hover:text-primary transition-colors">{item.label}</Link></li>
+                  <li key={index}><Link href={item.href.startsWith('/') ? `/${lang}${item.href}`: item.href} className="text-sm hover:text-primary transition-colors">{t(item.label)}</Link></li>
               ))}
             </ul>
           </div>

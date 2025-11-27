@@ -11,7 +11,6 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
   CommandLoading,
@@ -20,7 +19,7 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "@/context/translations-context";
 
-export default function IntelligentSearchBar() {
+export default function IntelligentSearchBar({ lang }: { lang: string }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Emoji[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -51,7 +50,7 @@ export default function IntelligentSearchBar() {
   
   const handleSelect = (id: string) => {
     setIsOpen(false);
-    router.push(`/emoji/${id}`);
+    router.push(`/${lang}/emoji/${id}`);
   };
 
   return (
@@ -61,7 +60,7 @@ export default function IntelligentSearchBar() {
         onSubmit={(e) => {
           e.preventDefault();
           if (query) {
-             router.push(`/emojis/all?search=${query}`)
+             router.push(`/${lang}/emojis/all?search=${query}`)
           }
         }}
       >

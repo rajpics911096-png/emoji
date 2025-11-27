@@ -17,7 +17,7 @@ import { ThemeToggle } from './theme-toggle';
 import { LanguageSwitcher } from './language-switcher';
 import { useTranslations } from '@/context/translations-context';
 
-export default function Header() {
+export default function Header({ lang }: { lang: string }) {
   const { settings } = useSiteSettings();
   const { t } = useTranslations();
   const navItems = categories.filter(c => c.id !== 'all');
@@ -37,7 +37,7 @@ export default function Header() {
                 </Button>
             </SheetTrigger>
             <SheetContent side="left">
-                <Link href="/" className="flex items-center space-x-2">
+                <Link href={`/${lang}`} className="flex items-center space-x-2">
                 <SvgIcon svg={settings.logo} className="h-6 w-6" />
                 <span className="font-bold font-headline text-lg">{settings.name}</span>
                 </Link>
@@ -45,7 +45,7 @@ export default function Header() {
                 {navItems.map((item) => (
                     <Link
                     key={item.id}
-                    href={`/emojis/${item.id}`}
+                    href={`/${lang}/emojis/${item.id}`}
                     className="text-lg font-medium transition-colors hover:text-primary"
                     >
                     {t(`category_${item.id}`)}
@@ -57,7 +57,7 @@ export default function Header() {
         </div>
 
         <div className="mr-4 hidden md:flex">
-          <Link href="/" className="mr-6 flex items-center space-x-2">
+          <Link href={`/${lang}`} className="mr-6 flex items-center space-x-2">
             <SvgIcon svg={settings.logo} className="h-6 w-6" />
             <span className="hidden font-bold sm:inline-block font-headline text-lg">
               {settings.name}
@@ -67,7 +67,7 @@ export default function Header() {
             {navItems.map((item) => (
               <Link
                 key={item.id}
-                href={`/emojis/${item.id}`}
+                href={`/${lang}/emojis/${item.id}`}
                 className="transition-colors hover:text-primary"
               >
                 {t(`category_${item.id}`)}
@@ -77,7 +77,7 @@ export default function Header() {
         </div>
         
         <div className="flex-1 flex justify-center md:hidden">
-            <Link href="/" className="flex items-center space-x-2">
+            <Link href={`/${lang}`} className="flex items-center space-x-2">
               <SvgIcon svg={settings.logo} className="h-6 w-6" />
               <span className="font-bold sm:inline-block font-headline text-lg">
                 {settings.name}
