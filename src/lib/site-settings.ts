@@ -82,5 +82,14 @@ export const defaultSiteSettings: SiteSettings = {
          style="border: 0; max-width: 100%; height: auto; margin: 0 auto;">
   </a>
 </div>`, enabled: true },
+        { location: 'below_download', code: `<div style="text-align:center; margin: 20px 0;">
+  <a href="https://example.com" target="_blank" title="Visit our website demo">
+    <img src="https://placehold.co/468x60.png?text=Below+Download+Ad+image+Photos" 
+         alt="Demo Banner Ad" 
+         width="468" 
+         height="60" 
+         style="border: 0; max-width: 100%; height: auto; margin: 0 auto;">
+  </a>
+</div>`, enabled: true },
     ]
 };

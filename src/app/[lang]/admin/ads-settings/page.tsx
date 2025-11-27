@@ -59,11 +59,11 @@ export default function AdsSettingsPage() {
   }
 
   const handleAddSlot = () => {
-    setAdSettings([...adSettings, { location: 'custom', code: '', enabled: true }]);
+    setAdSettings([...(adSettings || []), { location: 'custom', code: '', enabled: true }]);
   }
   
   const handleRemoveSlot = (index: number) => {
-      setAdSettings(adSettings.filter((_, i) => i !== index));
+      setAdSettings((adSettings || []).filter((_, i) => i !== index));
   }
 
   return (
@@ -107,6 +107,7 @@ export default function AdsSettingsPage() {
                       <SelectItem value="below_emoji">{t('ads_settings_location_below_emoji')}</SelectItem>
                       <SelectItem value="sidebar">{t('ads_settings_location_sidebar')}</SelectItem>
                       <SelectItem value="in_download_grid">In Download Grid</SelectItem>
+                      <SelectItem value="below_download">Below Download</SelectItem>
                        <SelectItem value="custom">Custom</SelectItem>
                     </SelectContent>
                   </Select>
