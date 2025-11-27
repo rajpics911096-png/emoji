@@ -13,7 +13,7 @@ import { Download, File as FileIcon, Hourglass, ArrowLeft, Video } from 'lucide-
 import Image from 'next/image';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { useTranslations } from '@/context/translations-context';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, use } from 'react';
 import type { EmojiFormatFile } from '@/lib/types';
 
 const DownloadButton = ({ file }: { file: EmojiFormatFile }) => {
@@ -91,7 +91,7 @@ const FilePreview = ({ file, format }: { file: EmojiFormatFile; format: string }
 
 export default function FileDownloadPage() {
   const params = useParams<{ id: string; lang: string; format: string; filename: string }>();
-  const { id, lang, format, filename } = params;
+  const { id, lang, format, filename } = use(Promise.resolve(params));
   
   const { t } = useTranslations();
   const emoji = getEmojiById(id);
@@ -133,11 +133,11 @@ export default function FileDownloadPage() {
             
             <div className="flex flex-col items-center gap-8 md:gap-12">
                 <div className="w-full max-w-2xl space-y-4">
-                    <FilePreview file={file} format={format} />
                     <div className="text-center">
                         <h1 className="text-3xl font-headline font-bold">{file.name}</h1>
                         <p className="text-muted-foreground">Part of the {emoji.title} collection</p>
                     </div>
+                    <FilePreview file={file} format={format} />
                     <DownloadButton file={file} />
                 </div>
                 
