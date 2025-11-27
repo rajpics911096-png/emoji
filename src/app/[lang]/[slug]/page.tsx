@@ -11,8 +11,7 @@ const getPageBySlug = (slug: string) => {
     return allPages.find((page) => page.slug === slug);
 }
 
-export default function GenericPage() {
-  const params = useParams<{ slug: string, lang: string }>();
+export default function GenericPage({ params }: { params: { slug: string, lang: string } }) {
   const { slug, lang } = params;
   const page = getPageBySlug(slug);
 

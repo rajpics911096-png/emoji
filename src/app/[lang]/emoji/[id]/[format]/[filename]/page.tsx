@@ -1,7 +1,7 @@
 
 'use client';
 
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { getEmojiById, categories } from '@/lib/data';
 import Header from '@/components/header';
@@ -17,8 +17,6 @@ import { useState, useEffect, useMemo } from 'react';
 import type { EmojiFormatFile } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { useParams } from 'next/navigation';
-
 
 const DownloadButton = ({ file }: { file: EmojiFormatFile }) => {
   const { settings } = useSiteSettings();
@@ -93,8 +91,7 @@ const FilePreview = ({ file, format }: { file: EmojiFormatFile; format: string }
 };
 
 
-export default function FileDownloadPage() {
-  const params = useParams<{ id: string; lang: string; format: string; filename: string }>();
+export default function FileDownloadPage({ params }: { params: { id: string; lang: string; format: string; filename: string } }) {
   const { id, lang, format, filename } = params;
   
   const { t } = useTranslations();

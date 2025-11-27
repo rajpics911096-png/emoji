@@ -15,8 +15,7 @@ import { useEffect, useRef } from 'react';
 import { useTranslations } from '@/context/translations-context';
 import { AdSlot } from '@/components/ad-slot';
 
-export default function EmojiPage() {
-  const params = useParams<{ id: string; lang: string }>();
+export default function EmojiPage({ params }: { params: { id: string, lang: string } }) {
   const { id, lang } = params;
   const emoji = getEmojiById(id);
   const effectRan = useRef(false);
