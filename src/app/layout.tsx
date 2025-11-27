@@ -1,8 +1,7 @@
 import { redirect } from 'next/navigation';
 
+// This is the root layout of the application.
+// It redirects the user to the default language.
 export default function RootLayout() {
-  // This is a temporary redirect to the default language.
-  // In a real app, you might want to detect the user's language
-  // and redirect them to the appropriate locale.
   redirect('/en');
 }
