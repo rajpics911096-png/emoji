@@ -1,7 +1,7 @@
 
 'use client';
 
-import { notFound, useParams } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getEmojiById, getRelatedEmojis, categories } from '@/lib/data';
 import Header from '@/components/header';
@@ -11,11 +11,12 @@ import { EmojiView } from './components/emoji-view';
 import { SvgIcon } from '@/components/svg-icon';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EmojiDownloads } from './components/emoji-downloads';
-import { useEffect, useRef, use } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslations } from '@/context/translations-context';
+import { useParams } from 'next/navigation';
 
 export default function EmojiPage() {
-  const params = use(Promise.resolve(useParams<{ id: string; lang: string }>()));
+  const params = useParams<{ id: string; lang: string }>();
   const { id, lang } = params;
   const emoji = getEmojiById(id);
   const effectRan = useRef(false);

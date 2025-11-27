@@ -1,10 +1,11 @@
 
 'use client';
 
-import { notFound, useParams } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { pages as allPages } from '@/lib/data';
+import { useParams } from 'next/navigation';
 
 const getPageBySlug = (slug: string) => {
     return allPages.find((page) => page.slug === slug);

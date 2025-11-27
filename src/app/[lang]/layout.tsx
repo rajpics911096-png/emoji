@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils';
 import { SiteSettingsProvider } from '@/context/site-settings-context';
 import { TranslationsProvider } from '@/context/translations-context';
 import { i18n } from '@/lib/i18n-config';
-import { use } from 'react';
 
 export const metadata: Metadata = {
   title: 'EmojiVerse',
@@ -24,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
   params: { lang: string };
 }>) {
-  const { lang } = use(Promise.resolve(params));
+  const { lang } = params;
   return (
     <html lang={lang} dir={lang === 'ar' || lang === 'ur' ? 'rtl' : 'ltr'} suppressHydrationWarning>
       <head>

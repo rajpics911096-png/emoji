@@ -1,8 +1,9 @@
+
 'use client';
 
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getEmojiById, getRelatedEmojis, emojis, categories } from '@/lib/data';
+import { getEmojiById, getRelatedEmojis, categories } from '@/lib/data';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { EmojiCard } from '@/components/emoji-card';
@@ -12,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EmojiDownloads } from './components/emoji-downloads';
 import { useEffect, useRef } from 'react';
 import { useTranslations } from '@/context/translations-context';
+import { useParams } from 'next/navigation';
 
 export default function EmojiPage({ params }: { params: { id: string, lang: string } }) {
   const { id, lang } = params;
@@ -77,7 +79,7 @@ export default function EmojiPage({ params }: { params: { id: string, lang: stri
             </aside>
           </div>
           
-          <EmojiDownloads emoji={emoji} />
+          <EmojiDownloads emoji={emoji} lang={lang} />
 
           {related.length > 0 && (
             <section className="mt-16 md:mt-24">

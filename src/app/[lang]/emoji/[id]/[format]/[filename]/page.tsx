@@ -1,22 +1,24 @@
 
 'use client';
 
-import { notFound, useParams } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getEmojiById, categories } from '@/lib/data';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { SvgIcon } from '@/components/svg-icon';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, File as FileIcon, Hourglass, ArrowLeft, Video, Info } from 'lucide-react';
 import Image from 'next/image';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { useTranslations } from '@/context/translations-context';
-import { useState, useEffect, useMemo, use } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import type { EmojiFormatFile } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { useParams } from 'next/navigation';
+
 
 const DownloadButton = ({ file }: { file: EmojiFormatFile }) => {
   const { settings } = useSiteSettings();
@@ -92,7 +94,7 @@ const FilePreview = ({ file, format }: { file: EmojiFormatFile; format: string }
 
 
 export default function FileDownloadPage() {
-  const params = use(Promise.resolve(useParams<{ id: string; lang: string; format: string; filename: string }>()));
+  const params = useParams<{ id: string; lang: string; format: string; filename: string }>();
   const { id, lang, format, filename } = params;
   
   const { t } = useTranslations();
