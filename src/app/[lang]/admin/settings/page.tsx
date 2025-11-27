@@ -10,8 +10,19 @@ import { useSiteSettings } from "@/context/site-settings-context";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslations } from "@/context/translations-context";
 import { useState } from "react";
-import { getAuth, updatePassword, updateEmail, type User } from "firebase/auth";
+import { getAuth, updatePassword, updateEmail, type User, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { Separator } from "@/components/ui/separator";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+
 
 export default function SettingsPage() {
   const { t } = useTranslations();
@@ -20,6 +31,9 @@ export default function SettingsPage() {
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showReauthDialog, setShowReauthDialog] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+
 
   const handleSave = () => {
     setSettings(settings);
@@ -65,14 +79,45 @@ export default function SettingsPage() {
         });
         setNewEmail("");
       } catch (error: any) {
-        toast({
-          variant: "destructive",
-          title: "Email Change Failed",
-          description: error.message || "Please log out and log in again before changing your email.",
-        });
+        if (error.code === 'auth/requires-recent-login') {
+            setShowReauthDialog(true);
+        } else {
+            toast({
+              variant: "destructive",
+              title: "Email Change Failed",
+              description: error.message || "An error occurred.",
+            });
+        }
       }
     }
   };
+
+  const handleReauthenticateAndChangeEmail = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user && user.email) {
+      const credential = EmailAuthProvider.credential(user.email, currentPassword);
+      try {
+        await reauthenticateWithCredential(user, credential);
+        // Now try updating the email again
+        await updateEmail(user, newEmail);
+        toast({
+          title: "Email Updated Successfully",
+          description: "Your login email has been changed.",
+        });
+        setShowReauthDialog(false);
+        setNewEmail("");
+        setCurrentPassword("");
+      } catch (error: any) {
+        toast({
+          variant: "destructive",
+          title: "Authentication Failed",
+          description: error.message || "Could not update email. Please check your password.",
+        });
+      }
+    }
+  }
 
   const handleChangePassword = async () => {
     if (newPassword !== confirmPassword) {
@@ -115,6 +160,7 @@ export default function SettingsPage() {
   };
 
   return (
+    <>
     <div className="mx-auto max-w-4xl flex-1 space-y-4 md:space-y-8">
       <h1 className="text-3xl font-headline font-bold">{t('settings_title')}</h1>
 
@@ -239,5 +285,30 @@ export default function SettingsPage() {
         <Button onClick={handleSave}>{t('settings_save_button')}</Button>
       </div>
     </div>
+    <AlertDialog open={showReauthDialog} onOpenChange={setShowReauthDialog}>
+        <AlertDialogContent>
+            <AlertDialogHeader>
+            <AlertDialogTitle>Please Re-authenticate</AlertDialogTitle>
+            <AlertDialogDescription>
+                To change your email, please enter your current password to confirm your identity.
+            </AlertDialogDescription>
+            </AlertDialogHeader>
+            <div className="space-y-2">
+            <Label htmlFor="current-password">Current Password</Label>
+            <Input
+                id="current-password"
+                type="password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                placeholder="Enter your current password"
+            />
+            </div>
+            <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleReauthenticateAndChangeEmail}>Confirm</AlertDialogAction>
+            </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
+   </>
   );
 }
