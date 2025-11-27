@@ -1,7 +1,7 @@
 
 'use client';
 
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { getEmojiById, getRelatedEmojis, emojis, categories } from '@/lib/data';
 import Header from '@/components/header';
@@ -14,7 +14,8 @@ import { EmojiDownloads } from './components/emoji-downloads';
 import { useEffect, useRef } from 'react';
 import { useTranslations } from '@/context/translations-context';
 
-export default function EmojiPage({ params }: { params: { id: string, lang: string } }) {
+export default function EmojiPage() {
+  const params = useParams<{ id: string, lang: string }>();
   const { id, lang } = params;
   const emoji = getEmojiById(id);
   const effectRan = useRef(false);

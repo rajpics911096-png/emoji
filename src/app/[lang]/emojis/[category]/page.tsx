@@ -1,7 +1,7 @@
 
 'use client';
 
-import { notFound } from 'next/navigation';
+import { notFound, useParams, useSearchParams } from 'next/navigation';
 import { categories, getEmojisByCategory } from '@/lib/data';
 import { EmojiCard } from '@/components/emoji-card';
 import Header from '@/components/header';
@@ -9,14 +9,11 @@ import Footer from '@/components/footer';
 import IntelligentSearchBar from '@/components/intelligent-search-bar';
 import { useTranslations } from '@/context/translations-context';
 
-export default function CategoryPage({
-  params,
-  searchParams,
-}: {
-  params: { category: string, lang: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
+export default function CategoryPage() {
+  const params = useParams<{ category: string, lang: string }>();
+  const searchParams = useSearchParams();
   const { category: categorySlug, lang } = params;
+
   const { t } = useTranslations();
   const category = categories.find((c) => c.id === categorySlug);
   if (!category) {
@@ -26,7 +23,7 @@ export default function CategoryPage({
   const categoryName = t(`category_${category.id}`);
 
   let emojiList = getEmojisByCategory(categorySlug);
-  const searchTerm = searchParams?.search as string;
+  const searchTerm = searchParams.get('search');
 
   if (searchTerm) {
     emojiList = emojiList.filter(emoji => 
@@ -60,7 +57,7 @@ export default function CategoryPage({
           </div>
         ) : (
           <div className="text-center py-16">
-            <p className="text-xl text-muted-foreground">{t('categoryNoResults', { searchTerm: searchTerm })}</p>
+            <p className="text-xl text-muted-foreground">{t('categoryNoResults', { searchTerm: searchTerm || '' })}</p>
           </div>
         )}
       </main>
