@@ -2,7 +2,8 @@
 
 "use client";
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useTransition, useCallback } from 'react';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import type { Emoji, EmojiFormatFile } from '@/lib/types';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
@@ -99,6 +100,10 @@ const FilePreview = ({ file, format }: { file: EmojiFormatFile; format: string }
 export function EmojiDownloads({ emoji }: { emoji: Emoji }) {
   const { formats } = emoji;
   const { t } = useTranslations();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
 
   const allFiles = useMemo(() => {
     return (Object.keys(formats) as (keyof typeof formats)[]).flatMap(format => 
@@ -106,13 +111,27 @@ export function EmojiDownloads({ emoji }: { emoji: Emoji }) {
     );
   }, [formats]);
 
-  const tabs = [
+  const tabs = useMemo(() => [
     { value: 'all', label: t('downloadsTabAll'), files: allFiles },
     { value: 'png', label: 'PNG', files: formats.png.map(f => ({...f, format: 'png'})) },
     { value: 'gif', label: 'GIF', files: formats.gif.map(f => ({...f, format: 'gif'})) },
     { value: 'image', label: t('downloadsTabImages'), files: formats.image.map(f => ({...f, format: 'image'})) },
     { value: 'video', label: t('downloadsTabVideos'), files: formats.video.map(f => ({...f, format: 'video'})) },
-  ].filter(tab => tab.files.length > 0);
+  ].filter(tab => tab.files.length > 0), [t, formats, allFiles]);
+  
+  const selectedTab = searchParams.get('format') || tabs[0]?.value || 'all';
+
+  const handleTabChange = useCallback((value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (value === 'all') {
+          params.delete('format');
+      } else {
+          params.set('format', value);
+      }
+      startTransition(() => {
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      });
+  }, [searchParams, pathname, router]);
 
   if (allFiles.length === 0) {
     return null;
@@ -120,9 +139,9 @@ export function EmojiDownloads({ emoji }: { emoji: Emoji }) {
 
   return (
     <section className="mt-16 md:mt-24">
-      <Tabs defaultValue={tabs[0].value}>
+      <Tabs value={selectedTab} onValueChange={handleTabChange}>
         <div className="flex justify-center">
-            <ScrollArea className="w-auto whitespace-nowrap">
+            <ScrollArea className="w-auto max-w-full whitespace-nowrap">
             <TabsList className="inline-flex h-auto p-1.5 bg-card/50 justify-center w-auto mb-8 rounded-full">
                 {tabs.map(tab => (
                 <TabsTrigger 
@@ -141,7 +160,7 @@ export function EmojiDownloads({ emoji }: { emoji: Emoji }) {
             </ScrollArea>
         </div>
         {tabs.map(tab => (
-            <TabsContent key={tab.value} value={tab.value}>
+            <TabsContent key={tab.value} value={tab.value} forceMount={true} className={cn("ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2", selectedTab !== tab.value && "hidden")}>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
                 {tab.files.map((file, index) => (
                     <FilePreview key={`${tab.value}-${index}`} file={file} format={file.format} />
