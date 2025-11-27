@@ -24,3 +24,20 @@ export type EmojiCategory = {
   name: string;
   icon: string;
 };
+
+export type LinkItem = {
+  label: string;
+  href: string;
+};
+
+export type SocialLink = {
+  icon: string;
+  'aria-label': string;
+  href: string;
+};
+
+export type FooterContent = {
+  navigation: LinkItem[];
+  legal: LinkItem[];
+  social: SocialLink[];
+};

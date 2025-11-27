@@ -1,8 +1,15 @@
 import Link from 'next/link';
 import { Logo } from './icons';
-import { Github, Twitter, Linkedin } from 'lucide-react';
+import { footerContent } from '@/lib/data';
+import { iconMap } from '@/lib/icon-map';
+
+const SocialIcon = ({ iconName, className }: { iconName: string; className?: string }) => {
+  const IconComponent = iconMap[iconName] || iconMap.twitter;
+  return <IconComponent className={className} />;
+};
 
 export default function Footer() {
+  const { navigation, legal, social } = footerContent;
   return (
     <footer className="bg-primary/5 border-t">
       <div className="container mx-auto py-12 px-4">
@@ -19,32 +26,27 @@ export default function Footer() {
           <div>
             <h3 className="font-headline font-semibold mb-4">Navigation</h3>
             <ul className="space-y-2">
-              <li><Link href="/emojis/all" className="text-sm hover:text-primary transition-colors">All Emojis</Link></li>
-              <li><Link href="/emojis/smileys-and-people" className="text-sm hover:text-primary transition-colors">Smileys & People</Link></li>
-              <li><Link href="/emojis/animals-and-nature" className="text-sm hover:text-primary transition-colors">Animals & Nature</Link></li>
-              <li><Link href="/emojis/food-and-drink" className="text-sm hover:text-primary transition-colors">Food & Drink</Link></li>
+              {navigation.map((item, index) => (
+                 <li key={index}><Link href={item.href} className="text-sm hover:text-primary transition-colors">{item.label}</Link></li>
+              ))}
             </ul>
           </div>
           <div>
             <h3 className="font-headline font-semibold mb-4">Legal</h3>
             <ul className="space-y-2">
-              <li><Link href="#" className="text-sm hover:text-primary transition-colors">Terms & Conditions</Link></li>
-              <li><Link href="#" className="text-sm hover:text-primary transition-colors">Privacy Policy</Link></li>
-              <li><Link href="#" className="text-sm hover:text-primary transition-colors">Contact Us</Link></li>
+              {legal.map((item, index) => (
+                  <li key={index}><Link href={item.href} className="text-sm hover:text-primary transition-colors">{item.label}</Link></li>
+              ))}
             </ul>
           </div>
           <div>
             <h3 className="font-headline font-semibold mb-4">Connect</h3>
             <div className="flex space-x-4">
-              <Link href="#" aria-label="Twitter">
-                <Twitter className="h-6 w-6 text-foreground/70 hover:text-primary transition-colors" />
-              </Link>
-              <Link href="#" aria-label="GitHub">
-                <Github className="h-6 w-6 text-foreground/70 hover:text-primary transition-colors" />
-              </Link>
-              <Link href="#" aria-label="LinkedIn">
-                <Linkedin className="h-6 w-6 text-foreground/70 hover:text-primary transition-colors" />
-              </Link>
+              {social.map((item, index) => (
+                <Link key={index} href={item.href} aria-label={item['aria-label']}>
+                  <SocialIcon iconName={item.icon} className="h-6 w-6 text-foreground/70 hover:text-primary transition-colors" />
+                </Link>
+              ))}
             </div>
           </div>
         </div>

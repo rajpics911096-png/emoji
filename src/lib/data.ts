@@ -1,4 +1,4 @@
-import type { Emoji, EmojiCategory } from './types';
+import type { Emoji, EmojiCategory, FooterContent } from './types';
 
 export const categories: EmojiCategory[] = [
     { id: 'all', name: 'All Emojis', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smile"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>' },
@@ -211,3 +211,23 @@ export function getRelatedEmojis(emoji: Emoji) {
 }
 
 export const downloadTimer = 10;
+
+
+export const footerContent: FooterContent = {
+  navigation: [
+    { label: 'All Emojis', href: '/emojis/all' },
+    { label: 'Smileys & People', href: '/emojis/smileys-and-people' },
+    { label: 'Animals & Nature', href: '/emojis/animals-and-nature' },
+    { label: 'Food & Drink', href: '/emojis/food-and-drink' },
+  ],
+  legal: [
+    { label: 'Terms & Conditions', href: '#' },
+    { label: 'Privacy Policy', href: '#' },
+    { label: 'Contact Us', href: '#' },
+  ],
+  social: [
+    { icon: 'twitter', 'aria-label': 'Twitter', href: '#' },
+    { icon: 'github', 'aria-label': 'GitHub', href: '#' },
+    { icon: 'linkedin', 'aria-label': 'LinkedIn', href: '#' },
+  ],
+};

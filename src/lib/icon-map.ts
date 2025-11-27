@@ -16,6 +16,9 @@ import {
   Bell,
   Sun,
   Moon,
+  Github, 
+  Twitter, 
+  Linkedin,
 } from 'lucide-react';
 
 export const iconMap: { [key: string]: React.ComponentType<{ className?: string }> } = {
@@ -36,6 +39,9 @@ export const iconMap: { [key: string]: React.ComponentType<{ className?: string 
   'bell': Bell,
   'sun': Sun,
   'moon': Moon,
+  'github': Github,
+  'twitter': Twitter,
+  'linkedin': Linkedin,
 };
 
 export const iconNames = Object.keys(iconMap);
