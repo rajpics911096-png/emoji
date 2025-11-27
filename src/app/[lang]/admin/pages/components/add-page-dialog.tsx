@@ -48,8 +48,6 @@ export function AddPageDialog({ isOpen, onOpenChange, onAddPage }: AddPageDialog
     handleSubmit,
     control,
     reset,
-    watch,
-    setValue,
     formState: { errors },
   } = useForm<PageFormData>({
     resolver: zodResolver(pageSchema),
@@ -58,16 +56,10 @@ export function AddPageDialog({ isOpen, onOpenChange, onAddPage }: AddPageDialog
     }
   });
 
-  const title = watch("title");
-
-  useEffect(() => {
-      if (title) {
-          setValue("slug", title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''));
-      }
-  }, [title, setValue]);
 
   const onSubmit = (data: PageFormData) => {
-    onAddPage(data);
+    const slug = data.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    onAddPage({...data, slug});
     reset();
   };
   
