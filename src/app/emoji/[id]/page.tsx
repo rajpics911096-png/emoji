@@ -39,9 +39,7 @@ export default function EmojiPage({ params }: { params: { id: string } }) {
                 <h3 className="font-headline text-2xl font-semibold text-primary">
                   Description
                 </h3>
-                <p className="text-lg text-foreground/80 leading-relaxed">
-                  {emoji.description}
-                </p>
+                <div className="prose dark:prose-invert max-w-none text-foreground/80" dangerouslySetInnerHTML={{ __html: emoji.description }} />
               </div>
 
               {category && (

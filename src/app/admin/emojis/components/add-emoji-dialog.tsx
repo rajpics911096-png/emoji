@@ -11,13 +11,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { categories } from "@/lib/data";
 import type { Emoji, EmojiFormatFile } from "@/lib/types";
+import { RichTextEditor } from "@/components/rich-text-editor";
 
 const fileSchema = z.custom<FileList>().optional();
 
@@ -49,6 +49,9 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
     formState: { errors },
   } = useForm<EmojiFormData>({
     resolver: zodResolver(emojiSchema),
+    defaultValues: {
+      description: "",
+    }
   });
 
   const onSubmit = (data: EmojiFormData) => {
@@ -86,7 +89,7 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-w-4xl">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>Add New Emoji</DialogTitle>
@@ -118,7 +121,16 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
                 Description
               </Label>
               <div className="col-span-3">
-                <Textarea id="description" {...register("description")} />
+                <Controller
+                    name="description"
+                    control={control}
+                    render={({ field }) => (
+                        <RichTextEditor
+                        value={field.value}
+                        onChange={field.onChange}
+                        />
+                    )}
+                />
                 {errors.description && <p className="text-destructive text-sm mt-1">{errors.description.message}</p>}
               </div>
             </div>

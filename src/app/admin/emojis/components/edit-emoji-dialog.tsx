@@ -11,7 +11,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,6 +21,7 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { FileType } from 'lucide-react';
+import { RichTextEditor } from "@/components/rich-text-editor";
 
 
 const fileSchema = z.custom<FileList>().optional();
@@ -126,7 +126,7 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji: init
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-w-4xl">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>Edit Emoji</DialogTitle>
@@ -158,7 +158,16 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji: init
                 Description
               </Label>
               <div className="col-span-3">
-                <Textarea id="description" {...register("description")} />
+                 <Controller
+                    name="description"
+                    control={control}
+                    render={({ field }) => (
+                        <RichTextEditor
+                        value={field.value}
+                        onChange={field.onChange}
+                        />
+                    )}
+                />
                 {errors.description && <p className="text-destructive text-sm mt-1">{errors.description.message}</p>}
               </div>
             </div>
