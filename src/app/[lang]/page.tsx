@@ -2,6 +2,7 @@
 "use client";
 
 import Link from 'next/link';
+import { use } from 'react';
 import {
   ArrowRight,
 } from 'lucide-react';
