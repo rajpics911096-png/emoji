@@ -38,7 +38,7 @@ export const defaultSiteSettings: SiteSettings = {
     adSettings: [
         { location: 'header', code: `<div style="text-align:center; margin: 20px 0;">
   <a href="https://example.com" target="_blank" title="Visit our website demo">
-    <img src="https://via.placeholder.com/728x90.png?text=Header+Ad" 
+    <img src="https://placehold.co/728x90.png?text=Header+Ad+image+Photos" 
          alt="Demo Banner Ad" 
          width="728" 
          height="90" 
@@ -47,7 +47,7 @@ export const defaultSiteSettings: SiteSettings = {
 </div>`, enabled: true },
         { location: 'footer', code: `<div style="text-align:center; margin: 20px 0;">
   <a href="https://example.com" target="_blank" title="Visit our website demo">
-    <img src="https://via.placeholder.com/728x90.png?text=Footer+Ad" 
+    <img src="https://placehold.co/728x90.png?text=Footer+Ad+image+Photos" 
          alt="Demo Banner Ad" 
          width="728" 
          height="90" 
@@ -56,7 +56,7 @@ export const defaultSiteSettings: SiteSettings = {
 </div>`, enabled: true },
         { location: 'sidebar', code: `<div style="text-align:center; margin: 20px 0;">
   <a href="https://example.com" target="_blank" title="Visit our website demo">
-    <img src="https://via.placeholder.com/300x250.png?text=Sidebar+Ad" 
+    <img src="https://placehold.co/300x250.png?text=Sidebar+Ad+image+Photos" 
          alt="Demo Banner Ad" 
          width="300" 
          height="250" 
@@ -65,7 +65,7 @@ export const defaultSiteSettings: SiteSettings = {
 </div>`, enabled: true },
         { location: 'below_emoji', code: `<div style="text-align:center; margin: 20px 0;">
   <a href="https://example.com" target="_blank" title="Visit our website demo">
-    <img src="https://via.placeholder.com/468x60.png?text=Below+Emoji+Ad" 
+    <img src="https://placehold.co/468x60.png?text=Below+Emoji+Ad+image+Photos" 
          alt="Demo Banner Ad" 
          width="468" 
          height="60" 
