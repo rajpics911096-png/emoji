@@ -1,3 +1,5 @@
+"use client";
+
 import Link from 'next/link';
 import {
   ArrowRight,
@@ -12,8 +14,10 @@ import Footer from '@/components/footer';
 import IntelligentSearchBar from '@/components/intelligent-search-bar';
 import { Card, CardContent } from '@/components/ui/card';
 import { SvgIcon } from '@/components/svg-icon';
+import { useSiteSettings } from '@/context/site-settings-context';
 
 export default function Home() {
+  const { settings } = useSiteSettings();
   const featuredEmojis = emojis.slice(0, 8);
 
   return (
@@ -23,7 +27,7 @@ export default function Home() {
         <section className="relative py-20 md:py-32 bg-primary/10">
           <div className="container mx-auto text-center px-4">
             <h1 className="text-4xl md:text-6xl font-headline font-bold text-primary tracking-tighter">
-              Welcome to EmojiVerse
+              Welcome to {settings.name}
             </h1>
             <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto text-foreground/80">
               Your universe of emojis. Discover, copy, and download thousands of
