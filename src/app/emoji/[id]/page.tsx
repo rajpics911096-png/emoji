@@ -44,6 +44,10 @@ export default function EmojiPage({ params }: { params: { id: string } }) {
                         </div>
                     </dl>
                 </div>
+                <div className="mt-8">
+                    <h3 className="font-headline text-2xl font-semibold mb-2 text-primary">Description</h3>
+                    <p className="text-lg text-foreground/80 leading-relaxed">{emoji.description}</p>
+                </div>
             </aside>
           </div>
           {related.length > 0 && (

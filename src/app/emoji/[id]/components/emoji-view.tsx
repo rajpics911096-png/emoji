@@ -36,12 +36,6 @@ export function EmojiView({ emoji }: EmojiViewProps) {
                 )}
             </Button>
       </div>
-
-      <div className="mt-8">
-        <h2 className="text-2xl font-headline font-semibold mb-2">Description</h2>
-        <p className="text-lg text-foreground/80 leading-relaxed">{emoji.description}</p>
-      </div>
-      
     </article>
   );
 }
