@@ -78,11 +78,6 @@ export default function Header() {
         <div className="flex flex-1 items-center justify-end space-x-2">
           <LanguageSwitcher />
           <ThemeToggle />
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/admin">
-              Admin
-            </Link>
-          </Button>
         </div>
       </div>
     </header>
