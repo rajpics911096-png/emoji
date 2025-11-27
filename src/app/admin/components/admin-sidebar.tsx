@@ -19,6 +19,7 @@ import {
   LogOut,
   Tags,
   FileText,
+  Library,
 } from "lucide-react";
 
 export function AdminSidebar() {
@@ -39,6 +40,11 @@ export function AdminSidebar() {
       href: "/admin/pages",
       label: "Pages",
       icon: FileText,
+    },
+    {
+      href: "/admin/media",
+      label: "Media",
+      icon: Library,
     },
     {
       href: "/admin/categories",

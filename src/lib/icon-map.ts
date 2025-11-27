@@ -20,6 +20,7 @@ import {
   Twitter, 
   Linkedin,
   FileText,
+  Library,
 } from 'lucide-react';
 
 export const iconMap: { [key: string]: React.ComponentType<{ className?: string }> } = {
@@ -44,6 +45,7 @@ export const iconMap: { [key: string]: React.ComponentType<{ className?: string 
   'twitter': Twitter,
   'linkedin': Linkedin,
   'file-text': FileText,
+  'library': Library,
 };
 
 export const iconNames = Object.keys(iconMap);
