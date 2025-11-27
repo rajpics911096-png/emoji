@@ -1,7 +1,8 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { getAuth, signOut } from "firebase/auth";
 import {
   Sidebar,
   SidebarHeader,
@@ -24,12 +25,33 @@ import {
 } from "lucide-react";
 import { useSiteSettings } from "@/context/site-settings-context";
 import { useTranslations } from "@/context/translations-context";
+import { useToast } from "@/hooks/use-toast";
 
 
 export function AdminSidebar() {
   const pathname = usePathname();
   const { settings } = useSiteSettings();
   const { t, language } = useTranslations();
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const handleLogout = async () => {
+    const auth = getAuth();
+    try {
+      await signOut(auth);
+      toast({
+        title: "Logged Out",
+        description: "You have been successfully logged out.",
+      });
+      router.push(`/${language}/login`);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Logout Failed",
+        description: "An error occurred while logging out.",
+      });
+    }
+  };
 
   const menuItems = [
     {
@@ -124,11 +146,9 @@ export function AdminSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip={t('admin_logout')}>
-              <Link href={`/${language}`}>
-                <LogOut />
-                <span>{t('admin_logout')}</span>
-              </Link>
+            <SidebarMenuButton onClick={handleLogout} tooltip={t('admin_logout')}>
+              <LogOut />
+              <span>{t('admin_logout')}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

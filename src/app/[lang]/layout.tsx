@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { SiteSettingsProvider } from '@/context/site-settings-context';
 import { TranslationsProvider } from '@/context/translations-context';
 import { i18n } from '@/lib/i18n-config';
+import { FirebaseProvider } from '@/firebase/provider';
 
 export const metadata: Metadata = {
   title: 'EmojiVerse',
@@ -39,12 +40,14 @@ export default function RootLayout({
         />
       </head>
       <body className={cn('font-body antialiased min-h-screen flex flex-col')}>
-        <SiteSettingsProvider>
-          <TranslationsProvider language={lang}>
-            {children}
-            <Toaster />
-          </TranslationsProvider>
-        </SiteSettingsProvider>
+        <FirebaseProvider>
+            <SiteSettingsProvider>
+            <TranslationsProvider language={lang}>
+                {children}
+                <Toaster />
+            </TranslationsProvider>
+            </SiteSettingsProvider>
+        </FirebaseProvider>
       </body>
     </html>
   );
