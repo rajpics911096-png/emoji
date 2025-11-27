@@ -1,18 +1,23 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useSiteSettings } from "@/context/site-settings-context";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslations } from "@/context/translations-context";
+import { useState } from "react";
+import { getAuth, updatePassword, type User } from "firebase/auth";
 
 export default function SettingsPage() {
   const { t } = useTranslations();
   const { toast } = useToast();
   const { settings, setSettings, resetSettings } = useSiteSettings();
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSave = () => {
     setSettings(settings);
@@ -35,6 +40,46 @@ export default function SettingsPage() {
       title: t('settings_toast_sitemap_title'),
       description: t('settings_toast_sitemap_desc'),
     });
+  };
+
+  const handleChangePassword = async () => {
+    if (newPassword !== confirmPassword) {
+      toast({
+        variant: "destructive",
+        title: "Passwords do not match",
+        description: "Please ensure both password fields are identical.",
+      });
+      return;
+    }
+    if (newPassword.length < 6) {
+      toast({
+        variant: "destructive",
+        title: "Password too short",
+        description: "Your new password must be at least 6 characters long.",
+      });
+      return;
+    }
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      try {
+        await updatePassword(user, newPassword);
+        toast({
+          title: "Password Updated",
+          description: "Your password has been changed successfully.",
+        });
+        setNewPassword("");
+        setConfirmPassword("");
+      } catch (error: any) {
+        toast({
+          variant: "destructive",
+          title: "Password Change Failed",
+          description: error.message,
+        });
+      }
+    }
   };
 
   return (
@@ -74,6 +119,40 @@ export default function SettingsPage() {
             </p>
           </div>
         </CardContent>
+      </Card>
+      
+       <Card>
+        <CardHeader>
+          <CardTitle>Account</CardTitle>
+          <CardDescription>
+            Change your login password here.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="new-password">New Password</Label>
+            <Input
+              id="new-password"
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="Enter your new password"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="confirm-password">Confirm New Password</Label>
+            <Input
+              id="confirm-password"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm your new password"
+            />
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button onClick={handleChangePassword}>Change Password</Button>
+        </CardFooter>
       </Card>
 
       <Card>
