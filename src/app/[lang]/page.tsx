@@ -48,6 +48,12 @@ export default function Home() {
       return [...allFiles].sort(() => 0.5 - Math.random()).slice(0, 8);
   }, [allFiles]);
 
+  const sortedCategories = useMemo(() => {
+    const allCategory = categories.find(c => c.id === 'all');
+    const otherCategories = categories.filter(c => c.id !== 'all').sort((a, b) => t(a.name).localeCompare(t(b.name)));
+    return allCategory ? [allCategory, ...otherCategories] : otherCategories;
+  }, [categories, t]);
+
   return (
     <>
       <Header lang={lang} />
@@ -80,7 +86,7 @@ export default function Home() {
               {t('exploreCategories')}
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-6 text-center">
-              {categories.map((category) => (
+              {sortedCategories.map((category) => (
                 <Link key={category.id} href={`/${lang}/emojis/${category.id}`}>
                   <Card className="group transform hover:-translate-y-2 transition-transform duration-300 ease-in-out hover:shadow-xl">
                     <CardContent className="p-6 flex flex-col items-center justify-center">
