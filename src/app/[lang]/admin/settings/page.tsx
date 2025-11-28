@@ -189,7 +189,7 @@ export default function SettingsPage() {
             </p>
           </div>
            <div className="space-y-2">
-            <Label htmlFor="meta-title">Meta Title</Label>
+            <Label htmlFor="meta-title">{t('settings_meta_title_label')}</Label>
             <Input
               id="meta-title"
               type="text"
@@ -197,11 +197,11 @@ export default function SettingsPage() {
               onChange={(e) => setSettings({ ...settings, metaTitle: e.target.value })}
             />
             <p className="text-sm text-muted-foreground">
-              The title used for search engine results.
+              {t('settings_meta_title_desc')}
             </p>
           </div>
            <div className="space-y-2">
-            <Label htmlFor="meta-description">Meta Description</Label>
+            <Label htmlFor="meta-description">{t('settings_meta_description_label')}</Label>
             <Textarea
               id="meta-description"
               value={settings.metaDescription || ''}
@@ -209,7 +209,7 @@ export default function SettingsPage() {
               rows={3}
             />
             <p className="text-sm text-muted-foreground">
-              The description used for search engine results.
+              {t('settings_meta_description_desc')}
             </p>
           </div>
           <div className="space-y-2">
@@ -225,7 +225,7 @@ export default function SettingsPage() {
             </p>
           </div>
            <div className="space-y-2">
-            <Label htmlFor="site-favicon">Favicon (SVG Code)</Label>
+            <Label htmlFor="site-favicon">{t('settings_favicon_label')}</Label>
             <Textarea
               id="site-favicon"
               value={settings.favicon}
@@ -233,7 +233,7 @@ export default function SettingsPage() {
               rows={4}
             />
             <p className="text-sm text-muted-foreground">
-              Paste the SVG code for your website's favicon.
+              {t('settings_favicon_desc')}
             </p>
           </div>
         </CardContent>
@@ -354,3 +354,5 @@ export default function SettingsPage() {
    </>
   );
 }
+
+    

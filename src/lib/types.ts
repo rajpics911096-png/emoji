@@ -20,8 +20,6 @@ export type Emoji = {
   };
   related: string[];
   views: number;
-  showEmoji: boolean;
-  status: 'visible' | 'hidden';
 };
 
 export type EmojiCategory = {
@@ -89,3 +87,5 @@ export type SiteSettings = {
   adsTxtContent?: string;
   colors?: ColorSettings;
 };
+
+    

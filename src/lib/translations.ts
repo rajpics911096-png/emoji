@@ -166,8 +166,14 @@ const translations = {
         settings_branding_desc: 'Customize your website\'s name and logo.',
         settings_site_name_label: 'Website Name',
         settings_site_name_desc: 'This will appear in the header and footer.',
+        settings_meta_title_label: 'Meta Title',
+        settings_meta_title_desc: 'The title used for search engine results.',
+        settings_meta_description_label: 'Meta Description',
+        settings_meta_description_desc: 'The description used for search engine results.',
         settings_logo_label: 'Logo (SVG Code)',
         settings_logo_desc: 'Paste the full SVG code for your logo here.',
+        settings_favicon_label: 'Favicon (SVG Code)',
+        settings_favicon_desc: "Paste the SVG code for your website's favicon.",
         settings_content_title: 'Content Settings',
         settings_content_desc: 'Manage content-related settings for your website.',
         settings_download_timer_label: 'Download Timer',
@@ -747,3 +753,4 @@ export default translations;
 
     
 
+    
