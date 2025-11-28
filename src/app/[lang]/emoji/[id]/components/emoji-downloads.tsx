@@ -67,7 +67,7 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
     <section className="mt-12 md:mt-16">
       <Tabs defaultValue={selectedFormat} onValueChange={handleTabChange} className="w-full">
         <div className="flex justify-center mb-8">
-            <TabsList className="bg-card/50 rounded-full p-1.5 h-auto">
+            <TabsList className="bg-background border rounded-full p-1.5 h-auto">
                 {fileTypes.map(format => (
                 <TabsTrigger 
                     key={format} 
