@@ -223,8 +223,8 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
                         <div className="space-y-3">
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                                 {Object.entries(uploadedFiles).map(([format, files]) => (
-                                    files.map(file => (
-                                        <UploadedFileCard key={file.url} file={file} format={format} onRemove={removeFile} />
+                                    files.map((file, index) => (
+                                        <UploadedFileCard key={`${file.url}-${file.name}-${index}`} file={file} format={format} onRemove={removeFile} />
                                     ))
                                 ))}
                             </div>

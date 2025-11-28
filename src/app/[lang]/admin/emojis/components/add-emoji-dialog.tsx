@@ -202,8 +202,8 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
                             <h4 className="font-medium text-sm">{t('emoji_form_uploaded_title')}</h4>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                                 {Object.entries(uploadedFiles).map(([format, files]) => (
-                                    files.map(file => (
-                                        <UploadedFileCard key={file.url} file={file} format={format} onRemove={removeFile} />
+                                    files.map((file, index) => (
+                                        <UploadedFileCard key={`${file.url}-${file.name}-${index}`} file={file} format={format} onRemove={removeFile} />
                                     ))
                                 ))}
                             </div>
