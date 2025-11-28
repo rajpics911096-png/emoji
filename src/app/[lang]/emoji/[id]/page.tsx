@@ -4,7 +4,6 @@
 import { notFound, useParams } from 'next/navigation';
 import Head from 'next/head';
 import Link from 'next/link';
-import { getRelatedEmojis } from '@/lib/data';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { EmojiCard } from '@/components/emoji-card';
@@ -19,12 +18,13 @@ import { AdSlot } from '@/components/ad-slot';
 import { JsonLd } from '@/components/json-ld';
 import type { Thing } from 'schema-dts';
 import { useCategoryStore, useEmojiStore } from '@/lib/store';
+import { FeaturedFiles } from '@/components/featured-files';
 
 export default function EmojiPage() {
   const params = useParams<{ id: string, lang: string }>();
   const { id, lang } = params;
   
-  const { getEmojiById } = useEmojiStore();
+  const { emojis, getEmojiById, getRelatedEmojis } = useEmojiStore();
   const { categories } = useCategoryStore();
   const emoji = getEmojiById(id);
 
@@ -45,6 +45,22 @@ export default function EmojiPage() {
       }
     };
   }, [emoji]);
+  
+  const allFiles = useMemo(() => {
+    return emojis.flatMap(emojiItem => 
+        Object.entries(emojiItem.formats).flatMap(([format, files]) => 
+            files.map(file => ({
+                ...file,
+                emojiId: emojiItem.id,
+                format: format,
+            }))
+        )
+    );
+  }, [emojis]);
+  
+  const featuredFiles = useMemo(() => {
+      return [...allFiles].sort(() => 0.5 - Math.random()).slice(0, 8);
+  }, [allFiles]);
 
   const jsonLdData: Thing = useMemo(() => {
     if (!emoji) return {};
@@ -136,6 +152,17 @@ export default function EmojiPage() {
               </div>
             </section>
           )}
+
+          {featuredFiles.length > 0 && (
+            <section id="featured-files" className="mt-16 md:mt-24">
+                <div className="container mx-auto px-4">
+                <h2 className="text-3xl font-headline font-bold text-center mb-10">
+                    Featured Files
+                </h2>
+                <FeaturedFiles files={featuredFiles} lang={lang} />
+                </div>
+            </section>
+            )}
         </div>
       </main>
       <Footer lang={lang} />
