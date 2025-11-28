@@ -83,7 +83,7 @@ const FilePreview = ({ file, format }: { file: EmojiFormatFile; format: string }
         {isImage ? (
             <Image src={file.url} alt={file.name} layout="fill" objectFit="contain" className="p-4" unoptimized={file.format === 'gif'} />
         ) : isVideo ? (
-            <video src={file.url} controls autoPlay muted loop className="w-full h-full object-contain" />
+            <video src={file.url} autoPlay muted loop className="w-full h-full object-contain" />
         ) : (
             <FileIcon className="w-24 h-24 text-muted-foreground" />
         )}
