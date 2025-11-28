@@ -30,20 +30,16 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleSearch = (searchQuery: string) => {
-      if (!searchQuery) {
-        setResults([]);
-        setIsOpen(false);
-        return;
-      }
+    if (debouncedQuery) {
       setIsOpen(true);
       startTransition(async () => {
-        const { results } = await searchEmojisAction(searchQuery);
+        const { results } = await searchEmojisAction(debouncedQuery);
         setResults(results);
       });
-    };
-    
-    handleSearch(debouncedQuery);
+    } else {
+      setIsOpen(false);
+      setResults([]);
+    }
   }, [debouncedQuery]);
 
   useEffect(() => {
@@ -95,9 +91,9 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
       </form>
        <div className={cn("absolute top-full mt-2 w-full z-10", isOpen ? "block" : "hidden")}>
           <Command className="rounded-lg border shadow-md">
-            <CommandList>
+            <CommandList onMouseDown={(e) => e.preventDefault()}>
               {isPending && <CommandLoading>{t('searchLoading')}</CommandLoading>}
-              {!isPending && !results.length && query && <CommandEmpty>{t('searchNoResults')}</CommandEmpty>}
+              {!isPending && !results.length && debouncedQuery && <CommandEmpty>{t('searchNoResults')}</CommandEmpty>}
               {results.length > 0 && (
                  <CommandGroup heading={t('searchResults')}>
                     {results.map((emoji) => (
