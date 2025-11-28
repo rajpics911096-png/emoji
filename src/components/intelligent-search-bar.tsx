@@ -5,7 +5,6 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { searchEmojisAction } from "@/lib/actions";
 import type { Emoji } from "@/lib/types";
 import {
@@ -57,7 +56,7 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
   return (
     <div className="relative">
       <form
-        className="flex w-full items-center"
+        className="w-full"
         onSubmit={(e) => {
           e.preventDefault();
           if (query) {
@@ -65,12 +64,12 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
           }
         }}
       >
-        <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+        <div className="relative flex items-center w-full bg-background border border-input rounded-full shadow-sm focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background transition-all">
+            <Search className="absolute left-4 h-5 w-5 text-muted-foreground pointer-events-none" />
             <Input
               type="search"
               placeholder={t('searchPlaceholder')}
-              className="pl-10 h-10 text-sm"
+              className="pl-12 pr-4 h-12 text-base bg-transparent border-none rounded-full focus-visible:ring-0 focus-visible:ring-offset-0 w-full"
               value={query}
               onChange={handleInputChange}
               onFocus={() => query && setIsOpen(true)}
