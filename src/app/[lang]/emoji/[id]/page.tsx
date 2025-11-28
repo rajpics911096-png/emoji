@@ -98,18 +98,18 @@ export default function EmojiPage() {
       </Head>
       <JsonLd data={jsonLdData} />
       <Header lang={lang} />
-      <main className="flex-1 py-12 md:py-16">
+      <main className="flex-1 py-8 md:py-12">
         <div className="container mx-auto px-4">
           
           <div className="grid md:grid-cols-3 gap-8 md:gap-12">
             <div className="md:col-span-2">
                 <EmojiView emoji={emoji} />
-                <div className="my-8">
+                <div className="my-6">
                   <AdSlot location="below_emoji" />
                 </div>
                 <EmojiDownloads emoji={emoji} lang={lang} />
             </div>
-            <aside className="space-y-8">
+            <aside className="space-y-6">
               <AdSlot location="sidebar" />
               <div className="space-y-4">
                 <h3 className="font-headline text-2xl font-semibold text-primary">
@@ -137,13 +137,13 @@ export default function EmojiPage() {
             </aside>
           </div>
           
-          <div className="my-8">
+          <div className="my-6">
             <AdSlot location="below_download" />
           </div>
 
           {related.length > 0 && (
-            <section className="mt-16 md:mt-24">
-              <h2 className="text-3xl font-headline font-bold text-center mb-10">
+            <section className="mt-12 md:mt-16">
+              <h2 className="text-3xl font-headline font-bold text-center mb-8">
                 {t('relatedEmojisTitle')}
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
@@ -155,9 +155,9 @@ export default function EmojiPage() {
           )}
 
           {featuredFiles.length > 0 && (
-            <section id="featured-files" className="mt-16 md:mt-24">
+            <section id="featured-files" className="mt-12 md:mt-16">
                 <div className="container mx-auto px-4">
-                <h2 className="text-3xl font-headline font-bold text-center mb-10">
+                <h2 className="text-3xl font-headline font-bold text-center mb-8">
                     Featured Files
                 </h2>
                 <FeaturedFiles files={featuredFiles} lang={lang} />

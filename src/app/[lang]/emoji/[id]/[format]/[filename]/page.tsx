@@ -157,7 +157,7 @@ export default function FileDownloadPage() {
 
                 <Separator className="my-2" />
                 
-                <div className="w-full max-w-5xl space-y-12">
+                <div className="w-full max-w-5xl space-y-8">
                     {relatedFiles.length > 0 && (
                         <section>
                           <h2 className="text-2xl font-headline font-bold text-center mb-6">{t('relatedFilesTitle')}</h2>

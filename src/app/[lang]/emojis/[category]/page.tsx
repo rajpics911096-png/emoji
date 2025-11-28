@@ -77,7 +77,7 @@ export default function CategoryPage() {
       <Header lang={lang} />
       <main className="flex-1 container mx-auto py-8 px-4">
         
-        <div className="text-center mb-10 md:mb-12">
+        <div className="text-center mb-8 md:mb-10">
             <h1 className="text-4xl md:text-5xl font-headline font-bold text-primary tracking-tighter">
                 {categoryName}
             </h1>
@@ -99,9 +99,9 @@ export default function CategoryPage() {
         )}
 
         {featuredFiles.length > 0 && (
-            <section id="featured-files" className="mt-16 md:mt-24">
+            <section id="featured-files" className="mt-12 md:mt-16">
                 <div className="container mx-auto px-4">
-                <h2 className="text-3xl font-headline font-bold text-center mb-10">
+                <h2 className="text-3xl font-headline font-bold text-center mb-8">
                     Featured Files
                 </h2>
                 <FeaturedFiles files={featuredFiles} lang={lang} />

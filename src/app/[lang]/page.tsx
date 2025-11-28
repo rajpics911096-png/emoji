@@ -58,7 +58,7 @@ export default function Home() {
       <Header lang={lang} />
       <main className="flex-1">
         
-        <section className="relative py-20 md:py-32 bg-primary/10">
+        <section className="relative py-16 md:py-20 bg-primary/10">
           <div className="container mx-auto text-center px-4">
             <h1 className="text-4xl md:text-6xl font-headline font-bold text-primary tracking-tighter">
               {t('welcomeMessage', { siteName: settings.name })}
@@ -78,7 +78,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="categories" className="py-16 md:py-24">
+        <section id="categories" className="py-12 md:py-16">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-headline font-bold text-center mb-10">
               {t('exploreCategories')}
@@ -100,7 +100,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="featured" className="py-16 md:py-24 bg-primary/5">
+        <section id="featured" className="py-12 md:py-16 bg-primary/5">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-headline font-bold text-center mb-10">
               {t('featuredEmojis')}
@@ -114,7 +114,7 @@ export default function Home() {
         </section>
 
         {featuredFiles.length > 0 && (
-          <section id="featured-files" className="py-16 md:py-24">
+          <section id="featured-files" className="py-12 md:py-16">
             <div className="container mx-auto px-4">
               <h2 className="text-3xl font-headline font-bold text-center mb-10">
                 Featured Files
