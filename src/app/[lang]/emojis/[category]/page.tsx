@@ -5,7 +5,6 @@ import { notFound, useParams, useSearchParams } from 'next/navigation';
 import { EmojiCard } from '@/components/emoji-card';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
-import IntelligentSearchBar from '@/components/intelligent-search-bar';
 import { useTranslations } from '@/context/translations-context';
 import { useCategoryStore, useEmojiStore } from '@/lib/store';
 import { useMemo } from 'react';
@@ -77,9 +76,7 @@ export default function CategoryPage() {
     <>
       <Header lang={lang} />
       <main className="flex-1 container mx-auto py-8 px-4">
-        <div className="md:hidden mb-6">
-            <IntelligentSearchBar lang={lang} />
-        </div>
+        
         <div className="text-center mb-10 md:mb-12">
             <h1 className="text-4xl md:text-5xl font-headline font-bold text-primary tracking-tighter">
                 {categoryName}
@@ -87,9 +84,6 @@ export default function CategoryPage() {
             <p className="mt-3 text-lg md:text-xl max-w-3xl mx-auto text-foreground/80">
                 {t('categoryDescription', { categoryName: categoryName })}
             </p>
-             <div className="mt-8 max-w-2xl mx-auto hidden md:block">
-              <IntelligentSearchBar lang={lang} />
-            </div>
         </div>
         
         {emojiList.length > 0 ? (

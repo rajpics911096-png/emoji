@@ -19,7 +19,6 @@ import { JsonLd } from '@/components/json-ld';
 import type { Thing } from 'schema-dts';
 import { useCategoryStore, useEmojiStore } from '@/lib/store';
 import { FeaturedFiles } from '@/components/featured-files';
-import IntelligentSearchBar from '@/components/intelligent-search-bar';
 
 export default function EmojiPage() {
   const params = useParams<{ id: string, lang: string }>();
@@ -101,9 +100,7 @@ export default function EmojiPage() {
       <Header lang={lang} />
       <main className="flex-1 py-12 md:py-16">
         <div className="container mx-auto px-4">
-          <div className="mb-8">
-            <IntelligentSearchBar lang={lang} />
-          </div>
+          
           <div className="grid md:grid-cols-3 gap-8 md:gap-12">
             <div className="md:col-span-2">
                 <EmojiView emoji={emoji} />

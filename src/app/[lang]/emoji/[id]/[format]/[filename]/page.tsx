@@ -18,7 +18,6 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { AdSlot } from '@/components/ad-slot';
 import { useEmojiStore, useCategoryStore } from '@/lib/store';
-import IntelligentSearchBar from '@/components/intelligent-search-bar';
 
 const DownloadButton = ({ file, format }: { file: EmojiFormatFile, format: string }) => {
   const { settings } = useSiteSettings();
@@ -128,9 +127,7 @@ export default function FileDownloadPage() {
       <Header lang={lang} />
       <main className="flex-1 py-8 md:py-12 bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4">
-            <div className="mb-8">
-                <IntelligentSearchBar lang={lang} />
-            </div>
+            
             <div className="mb-4">
                  <Button asChild variant="outline" className="text-muted-foreground hover:text-primary">
                     <Link href={`/${lang}/emoji/${id}`}>

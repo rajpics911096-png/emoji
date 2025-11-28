@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button';
 import { EmojiCard } from '@/components/emoji-card';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
-import IntelligentSearchBar from '@/components/intelligent-search-bar';
 import { Card, CardContent } from '@/components/ui/card';
 import { SvgIcon } from '@/components/svg-icon';
 import { useSiteSettings } from '@/context/site-settings-context';
@@ -58,9 +57,7 @@ export default function Home() {
     <>
       <Header lang={lang} />
       <main className="flex-1">
-        <div className="md:hidden p-4 border-b">
-          <IntelligentSearchBar lang={lang} />
-        </div>
+        
         <section className="relative py-20 md:py-32 bg-primary/10">
           <div className="container mx-auto text-center px-4">
             <h1 className="text-4xl md:text-6xl font-headline font-bold text-primary tracking-tighter">
@@ -69,9 +66,7 @@ export default function Home() {
             <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto text-foreground/80">
               {t('siteDescription')}
             </p>
-            <div className="mt-8 max-w-2xl mx-auto hidden md:block">
-              <IntelligentSearchBar lang={lang} />
-            </div>
+            
             <div className="mt-6">
               <Button asChild size="lg" className="font-bold group">
                 <Link href={`/${lang}/emojis/all`}>
