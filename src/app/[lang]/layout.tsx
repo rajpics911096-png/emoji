@@ -1,6 +1,3 @@
-
-"use client";
-
 import { Toaster } from '@/components/ui/toaster';
 import '../globals.css';
 import { cn } from '@/lib/utils';
@@ -9,7 +6,8 @@ import { TranslationsProvider } from '@/context/translations-context';
 import { FirebaseProvider } from '@/firebase/provider';
 import { DynamicFavicon } from '@/components/dynamic-favicon';
 import Head from 'next/head';
-import { useEffect } from 'react';
+import type { ReactNode } from 'react';
+import { DynamicTheme } from '@/components/dynamic-theme';
 
 function SiteHead() {
   const { settings } = useSiteSettings();
@@ -29,32 +27,29 @@ function SiteHead() {
   );
 }
 
-function DynamicTheme() {
-    const { settings } = useSiteSettings();
-
-    useEffect(() => {
-        const root = document.documentElement;
-        if (settings.colors) {
-            for (const [name, hsl] of Object.entries(settings.colors)) {
-                if (hsl) {
-                    root.style.setProperty(`--${name}`, `${hsl.h} ${hsl.s}% ${hsl.l}%`);
-                }
-            }
-        }
-    }, [settings.colors]);
-
-    return null;
+function AppProviders({ children, lang }: { children: ReactNode, lang: string }) {
+    return (
+        <FirebaseProvider>
+            <SiteSettingsProvider>
+                <TranslationsProvider language={lang}>
+                    <SiteHead />
+                    <DynamicFavicon />
+                    <DynamicTheme />
+                    {children}
+                    <Toaster />
+                </TranslationsProvider>
+            </SiteSettingsProvider>
+        </FirebaseProvider>
+    );
 }
-
 
 export default function RootLayout({
   children,
-  params,
+  params: { lang },
 }: Readonly<{
   children: React.ReactNode;
   params: { lang: string };
 }>) {
-  const { lang } = params;
   return (
     <html lang={lang} dir={lang === 'ar' || lang === 'ur' ? 'rtl' : 'ltr'} suppressHydrationWarning>
       <head>
@@ -70,17 +65,9 @@ export default function RootLayout({
         />
       </head>
       <body className={cn('font-body antialiased min-h-screen flex flex-col')}>
-        <FirebaseProvider>
-            <SiteSettingsProvider>
-            <TranslationsProvider language={lang}>
-                <SiteHead />
-                <DynamicFavicon />
-                <DynamicTheme />
-                {children}
-                <Toaster />
-            </TranslationsProvider>
-            </SiteSettingsProvider>
-        </FirebaseProvider>
+        <AppProviders lang={lang}>
+            {children}
+        </AppProviders>
       </body>
     </html>
   );
