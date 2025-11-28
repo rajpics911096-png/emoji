@@ -9,6 +9,15 @@ import IntelligentSearchBar from '@/components/intelligent-search-bar';
 import { useTranslations } from '@/context/translations-context';
 import { useCategoryStore, useEmojiStore } from '@/lib/store';
 import { useMemo } from 'react';
+import { FeaturedFiles } from '@/components/featured-files';
+import type { EmojiFormatFile } from '@/lib/types';
+
+type FeaturedFile = EmojiFormatFile & {
+    emojiId: string;
+    format: string;
+    emojiTitle: string;
+};
+
 
 export default function CategoryPage() {
   const searchParams = useSearchParams();
@@ -17,7 +26,7 @@ export default function CategoryPage() {
 
   const { t } = useTranslations();
   const { categories } = useCategoryStore();
-  const { getEmojisByCategory } = useEmojiStore();
+  const { emojis, getEmojisByCategory } = useEmojiStore();
   
   const category = categories.find((c) => c.id === categorySlug);
   if (!category) {
@@ -29,15 +38,39 @@ export default function CategoryPage() {
   const searchTerm = searchParams.get('search');
   
   const emojiList = useMemo(() => {
-    let emojis = getEmojisByCategory(categorySlug);
+    let categoryEmojis = getEmojisByCategory(categorySlug);
     if (searchTerm) {
-        emojis = emojis.filter(emoji => 
+        return categoryEmojis.filter(emoji => 
             emoji.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             emoji.description.toLowerCase().includes(searchTerm.toLowerCase())
         );
     }
-    return emojis;
+    return categoryEmojis;
   }, [getEmojisByCategory, categorySlug, searchTerm]);
+
+  const featuredFiles = useMemo(() => {
+    if (!searchTerm) {
+      return [];
+    }
+
+    const allFiles: FeaturedFile[] = emojis.flatMap(emoji =>
+        Object.entries(emoji.formats).flatMap(([format, files]) =>
+            files.map(file => ({
+                ...file,
+                emojiId: emoji.id,
+                format: format,
+                emojiTitle: emoji.title,
+            }))
+        )
+    );
+
+    const lowercasedQuery = searchTerm.toLowerCase();
+    return allFiles.filter(file => 
+        file.name.toLowerCase().includes(lowercasedQuery) ||
+        file.emojiTitle.toLowerCase().includes(lowercasedQuery)
+    ).slice(0, 8); // Limit to 8 results for display
+
+  }, [emojis, searchTerm]);
 
 
   return (
@@ -69,6 +102,17 @@ export default function CategoryPage() {
           <div className="text-center py-16">
             <p className="text-xl text-muted-foreground">{t('categoryNoResults', { searchTerm: searchTerm || '' })}</p>
           </div>
+        )}
+
+        {featuredFiles.length > 0 && (
+            <section id="featured-files" className="mt-16 md:mt-24">
+                <div className="container mx-auto px-4">
+                <h2 className="text-3xl font-headline font-bold text-center mb-10">
+                    Featured Files
+                </h2>
+                <FeaturedFiles files={featuredFiles} lang={lang} />
+                </div>
+            </section>
         )}
       </main>
       <Footer lang={lang} />
