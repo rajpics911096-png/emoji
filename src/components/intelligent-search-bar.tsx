@@ -1,7 +1,8 @@
+
 "use client";
 
 import { useState, useTransition } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -56,7 +57,7 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
   return (
     <div className="relative">
       <form
-        className="flex w-full items-center space-x-2"
+        className="flex w-full items-center"
         onSubmit={(e) => {
           e.preventDefault();
           if (query) {
@@ -69,14 +70,13 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
             <Input
               type="search"
               placeholder={t('searchPlaceholder')}
-              className="pl-10 h-12 text-base"
+              className="pl-10 h-10 text-sm"
               value={query}
               onChange={handleInputChange}
               onFocus={() => query && setIsOpen(true)}
               onBlur={() => setTimeout(() => setIsOpen(false), 200)}
             />
         </div>
-        <Button type="submit" size="lg" className="h-12">{t('searchButton')}</Button>
       </form>
        <div className={cn("absolute top-full mt-2 w-full z-10", isOpen ? "block" : "hidden")}>
           <Command className="rounded-lg border shadow-md">

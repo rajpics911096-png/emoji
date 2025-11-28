@@ -19,6 +19,7 @@ import { useTranslations } from '@/context/translations-context';
 import { useState } from 'react';
 import { AdSlot } from './ad-slot';
 import { useCategoryStore } from '@/lib/store';
+import IntelligentSearchBar from './intelligent-search-bar';
 
 export default function Header({ lang }: { lang: string }) {
   const { settings } = useSiteSettings();
@@ -63,24 +64,16 @@ export default function Header({ lang }: { lang: string }) {
             </Sheet>
         </div>
 
-        <div className="mr-4 hidden md:flex">
+        <div className="mr-4 hidden md:flex items-center flex-1">
           <Link href={`/${lang}`} className="mr-6 flex items-center space-x-2">
             <SvgIcon svg={settings.logo} className="h-6 w-6" />
             <span className="hidden font-bold sm:inline-block font-headline text-lg">
               {settings.name}
             </span>
           </Link>
-          <nav className="flex items-center space-x-6 text-sm font-medium">
-             {navCategories.map((category) => (
-                <Link
-                  key={category.id}
-                  href={`/${lang}/emojis/${category.id}`}
-                  className="transition-colors hover:text-foreground/80 text-foreground/60"
-                >
-                  {t(category.name)}
-                </Link>
-              ))}
-          </nav>
+          <div className="w-full max-w-md">
+            <IntelligentSearchBar lang={lang} />
+          </div>
         </div>
         
         <div className="flex-1 flex justify-center md:hidden">
