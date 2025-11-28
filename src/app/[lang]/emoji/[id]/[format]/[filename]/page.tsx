@@ -81,7 +81,7 @@ const FilePreview = ({ file, format }: { file: EmojiFormatFile; format: string }
     return (
       <div className="aspect-square w-full max-w-lg mx-auto bg-muted/50 flex items-center justify-center relative rounded-lg border overflow-hidden shadow-sm">
         {isImage ? (
-            <Image src={file.url} alt={file.name} layout="fill" objectFit="contain" className="p-4" />
+            <Image src={file.url} alt={file.name} layout="fill" objectFit="contain" className="p-4" unoptimized={file.format === 'gif'} />
         ) : isVideo ? (
             <video src={file.url} controls autoPlay muted loop className="w-full h-full object-contain" />
         ) : (
@@ -163,11 +163,11 @@ export default function FileDownloadPage() {
                           <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2">
                               {relatedFiles.map(relatedFile => (
                                   <Link key={relatedFile.url} href={`/${lang}/emoji/${id}/${relatedFile.format}/${encodeURIComponent(relatedFile.name)}`}>
-                                      <Card className="group aspect-square flex items-center justify-center p-1 hover:bg-muted/50 transition-colors">
+                                      <Card className="group aspect-square flex items-center justify-center p-1 hover:bg-muted/50 transition-colors overflow-hidden">
                                          {relatedFile.type?.startsWith('video') ? (
-                                              <Video className="w-6 h-6 text-muted-foreground" />
+                                              <video src={relatedFile.url} autoPlay loop muted playsInline className="w-full h-full object-contain" />
                                           ) : (
-                                              <Image src={relatedFile.url} alt={relatedFile.name} width={40} height={40} objectFit="contain" />
+                                              <Image src={relatedFile.url} alt={relatedFile.name} width={40} height={40} objectFit="contain" unoptimized={relatedFile.format === 'gif'} />
                                           )}
                                       </Card>
                                   </Link>
