@@ -17,7 +17,7 @@ import { ThemeToggle } from './theme-toggle';
 import { LanguageSwitcher } from './language-switcher';
 import { useTranslations } from '@/context/translations-context';
 import { useState } from 'react';
-import { AdSlot } from './ad-slot';
+import { AdSlot } from '@/components/ad-slot';
 import { useCategoryStore } from '@/lib/store';
 import IntelligentSearchBar from './intelligent-search-bar';
 
@@ -30,7 +30,7 @@ export default function Header({ lang }: { lang: string }) {
 
   return (
     <>
-    <header className="w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
+    <header className="sticky top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
       <div className="container flex h-16 items-center">
         <div className="flex items-center md:hidden">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
