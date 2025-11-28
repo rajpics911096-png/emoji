@@ -1,84 +1,33 @@
 
-import type { Metadata, ResolvingMetadata } from 'next';
+"use client";
+
 import { Toaster } from '@/components/ui/toaster';
 import '../globals.css';
 import { cn } from '@/lib/utils';
-import { SiteSettingsProvider } from '@/context/site-settings-context';
+import { SiteSettingsProvider, useSiteSettings } from '@/context/site-settings-context';
 import { TranslationsProvider } from '@/context/translations-context';
-import { i18n } from '@/lib/i18n-config';
 import { FirebaseProvider } from '@/firebase/provider';
-import { defaultSiteSettings } from '@/lib/site-settings';
-import translations from '@/lib/translations';
 import { DynamicFavicon } from '@/components/dynamic-favicon';
+import Head from 'next/head';
 
-type Props = {
-  params: { lang: string }
+function SiteHead() {
+  const { settings } = useSiteSettings();
+
+  return (
+    <Head>
+      <title>{settings.metaTitle || settings.name}</title>
+      <meta name="description" content={settings.metaDescription} />
+      <meta property="og:title" content={settings.metaTitle || settings.name} />
+      <meta property="og:description" content={settings.metaDescription} />
+      <meta property="og:image" content="/og-image.png" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={settings.metaTitle || settings.name} />
+      <meta name="twitter:description" content={settings.metaDescription} />
+      <meta name="twitter:image" content="/og-image.png" />
+    </Head>
+  );
 }
 
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
-  const lang = (i18n.locales.includes(params.lang as any) ? params.lang : i18n.defaultLocale) as keyof typeof translations;
-  const t = (key: string) => translations[lang]?.[key] || translations['en'][key] || key;
-  
-  // This is a workaround to get the settings from local storage on the server.
-  // In a real app, this would be fetched from a database.
-  const siteSettings = defaultSiteSettings;
-
-  return {
-    title: {
-      default: siteSettings.name,
-      template: `%s | ${siteSettings.name}`,
-    },
-    description: t('siteDescription'),
-    metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
-    alternates: {
-      canonical: '/',
-      languages: i18n.locales.reduce((acc, locale) => {
-        acc[locale] = `/${locale}`;
-        return acc;
-      }, {} as Record<string, string>),
-    },
-     openGraph: {
-      title: siteSettings.name,
-      description: t('siteDescription'),
-      url: '/',
-      siteName: siteSettings.name,
-      images: [
-        {
-          url: '/og-image.png',
-          width: 1200,
-          height: 630,
-        },
-      ],
-      locale: lang,
-      type: 'website',
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
-      },
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: siteSettings.name,
-      description: t('siteDescription'),
-      images: ['/og-image.png'],
-    },
-     // Favicon is now handled by DynamicFavicon client component
-  }
-}
-
-export async function generateStaticParams() {
-  return i18n.locales.map((locale) => ({ lang: locale }))
-}
 
 export default function RootLayout({
   children,
@@ -106,6 +55,7 @@ export default function RootLayout({
         <FirebaseProvider>
             <SiteSettingsProvider>
             <TranslationsProvider language={lang}>
+                <SiteHead />
                 <DynamicFavicon />
                 {children}
                 <Toaster />

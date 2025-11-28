@@ -19,6 +19,8 @@ export type Emoji = {
   };
   related: string[];
   views: number;
+  showEmoji: boolean;
+  status: 'visible' | 'hidden';
 };
 
 export type EmojiCategory = {
@@ -63,6 +65,8 @@ export type SiteSettings = {
   name: string;
   logo: string; // SVG code as a string
   favicon: string; // SVG code as a string
+  metaTitle?: string;
+  metaDescription?: string;
   downloadTimer: number;
   adSettings: AdSetting[];
   adsTxtContent?: string;

@@ -36,8 +36,9 @@ export const defaultSiteSettings: SiteSettings = {
       </defs>
     </svg>`,
     favicon: `<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Vercel</title><path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z"/></svg>`,
+    metaTitle: 'EmojiVerse - Your Universe of Emojis',
+    metaDescription: 'Discover, copy, and download thousands of emojis in various formats for every occasion.',
     downloadTimer: 10,
-    adsTxtContent: '',
     adSettings: [
         { location: 'header', code: `<div style="margin: 20px 0;">
   <a href="https://example.com" target="_blank" title="Visit our website demo">

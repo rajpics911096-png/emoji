@@ -188,6 +188,30 @@ export default function SettingsPage() {
               {t('settings_site_name_desc')}
             </p>
           </div>
+           <div className="space-y-2">
+            <Label htmlFor="meta-title">Meta Title</Label>
+            <Input
+              id="meta-title"
+              type="text"
+              value={settings.metaTitle || ''}
+              onChange={(e) => setSettings({ ...settings, metaTitle: e.target.value })}
+            />
+            <p className="text-sm text-muted-foreground">
+              The title used for search engine results.
+            </p>
+          </div>
+           <div className="space-y-2">
+            <Label htmlFor="meta-description">Meta Description</Label>
+            <Textarea
+              id="meta-description"
+              value={settings.metaDescription || ''}
+              onChange={(e) => setSettings({ ...settings, metaDescription: e.target.value })}
+              rows={3}
+            />
+            <p className="text-sm text-muted-foreground">
+              The description used for search engine results.
+            </p>
+          </div>
           <div className="space-y-2">
             <Label htmlFor="site-logo">{t('settings_logo_label')}</Label>
             <Textarea
