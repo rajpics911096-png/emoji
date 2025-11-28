@@ -57,10 +57,10 @@ export default function Home() {
   return (
     <>
       <Header lang={lang} />
-      <div className="md:hidden p-4 border-b">
-        <IntelligentSearchBar lang={lang} />
-      </div>
       <main className="flex-1">
+        <div className="md:hidden p-4 border-b">
+          <IntelligentSearchBar lang={lang} />
+        </div>
         <section className="relative py-20 md:py-32 bg-primary/10">
           <div className="container mx-auto text-center px-4">
             <h1 className="text-4xl md:text-6xl font-headline font-bold text-primary tracking-tighter">
