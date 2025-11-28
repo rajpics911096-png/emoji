@@ -29,7 +29,11 @@ import {
   Globe,
   Award,
   Book,
-  AtSign
+  AtSign,
+  Facebook,
+  MessageCircle,
+  Reddit,
+  Pinterest
 } from 'lucide-react';
 
 export const iconMap: { [key: string]: React.ComponentType<{ className?: string }> } = {
@@ -64,11 +68,15 @@ export const iconMap: { [key: string]: React.ComponentType<{ className?: string 
   'award': Award,
   'book': Book,
   'at-sign': AtSign,
+  'facebook': Facebook,
+  'whatsapp': MessageCircle,
+  'reddit': Reddit,
+  'pinterest': Pinterest,
 };
 
 export const iconNames = Object.keys(iconMap);
 
-export const socialIconNames = ['github', 'twitter', 'linkedin'];
+export const socialIconNames = ['github', 'twitter', 'linkedin', 'facebook', 'whatsapp', 'reddit', 'pinterest'];
 
 export const getIconName = (IconComponent: React.ComponentType<{ className?: string }>) => {
     for (const name in iconMap) {

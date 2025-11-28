@@ -4,8 +4,10 @@
 import { useState } from 'react';
 import type { Emoji } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { Copy, Check, Code } from 'lucide-react';
+import { Copy, Check, Code, Share2, Twitter, Facebook, MessageCircle, Linkedin, Reddit, Pinterest } from 'lucide-react';
 import { useTranslations } from '@/context/translations-context';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import Link from 'next/link';
 
 interface EmojiViewProps {
   emoji: Emoji;
@@ -25,8 +27,6 @@ export function EmojiView({ emoji }: EmojiViewProps) {
   const handleCopySvg = () => {
     const imageUrl = emoji.formats.png[0]?.url || emoji.formats.image[0]?.url;
     if (imageUrl) {
-        // In a real scenario, you might want to fetch image dimensions.
-        // For this prototype, we'll use a standard size.
         const svgString = `<svg width="128" height="128" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><image href="${window.location.origin}${imageUrl}" height="128" width="128"/></svg>`;
         navigator.clipboard.writeText(svgString);
         setIsSvgCopied(true);
@@ -35,6 +35,20 @@ export function EmojiView({ emoji }: EmojiViewProps) {
   };
 
   const canCopySvg = !!(emoji.formats.png[0] || emoji.formats.image[0]);
+
+  const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const shareTitle = encodeURIComponent(emoji.title);
+  const shareImage = typeof window !== 'undefined' && (emoji.formats.png[0]?.url || emoji.formats.image[0]?.url)
+    ? encodeURIComponent(window.location.origin + (emoji.formats.png[0]?.url || emoji.formats.image[0]?.url))
+    : '';
+
+  const socialShares = [
+    { name: 'Facebook', icon: Facebook, url: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}` },
+    { name: 'Twitter', icon: Twitter, url: `https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitle}` },
+    { name: 'WhatsApp', icon: MessageCircle, url: `https://api.whatsapp.com/send?text=${shareTitle}%20${shareUrl}` },
+    { name: 'Pinterest', icon: Pinterest, url: `https://pinterest.com/pin/create/button/?url=${shareUrl}&media=${shareImage}&description=${shareTitle}` },
+    { name: 'Reddit', icon: Reddit, url: `https://www.reddit.com/submit?url=${shareUrl}&title=${shareTitle}` },
+  ];
 
   return (
     <article>
@@ -66,6 +80,24 @@ export function EmojiView({ emoji }: EmojiViewProps) {
                         )}
                     </Button>
                 )}
+                 <Popover>
+                    <PopoverTrigger asChild>
+                       <Button size="default" variant="outline" className="transition-all">
+                            <Share2 className="mr-2 h-4 w-4" /> Share
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto">
+                        <div className="flex gap-2">
+                            {socialShares.map(social => (
+                                <Button key={social.name} asChild variant="outline" size="icon" title={`Share on ${social.name}`}>
+                                    <Link href={social.url} target="_blank" rel="noopener noreferrer">
+                                        <social.icon className="h-5 w-5" />
+                                    </Link>
+                                </Button>
+                            ))}
+                        </div>
+                    </PopoverContent>
+                </Popover>
             </div>
       </div>
     </article>
