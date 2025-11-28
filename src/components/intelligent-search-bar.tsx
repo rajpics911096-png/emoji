@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useTransition, useEffect } from "react";
+import { useState, useTransition, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -27,6 +27,7 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const { t } = useTranslations();
+  const searchContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleSearch = (searchQuery: string) => {
@@ -45,6 +46,17 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
     handleSearch(debouncedQuery);
   }, [debouncedQuery]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -58,7 +70,7 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
   };
 
   return (
-    <div className="relative">
+    <div className="relative" ref={searchContainerRef}>
       <form
         className="w-full"
         onSubmit={(e) => {
@@ -77,7 +89,6 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
               value={query}
               onChange={handleInputChange}
               onFocus={() => query && setIsOpen(true)}
-              onBlur={() => setTimeout(() => setIsOpen(false), 200)}
             />
             <Search className="absolute right-5 h-6 w-6 text-muted-foreground pointer-events-none" />
         </div>
@@ -93,10 +104,6 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
                       <CommandItem
                         key={emoji.id}
                         value={emoji.title}
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                        }}
                         onSelect={() => handleSelect(emoji.id)}
                         className="cursor-pointer"
                       >
