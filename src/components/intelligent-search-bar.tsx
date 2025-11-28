@@ -64,18 +64,20 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
     setQuery('');
     router.push(`/${lang}/emoji/${id}`);
   };
+  
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      if (query) {
+         setIsOpen(false);
+         router.push(`/${lang}/emojis/all?search=${query}`)
+      }
+  };
 
   return (
     <div className="relative" ref={searchContainerRef}>
       <form
         className="w-full"
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (query) {
-             setIsOpen(false);
-             router.push(`/${lang}/emojis/all?search=${query}`)
-          }
-        }}
+        onSubmit={handleFormSubmit}
       >
         <div className="relative flex items-center w-full bg-background border border-input rounded-full shadow-sm focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background transition-all">
             <Input
