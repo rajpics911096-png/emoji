@@ -71,7 +71,7 @@ export default function Header({ lang }: { lang: string }) {
               {settings.name}
             </span>
           </Link>
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-lg">
             <IntelligentSearchBar lang={lang} />
           </div>
         </div>
