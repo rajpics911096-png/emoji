@@ -19,20 +19,20 @@ import { Badge } from "@/components/ui/badge";
 import { AddPageDialog } from "./components/add-page-dialog";
 import { EditPageDialog } from "./components/edit-page-dialog";
 import Link from "next/link";
-import { pages as initialPagesData } from "@/lib/data";
 import { useTranslations } from "@/context/translations-context";
+import { usePageStore } from "@/lib/store";
 
 
 export default function PagesPage() {
   const { t, language } = useTranslations();
   const { toast } = useToast();
-  const [pages, setPages] = useState<Page[]>(initialPagesData);
+  const { pages, addPage, updatePage, deletePage } = usePageStore();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedPage, setSelectedPage] = useState<Page | null>(null);
 
   const handleDelete = (pageId: string, pageTitle: string) => {
-    setPages(pages.filter((page) => page.id !== pageId));
+    deletePage(pageId);
     toast({
       title: t('pages_toast_deleted_title'),
       description: t('pages_toast_deleted_desc', { title: pageTitle }),
@@ -49,7 +49,7 @@ export default function PagesPage() {
       ...newPage,
       id: newPage.slug,
     };
-    setPages([pageToAdd, ...pages]);
+    addPage(pageToAdd);
     toast({
       title: t('pages_toast_added_title'),
       description: t('pages_toast_added_desc', { title: newPage.title }),
@@ -58,7 +58,7 @@ export default function PagesPage() {
   };
 
   const handleEditPage = (updatedPage: Page) => {
-    setPages(pages.map(p => p.id === updatedPage.id ? updatedPage : p));
+    updatePage(updatedPage);
     toast({
         title: t('pages_toast_updated_title'),
         description: t('pages_toast_updated_desc', { title: updatedPage.title }),

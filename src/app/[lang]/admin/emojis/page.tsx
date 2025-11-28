@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MoreHorizontal, PlusCircle, ArrowUpDown, ExternalLink } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { emojis as initialEmojis } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useMemo, useEffect } from "react";
 import { AddEmojiDialog } from "./components/add-emoji-dialog";
@@ -21,6 +20,7 @@ import type { Emoji } from "@/lib/types";
 import { EditEmojiDialog } from "./components/edit-emoji-dialog";
 import Link from "next/link";
 import { useTranslations } from "@/context/translations-context";
+import { useEmojiStore } from "@/lib/store";
 
 type SortConfig = {
   key: keyof Emoji;
@@ -33,21 +33,24 @@ export default function EmojisPage() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState<Emoji | null>(null);
-  const [emojiList, setEmojiList] = useState<Emoji[]>(initialEmojis);
+  
+  const { emojis, addEmoji, updateEmoji, deleteEmoji } = useEmojiStore();
+  
   const [sortConfig, setSortConfig] = useState<SortConfig | null>({ key: 'views', direction: 'descending' });
-
+  const [emojiListWithViews, setEmojiListWithViews] = useState<Emoji[]>([]);
+  
   useEffect(() => {
     const views = JSON.parse(localStorage.getItem('emojiViews') || '{}');
-    setEmojiList(prevList =>
-      prevList.map(emoji => ({
-        ...emoji,
-        views: views[emoji.id] || emoji.views,
-      }))
-    );
-  }, []);
+    const updatedList = emojis.map(emoji => ({
+      ...emoji,
+      views: views[emoji.id] || emoji.views || 0,
+    }));
+    setEmojiListWithViews(updatedList);
+  }, [emojis]);
+
 
   const sortedEmojiList = useMemo(() => {
-    let sortableItems = [...emojiList];
+    let sortableItems = [...emojiListWithViews];
     if (sortConfig !== null) {
       sortableItems.sort((a, b) => {
         const aValue = a[sortConfig.key];
@@ -72,7 +75,7 @@ export default function EmojisPage() {
       });
     }
     return sortableItems;
-  }, [emojiList, sortConfig]);
+  }, [emojiListWithViews, sortConfig]);
 
   const requestSort = (key: keyof Emoji) => {
     let direction: 'ascending' | 'descending' = 'ascending';
@@ -90,7 +93,7 @@ export default function EmojisPage() {
   };
 
   const handleDelete = (emojiId: string, emojiTitle: string) => {
-    setEmojiList(emojiList.filter((emoji) => emoji.id !== emojiId));
+    deleteEmoji(emojiId);
     toast({
       title: t('emojis_toast_deleted_title'),
       description: t('emojis_toast_deleted_desc', { title: emojiTitle }),
@@ -105,11 +108,11 @@ export default function EmojisPage() {
   const handleAddEmoji = (newEmoji: Omit<Emoji, 'id' | 'related' | 'views'>) => {
     const emojiToAdd: Emoji = {
       ...newEmoji,
-      id: newEmoji.title.toLowerCase().replace(/ /g, '-'),
+      id: newEmoji.title.toLowerCase().replace(/ /g, '-').replace(/[^a-z0-9-]/g, ''),
       related: [],
       views: 0,
     };
-    setEmojiList([emojiToAdd, ...emojiList]);
+    addEmoji(emojiToAdd);
     toast({
       title: t('emojis_toast_added_title'),
       description: t('emojis_toast_added_desc', { title: newEmoji.title }),
@@ -118,7 +121,7 @@ export default function EmojisPage() {
   };
   
   const handleEditEmoji = (updatedEmoji: Emoji) => {
-    setEmojiList(emojiList.map(e => e.id === updatedEmoji.id ? updatedEmoji : e));
+    updateEmoji(updatedEmoji);
     toast({
         title: t('emojis_toast_updated_title'),
         description: t('emojis_toast_updated_desc', { title: updatedEmoji.title }),
@@ -135,7 +138,7 @@ export default function EmojisPage() {
             <div>
                 <CardTitle>{t('emojis_title')}</CardTitle>
                 <CardDescription>
-                  {t('emojis_description', { count: emojiList.length.toString() })}
+                  {t('emojis_description', { count: emojis.length.toString() })}
                 </CardDescription>
             </div>
             <Button size="sm" className="gap-1" onClick={() => setIsAddDialogOpen(true)}>
@@ -176,7 +179,7 @@ export default function EmojisPage() {
                 <TableCell className="font-medium text-2xl">{emoji.emoji}</TableCell>
                 <TableCell className="font-medium">{emoji.title}</TableCell>
                 <TableCell className="capitalize">{t(`category_${emoji.category}`)}</TableCell>
-                <TableCell>{emoji.views.toLocaleString()}</TableCell>
+                <TableCell>{(emoji.views || 0).toLocaleString()}</TableCell>
                 <TableCell className="hidden md:table-cell">
                     <div className="flex gap-1">
                         {Object.entries(emoji.formats).map(([format, files]) => (

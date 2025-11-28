@@ -4,27 +4,29 @@ import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Smile, FilePlus, Download, ArrowRight, Tags, PlusCircle } from "lucide-react";
 import { Button } from '@/components/ui/button';
-import { emojis, pages, categories } from '@/lib/data';
 import { useState, useEffect } from 'react';
 import { useTranslations } from '@/context/translations-context';
+import { useEmojiStore, usePageStore, useCategoryStore } from '@/lib/store';
 
 export default function DashboardPage() {
     const { t, language } = useTranslations();
-    const [emojiCount, setEmojiCount] = useState(0);
-    const [pageCount, setPageCount] = useState(0);
-    const [categoryCount, setCategoryCount] = useState(0);
+    const { emojis } = useEmojiStore();
+    const { pages } = usePageStore();
+    const { categories } = useCategoryStore();
+    
     const [downloadCount, setDownloadCount] = useState(0);
 
     useEffect(() => {
-        setEmojiCount(emojis.length);
-        setPageCount(pages.length);
-        setCategoryCount(categories.length - 1); // Subtract "All" category
-
         const storedDownloads = localStorage.getItem('downloadCount');
         if (storedDownloads) {
             setDownloadCount(parseInt(storedDownloads, 10));
         }
     }, []);
+    
+    const emojiCount = emojis.length;
+    const pageCount = pages.length;
+    const categoryCount = categories.length > 0 ? categories.length - 1 : 0; // Subtract "All" category
+
 
     const stats = [
         { title: t('dashboard_total_emojis'), value: emojiCount.toLocaleString(), icon: Smile, change: "20.1%", color: "bg-blue-500" },

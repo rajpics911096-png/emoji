@@ -4,7 +4,7 @@
 import { notFound, useParams } from 'next/navigation';
 import Head from 'next/head';
 import Link from 'next/link';
-import { getEmojiById, getRelatedEmojis, categories } from '@/lib/data';
+import { getRelatedEmojis } from '@/lib/data';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { EmojiCard } from '@/components/emoji-card';
@@ -18,11 +18,16 @@ import { useSiteSettings } from '@/context/site-settings-context';
 import { AdSlot } from '@/components/ad-slot';
 import { JsonLd } from '@/components/json-ld';
 import type { Thing } from 'schema-dts';
+import { useCategoryStore, useEmojiStore } from '@/lib/store';
 
 export default function EmojiPage() {
   const params = useParams<{ id: string, lang: string }>();
   const { id, lang } = params;
+  
+  const { getEmojiById } = useEmojiStore();
+  const { categories } = useCategoryStore();
   const emoji = getEmojiById(id);
+
   const effectRan = useRef(false);
   const { t } = useTranslations();
   const { settings } = useSiteSettings();
@@ -62,7 +67,7 @@ export default function EmojiPage() {
   }
 
   const category = categories.find(c => c.id === emoji.category);
-  const related = getRelatedEmojis(emoji);
+  const related = getRelatedEmojis(emoji.id);
 
   const metaTitle = emoji.metaTitle || emoji.title;
   const metaDescription = emoji.metaDescription || settings.metaDescription;

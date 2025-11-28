@@ -17,12 +17,13 @@ import { ThemeToggle } from './theme-toggle';
 import { LanguageSwitcher } from './language-switcher';
 import { useTranslations } from '@/context/translations-context';
 import { useState } from 'react';
-import { categories } from '@/lib/data';
 import { AdSlot } from './ad-slot';
+import { useCategoryStore } from '@/lib/store';
 
 export default function Header({ lang }: { lang: string }) {
   const { settings } = useSiteSettings();
   const { t } = useTranslations();
+  const { categories } = useCategoryStore();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navCategories = categories.filter(c => c.id !== 'all').slice(0, 5);
 

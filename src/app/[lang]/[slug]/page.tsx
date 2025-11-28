@@ -5,17 +5,18 @@ import { notFound, useParams } from 'next/navigation';
 import Head from 'next/head';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
-import { pages as allPages } from '@/lib/data';
 import { useSiteSettings } from '@/context/site-settings-context';
+import { usePageStore } from '@/lib/store';
 
-const getPageBySlug = (slug: string) => {
-    return allPages.find((page) => page.slug === slug);
+const getPageBySlug = (slug: string, pages: any[]) => {
+    return pages.find((page) => page.slug === slug);
 }
 
 export default function GenericPage() {
   const params = useParams<{ slug: string, lang: string }>();
   const { slug, lang } = params;
-  const page = getPageBySlug(slug);
+  const { pages } = usePageStore();
+  const page = getPageBySlug(slug, pages);
   const { settings } = useSiteSettings();
 
   if (!page || page.status === 'draft') {

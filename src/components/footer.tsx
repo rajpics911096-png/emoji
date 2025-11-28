@@ -3,11 +3,11 @@
 
 import Link from 'next/link';
 import { SvgIcon } from './svg-icon';
-import { footerContent } from '@/lib/data';
 import { iconMap } from '@/lib/icon-map';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { useTranslations } from '@/context/translations-context';
 import { AdSlot } from './ad-slot';
+import { useFooterStore } from '@/lib/store';
 
 const SocialIcon = ({ iconName, className }: { iconName: string; className?: string }) => {
   const IconComponent = iconMap[iconName] || iconMap.twitter;
@@ -17,7 +17,8 @@ const SocialIcon = ({ iconName, className }: { iconName: string; className?: str
 export default function Footer({ lang }: { lang: string }) {
   const { settings } = useSiteSettings();
   const { t } = useTranslations();
-  const { navigation, legal, social } = footerContent;
+  const { navigation, legal, social } = useFooterStore();
+  
   return (
     <>
     <AdSlot location="footer" />

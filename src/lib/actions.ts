@@ -1,8 +1,13 @@
+
 "use server";
 
 import { intelligentEmojiSearch } from "@/ai/flows/intelligent-emoji-search";
-import { emojis } from "@/lib/data";
+import { emojis as initialEmojis } from "@/lib/data";
 import type { Emoji } from "@/lib/types";
+
+// This is a server action, but for the prototype, we're using mock data.
+// In a real app, you would fetch from a database.
+// The store is client-side only, so we rely on the initial data here.
 
 export async function searchEmojisAction(
   query: string
@@ -22,7 +27,7 @@ export async function searchEmojisAction(
     await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
 
     const lowercasedQuery = query.toLowerCase();
-    const results = emojis.filter(
+    const results = initialEmojis.filter(
       (emoji) =>
         emoji.title.toLowerCase().includes(lowercasedQuery) ||
         emoji.description.toLowerCase().includes(lowercasedQuery) ||

@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -23,10 +24,10 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import type { Emoji, EmojiFormatFile } from "@/lib/types";
-import { categories } from "@/lib/data";
 import { useEffect, useState } from "react";
 import { useTranslations } from "@/context/translations-context";
 import { UploadedFileCard } from "./uploaded-file-card";
+import { useCategoryStore } from "@/lib/store";
 
 
 const emojiSchema = z.object({
@@ -34,6 +35,8 @@ const emojiSchema = z.object({
   title: z.string().min(1, "Title is required."),
   description: z.string().min(1, "Description is required."),
   category: z.string().min(1, "Category is required."),
+  metaTitle: z.string().optional(),
+  metaDescription: z.string().optional(),
 });
 
 type EmojiFormData = z.infer<typeof emojiSchema>;
@@ -47,6 +50,7 @@ interface EditEmojiDialogProps {
 
 export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: EditEmojiDialogProps) {
   const { t } = useTranslations();
+  const { categories } = useCategoryStore();
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, EmojiFormatFile[]>>(emoji.formats);
 
   const {
@@ -62,6 +66,8 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
       title: emoji.title,
       description: emoji.description,
       category: emoji.category,
+      metaTitle: emoji.metaTitle,
+      metaDescription: emoji.metaDescription,
     },
   });
 
@@ -72,6 +78,8 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
         title: emoji.title,
         description: emoji.description,
         category: emoji.category,
+        metaTitle: emoji.metaTitle,
+        metaDescription: emoji.metaDescription,
       });
       setUploadedFiles(emoji.formats);
     }
@@ -163,6 +171,18 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
               <div className="md:col-span-3">
                 <Input id="title" {...register("title")} />
                 {errors.title && <p className="text-destructive text-sm mt-1">{errors.title.message}</p>}
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+              <Label htmlFor="metaTitle" className="text-left md:text-right">Meta Title</Label>
+              <div className="md:col-span-3">
+                <Input id="metaTitle" {...register("metaTitle")} />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 items-start gap-4">
+              <Label htmlFor="metaDescription" className="text-left md:text-right pt-2">Meta Description</Label>
+              <div className="md:col-span-3">
+                <Textarea id="metaDescription" {...register("metaDescription")} />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 items-start gap-4">

@@ -242,11 +242,11 @@ export function getEmojisByCategory(categoryId: string) {
   return emojis.filter((emoji) => emoji.category === categoryId);
 }
 
-export function getRelatedEmojis(emoji: Emoji) {
+export function getRelatedEmojis(emojiId: string) {
+    const emoji = emojis.find(e => e.id === emojiId);
+    if (!emoji) return [];
     return emojis.filter(e => emoji.related.includes(e.id));
 }
-
-export const downloadTimer = 10;
 
 
 export const footerContent: FooterContent = {

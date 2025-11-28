@@ -12,7 +12,6 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, PlusCircle, ExternalLink } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { categories as initialCategories } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import type { EmojiCategory } from "@/lib/types";
@@ -21,6 +20,7 @@ import { EditCategoryDialog } from "./components/edit-category-dialog";
 import { SvgIcon } from "@/components/svg-icon";
 import Link from "next/link";
 import { useTranslations } from "@/context/translations-context";
+import { useCategoryStore } from "@/lib/store";
 
 export default function CategoriesPage() {
   const { t, language } = useTranslations();
@@ -28,7 +28,8 @@ export default function CategoriesPage() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<EmojiCategory | null>(null);
-  const [categoryList, setCategoryList] = useState<EmojiCategory[]>(initialCategories);
+  
+  const { categories, addCategory, updateCategory, deleteCategory } = useCategoryStore();
 
   const handleDelete = (categoryId: string, categoryName: string) => {
     if (categoryId === 'all') {
@@ -39,7 +40,7 @@ export default function CategoriesPage() {
         });
         return;
     }
-    setCategoryList(categoryList.filter((category) => category.id !== categoryId));
+    deleteCategory(categoryId);
     toast({
       title: t('categories_toast_deleted_title'),
       description: t('categories_toast_deleted_desc', { name: categoryName }),
@@ -54,9 +55,9 @@ export default function CategoriesPage() {
   const handleAddCategory = (newCategory: Omit<EmojiCategory, 'id'>) => {
     const categoryToAdd: EmojiCategory = {
       ...newCategory,
-      id: newCategory.name.toLowerCase().replace(/ /g, '-'),
+      id: newCategory.name.toLowerCase().replace(/ /g, '-').replace(/[^a-z0-9-]/g, ''),
     };
-    setCategoryList([categoryToAdd, ...categoryList]);
+    addCategory(categoryToAdd);
     toast({
       title: t('categories_toast_added_title'),
       description: t('categories_toast_added_desc', { name: newCategory.name }),
@@ -65,7 +66,7 @@ export default function CategoriesPage() {
   };
   
   const handleEditCategory = (updatedCategory: EmojiCategory) => {
-    setCategoryList(categoryList.map(c => c.id === updatedCategory.id ? updatedCategory : c));
+    updateCategory(updatedCategory);
     toast({
         title: t('categories_toast_updated_title'),
         description: t('categories_toast_updated_desc', { name: updatedCategory.name }),
@@ -102,7 +103,7 @@ export default function CategoriesPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {categoryList.map((category) => (
+            {categories.map((category) => (
               <TableRow key={category.id}>
                 <TableCell className="font-medium text-2xl">
                   <SvgIcon svg={category.icon} className="h-6 w-6" />

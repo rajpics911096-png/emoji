@@ -2,12 +2,13 @@
 'use client';
 
 import { notFound, useParams, useSearchParams } from 'next/navigation';
-import { categories, getEmojisByCategory } from '@/lib/data';
 import { EmojiCard } from '@/components/emoji-card';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import IntelligentSearchBar from '@/components/intelligent-search-bar';
 import { useTranslations } from '@/context/translations-context';
+import { useCategoryStore, useEmojiStore } from '@/lib/store';
+import { useMemo } from 'react';
 
 export default function CategoryPage() {
   const searchParams = useSearchParams();
@@ -15,6 +16,9 @@ export default function CategoryPage() {
   const { category: categorySlug, lang } = params;
 
   const { t } = useTranslations();
+  const { categories } = useCategoryStore();
+  const { getEmojisByCategory } = useEmojiStore();
+  
   const category = categories.find((c) => c.id === categorySlug);
   if (!category) {
     notFound();
@@ -22,15 +26,19 @@ export default function CategoryPage() {
 
   const categoryName = t(category.name);
 
-  let emojiList = getEmojisByCategory(categorySlug);
   const searchTerm = searchParams.get('search');
+  
+  const emojiList = useMemo(() => {
+    let emojis = getEmojisByCategory(categorySlug);
+    if (searchTerm) {
+        emojis = emojis.filter(emoji => 
+            emoji.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            emoji.description.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }
+    return emojis;
+  }, [getEmojisByCategory, categorySlug, searchTerm]);
 
-  if (searchTerm) {
-    emojiList = emojiList.filter(emoji => 
-        emoji.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        emoji.description.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }
 
   return (
     <>

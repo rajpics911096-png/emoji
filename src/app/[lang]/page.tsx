@@ -8,8 +8,6 @@ import {
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { categories } from '@/lib/data';
-import { emojis } from '@/lib/data';
 import { EmojiCard } from '@/components/emoji-card';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
@@ -18,12 +16,15 @@ import { Card, CardContent } from '@/components/ui/card';
 import { SvgIcon } from '@/components/svg-icon';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { useTranslations } from '@/context/translations-context';
+import { useCategoryStore, useEmojiStore } from '@/lib/store';
 
 export default function Home() {
   const params = useParams<{ lang: string }>();
   const lang = params.lang;
   const { settings } = useSiteSettings();
   const { t } = useTranslations();
+  const { emojis } = useEmojiStore();
+  const { categories } = useCategoryStore();
   const featuredEmojis = emojis.slice(0, 8);
 
   return (

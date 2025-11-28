@@ -11,21 +11,19 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { footerContent as initialFooterContent } from '@/lib/data';
-import { useState } from 'react';
-import type { FooterContent, LinkItem, SocialLink } from '@/lib/types';
+import type { LinkItem, SocialLink } from '@/lib/types';
 import { Trash2 } from 'lucide-react';
 import { useTranslations } from '@/context/translations-context';
+import { useFooterStore } from '@/lib/store';
 
 export default function FooterSettingsPage() {
   const { t } = useTranslations();
   const { toast } = useToast();
-  const [footerContent, setFooterContent] =
-    useState<FooterContent>(initialFooterContent);
+  const { navigation, legal, social, updateLink, addLink, removeLink, updateSocial, addSocial } = useFooterStore();
 
   const handleSave = () => {
-    // In a real app, you would send this data to your backend to save it.
-    console.log('Saving footer settings:', { footerContent });
+    // Note: zustand persist middleware already saves on change.
+    // This button is here for user feedback.
     toast({
       title: t('settings_toast_saved_title'),
       description: t('settings_toast_saved_desc'),
@@ -33,36 +31,20 @@ export default function FooterSettingsPage() {
   };
 
   const handleFooterChange = <T extends LinkItem | SocialLink>(
-    section: keyof FooterContent,
+    section: 'navigation' | 'legal' | 'social',
     index: number,
     field: keyof T,
     value: string
   ) => {
-    const newContent = { ...footerContent };
-    (newContent[section][index] as any)[field] = value;
-    setFooterContent(newContent);
+    if (section === 'social') {
+        const link = social[index];
+        updateSocial(index, {...link, [field]: value});
+    } else {
+        const link = section === 'navigation' ? navigation[index] : legal[index];
+        updateLink(section, index, {...link, [field]: value});
+    }
   };
 
-  const handleAddLink = (section: 'navigation' | 'legal') => {
-    const newContent = { ...footerContent };
-    newContent[section].push({ label: 'New Link', href: '#' });
-    setFooterContent(newContent);
-  };
-
-  const handleRemoveLink = (
-    section: 'navigation' | 'legal' | 'social',
-    index: number
-  ) => {
-    const newContent = { ...footerContent };
-    newContent[section].splice(index, 1);
-    setFooterContent(newContent);
-  };
-
-  const handleAddSocial = () => {
-    const newContent = { ...footerContent };
-    newContent.social.push({ icon: 'twitter', href: '#', 'aria-label': 'Twitter' });
-    setFooterContent(newContent);
-  };
 
   return (
     <div className="mx-auto max-w-4xl flex-1 space-y-4 md:space-y-8">
@@ -81,12 +63,12 @@ export default function FooterSettingsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => handleAddLink('navigation')}
+                onClick={() => addLink('navigation', { label: 'New Link', href: '#' })}
               >
                 {t('footer_settings_add_link_button')}
               </Button>
             </div>
-            {footerContent.navigation.map((link, index) => (
+            {navigation.map((link, index) => (
               <div key={index} className="flex items-end gap-2">
                 <div className="grid grid-cols-2 gap-2 flex-1">
                   <div className="space-y-1">
@@ -128,7 +110,7 @@ export default function FooterSettingsPage() {
                   variant="ghost"
                   size="icon"
                   className="h-9 w-9"
-                  onClick={() => handleRemoveLink('navigation', index)}
+                  onClick={() => removeLink('navigation', index)}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -141,12 +123,12 @@ export default function FooterSettingsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => handleAddLink('legal')}
+                onClick={() => addLink('legal', { label: 'New Link', href: '#' })}
               >
                 {t('footer_settings_add_link_button')}
               </Button>
             </div>
-            {footerContent.legal.map((link, index) => (
+            {legal.map((link, index) => (
               <div key={index} className="flex items-end gap-2">
                 <div className="grid grid-cols-2 gap-2 flex-1">
                   <div className="space-y-1">
@@ -183,7 +165,7 @@ export default function FooterSettingsPage() {
                   variant="ghost"
                   size="icon"
                   className="h-9 w-9"
-                  onClick={() => handleRemoveLink('legal', index)}
+                  onClick={() => removeLink('legal', index)}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -193,11 +175,11 @@ export default function FooterSettingsPage() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-medium">{t('footer_settings_social_links')}</h3>
-              <Button variant="outline" size="sm" onClick={handleAddSocial}>
+              <Button variant="outline" size="sm" onClick={() => addSocial({ icon: 'twitter', href: '#', 'aria-label': 'Twitter' })}>
                 {t('footer_settings_add_social_button')}
               </Button>
             </div>
-            {footerContent.social.map((link, index) => (
+            {social.map((link, index) => (
               <div key={index} className="flex items-end gap-2">
                 <div className="grid grid-cols-3 gap-2 flex-1">
                   <div className="space-y-1">
@@ -262,7 +244,7 @@ export default function FooterSettingsPage() {
                   variant="ghost"
                   size="icon"
                   className="h-9 w-9"
-                  onClick={() => handleRemoveLink('social', index)}
+                  onClick={() => removeLink('social', index)}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
