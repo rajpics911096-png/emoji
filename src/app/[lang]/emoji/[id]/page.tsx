@@ -120,6 +120,10 @@ export default function EmojiPage() {
             </aside>
           </div>
           
+          <div className="my-8">
+            <AdSlot location="below_download" />
+          </div>
+
           {related.length > 0 && (
             <section className="mt-16 md:mt-24">
               <h2 className="text-3xl font-headline font-bold text-center mb-10">
