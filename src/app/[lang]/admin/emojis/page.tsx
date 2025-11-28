@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -106,13 +107,7 @@ export default function EmojisPage() {
   };
 
   const handleAddEmoji = (newEmoji: Omit<Emoji, 'id' | 'related' | 'views'>) => {
-    const emojiToAdd: Emoji = {
-      ...newEmoji,
-      id: newEmoji.title.toLowerCase().replace(/ /g, '-').replace(/[^a-z0-9-]/g, ''),
-      related: [],
-      views: 0,
-    };
-    addEmoji(emojiToAdd);
+    addEmoji(newEmoji);
     toast({
       title: t('emojis_toast_added_title'),
       description: t('emojis_toast_added_desc', { title: newEmoji.title }),

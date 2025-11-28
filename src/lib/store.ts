@@ -1,3 +1,4 @@
+
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { Emoji, EmojiCategory, FooterContent, Page, LinkItem, SocialLink } from './types';
@@ -6,7 +7,7 @@ import { emojis as initialEmojis, categories as initialCategories, pages as init
 // Emoji Store
 interface EmojiState {
   emojis: Emoji[];
-  addEmoji: (emoji: Emoji) => void;
+  addEmoji: (emoji: Omit<Emoji, 'id' | 'related' | 'views'>) => void;
   updateEmoji: (emoji: Emoji) => void;
   deleteEmoji: (emojiId: string) => void;
   getEmojiById: (id: string) => Emoji | undefined;
@@ -18,7 +19,15 @@ export const useEmojiStore = create<EmojiState>()(
   persist(
     (set, get) => ({
       emojis: initialEmojis,
-      addEmoji: (emoji) => set((state) => ({ emojis: [emoji, ...state.emojis] })),
+      addEmoji: (newEmoji) => {
+        const emojiToAdd: Emoji = {
+            ...newEmoji,
+            id: newEmoji.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+            related: [],
+            views: 0,
+        };
+        set((state) => ({ emojis: [emojiToAdd, ...state.emojis] }))
+      },
       updateEmoji: (emoji) => set((state) => ({
         emojis: state.emojis.map((e) => (e.id === emoji.id ? emoji : e)),
       })),
