@@ -1,3 +1,4 @@
+
 import { Toaster } from '@/components/ui/toaster';
 import '../globals.css';
 import { cn } from '@/lib/utils';
@@ -6,13 +7,13 @@ import type { ReactNode } from 'react';
 
 export default function RootLayout({
   children,
-  params: { lang },
+  params,
 }: Readonly<{
   children: React.ReactNode;
   params: { lang: string };
 }>) {
   return (
-    <html lang={lang} dir={lang === 'ar' || lang === 'ur' ? 'rtl' : 'ltr'} suppressHydrationWarning>
+    <html lang={params.lang} dir={params.lang === 'ar' || params.lang === 'ur' ? 'rtl' : 'ltr'} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -26,7 +27,7 @@ export default function RootLayout({
         />
       </head>
       <body className={cn('font-body antialiased min-h-screen flex flex-col')}>
-        <ClientProviders lang={lang}>
+        <ClientProviders lang={params.lang}>
           {children}
           <Toaster />
         </ClientProviders>
