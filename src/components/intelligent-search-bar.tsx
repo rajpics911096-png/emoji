@@ -53,6 +53,7 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
   
   const handleSelect = (id: string) => {
     setIsOpen(false);
+    setQuery('');
     router.push(`/${lang}/emoji/${id}`);
   };
 
@@ -92,6 +93,10 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
                       <CommandItem
                         key={emoji.id}
                         value={emoji.title}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }}
                         onSelect={() => handleSelect(emoji.id)}
                         className="cursor-pointer"
                       >
