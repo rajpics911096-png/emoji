@@ -58,7 +58,7 @@ export default function Home() {
       <Header lang={lang} />
       <main className="flex-1">
         
-        <section className="relative py-16 md:py-20 bg-primary/10">
+        <section className="relative py-12 md:py-16 bg-primary/10">
           <div className="container mx-auto text-center px-4">
             <h1 className="text-4xl md:text-6xl font-headline font-bold text-primary tracking-tighter">
               {t('welcomeMessage', { siteName: settings.name })}
@@ -83,13 +83,13 @@ export default function Home() {
             <h2 className="text-3xl font-headline font-bold text-center mb-10">
               {t('exploreCategories')}
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-6 text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
               {sortedCategories.map((category) => (
                 <Link key={category.id} href={`/${lang}/emojis/${category.id}`}>
-                  <Card className="group transform hover:-translate-y-2 transition-transform duration-300 ease-in-out hover:shadow-xl">
-                    <CardContent className="p-6 flex flex-col items-center justify-center">
-                      <SvgIcon svg={category.icon} className="w-12 h-12 mb-4 text-primary transition-colors group-hover:text-accent-foreground" />
-                      <h3 className="text-lg font-headline font-semibold">
+                  <Card className="group transform hover:-translate-y-1 transition-transform duration-300 ease-in-out hover:shadow-xl h-full">
+                    <CardContent className="p-4 flex flex-col items-center justify-center text-center h-full">
+                      <SvgIcon svg={category.icon} className="w-14 h-14 mb-3 text-primary transition-colors group-hover:text-accent-foreground" />
+                      <h3 className="text-base font-headline font-semibold leading-tight">
                         {t(category.name)}
                       </h3>
                     </CardContent>

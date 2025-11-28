@@ -193,11 +193,11 @@ export default function FileDownloadPage() {
 
                     <section>
                       <h2 className="text-2xl font-headline font-bold text-center mb-6">{t('exploreCategories')}</h2>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                         {categories.map((cat) => (
-                          <Link key={cat.id} href={`/${lang}/emojis/${cat.id}`} className="group flex flex-col items-center gap-2 p-3 rounded-md hover:bg-muted/50 transition-colors border">
-                            <SvgIcon svg={cat.icon} className="w-8 h-8 text-primary" />
-                            <p className="font-semibold text-sm text-center group-hover:text-primary transition-colors">{t(cat.name)}</p>
+                          <Link key={cat.id} href={`/${lang}/emojis/${cat.id}`} className="group flex flex-col items-center justify-center gap-2 p-3 rounded-lg hover:bg-muted/50 transition-colors border aspect-square">
+                            <SvgIcon svg={cat.icon} className="w-10 h-10 text-primary transition-colors group-hover:text-accent-foreground" />
+                            <p className="font-semibold text-sm text-center leading-tight group-hover:text-primary transition-colors">{t(cat.name)}</p>
                           </Link>
                         ))}
                       </div>
