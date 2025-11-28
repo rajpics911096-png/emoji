@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -24,6 +25,7 @@ import * as z from "zod";
 import type { Page } from "@/lib/types";
 import { useTranslations } from "@/context/translations-context";
 import { RichTextEditor } from "@/components/rich-text-editor";
+import { Textarea } from "@/components/ui/textarea";
 
 
 const pageSchema = z.object({
@@ -31,6 +33,8 @@ const pageSchema = z.object({
   slug: z.string().min(1, "Slug is required.").regex(/^[a-z0-9-]+$/, "Slug must be lowercase with no spaces."),
   status: z.enum(["published", "draft"]),
   content: z.string().optional(),
+  metaTitle: z.string().optional(),
+  metaDescription: z.string().optional(),
 });
 
 type PageFormData = z.infer<typeof pageSchema>;
@@ -123,6 +127,18 @@ export function AddPageDialog({ isOpen, onOpenChange, onAddPage }: AddPageDialog
                         render={({ field }) => <RichTextEditor value={field.value} onChange={field.onChange} />}
                     />
                 </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+              <Label htmlFor="metaTitle" className="text-left md:text-right">Meta Title</Label>
+              <div className="md:col-span-3">
+                <Input id="metaTitle" {...register("metaTitle")} />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 items-start gap-4">
+              <Label htmlFor="metaDescription" className="text-left md:text-right pt-2">Meta Description</Label>
+              <div className="md:col-span-3">
+                <Textarea id="metaDescription" {...register("metaDescription")} />
+              </div>
             </div>
           </div>
           <DialogFooter>

@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -25,6 +26,7 @@ import type { Page } from "@/lib/types";
 import { useEffect } from "react";
 import { useTranslations } from "@/context/translations-context";
 import { RichTextEditor } from "@/components/rich-text-editor";
+import { Textarea } from "@/components/ui/textarea";
 
 
 const pageSchema = z.object({
@@ -32,6 +34,8 @@ const pageSchema = z.object({
   slug: z.string().min(1, "Slug is required."),
   status: z.enum(["published", "draft"]),
   content: z.string().optional(),
+  metaTitle: z.string().optional(),
+  metaDescription: z.string().optional(),
 });
 
 type PageFormData = z.infer<typeof pageSchema>;
@@ -58,6 +62,8 @@ export function EditPageDialog({ isOpen, onOpenChange, onEditPage, page }: EditP
       slug: page.slug,
       status: page.status,
       content: page.content,
+      metaTitle: page.metaTitle,
+      metaDescription: page.metaDescription,
     },
   });
 
@@ -67,7 +73,9 @@ export function EditPageDialog({ isOpen, onOpenChange, onEditPage, page }: EditP
         title: page.title,
         slug: page.slug,
         status: page.status,
-        content: page.content
+        content: page.content,
+        metaTitle: page.metaTitle,
+        metaDescription: page.metaDescription,
       });
     }
   }, [page, reset]);
@@ -129,6 +137,18 @@ export function EditPageDialog({ isOpen, onOpenChange, onEditPage, page }: EditP
                         render={({ field }) => <RichTextEditor value={field.value} onChange={field.onChange} />}
                     />
                 </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+              <Label htmlFor="metaTitle" className="text-left md:text-right">Meta Title</Label>
+              <div className="md:col-span-3">
+                <Input id="metaTitle" {...register("metaTitle")} />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 items-start gap-4">
+              <Label htmlFor="metaDescription" className="text-left md:text-right pt-2">Meta Description</Label>
+              <div className="md:col-span-3">
+                <Textarea id="metaDescription" {...register("metaDescription")} />
+              </div>
             </div>
           </div>
           <DialogFooter>

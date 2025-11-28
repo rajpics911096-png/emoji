@@ -2,9 +2,11 @@
 'use client';
 
 import { notFound, useParams } from 'next/navigation';
+import Head from 'next/head';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { pages as allPages } from '@/lib/data';
+import { useSiteSettings } from '@/context/site-settings-context';
 
 const getPageBySlug = (slug: string) => {
     return allPages.find((page) => page.slug === slug);
@@ -14,13 +16,24 @@ export default function GenericPage() {
   const params = useParams<{ slug: string, lang: string }>();
   const { slug, lang } = params;
   const page = getPageBySlug(slug);
+  const { settings } = useSiteSettings();
 
   if (!page || page.status === 'draft') {
     notFound();
   }
+  
+  const metaTitle = page.metaTitle || page.title;
+  const metaDescription = page.metaDescription || settings.metaDescription;
+
 
   return (
     <>
+      <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
+      </Head>
       <Header lang={lang} />
       <main className="flex-1 py-12 md:py-16">
         <div className="container mx-auto px-4">

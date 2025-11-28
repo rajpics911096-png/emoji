@@ -51,6 +51,8 @@ export type Page = {
   slug: string;
   status: 'published' | 'draft';
   content?: string; // Content will be markdown or HTML
+  metaTitle?: string;
+  metaDescription?: string;
 }
 
 export type AdSetting = {
@@ -87,5 +89,3 @@ export type SiteSettings = {
   adsTxtContent?: string;
   colors?: ColorSettings;
 };
-
-    
