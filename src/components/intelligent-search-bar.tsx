@@ -65,16 +65,16 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
         }}
       >
         <div className="relative flex items-center w-full bg-background border border-input rounded-full shadow-sm focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background transition-all">
-            <Search className="absolute left-4 h-5 w-5 text-muted-foreground pointer-events-none" />
             <Input
               type="search"
               placeholder={t('searchPlaceholder')}
-              className="pl-12 pr-4 h-12 text-base bg-transparent border-none rounded-full focus-visible:ring-0 focus-visible:ring-offset-0 w-full"
+              className="pl-4 pr-12 h-14 text-lg bg-transparent border-none rounded-full focus-visible:ring-0 focus-visible:ring-offset-0 w-full"
               value={query}
               onChange={handleInputChange}
               onFocus={() => query && setIsOpen(true)}
               onBlur={() => setTimeout(() => setIsOpen(false), 200)}
             />
+            <Search className="absolute right-5 h-6 w-6 text-muted-foreground pointer-events-none" />
         </div>
       </form>
        <div className={cn("absolute top-full mt-2 w-full z-10", isOpen ? "block" : "hidden")}>
