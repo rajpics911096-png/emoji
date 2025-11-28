@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useTransition, useEffect, useRef } from "react";
+import { useState, useTransition, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -28,8 +28,19 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
   const router = useRouter();
   const { t } = useTranslations();
   const searchContainerRef = useRef<HTMLDivElement>(null);
-  const isPointerDownOnList = useRef(false);
+  
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
 
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     if (debouncedQuery) {
@@ -49,11 +60,11 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
     setQuery(value);
   };
   
-  const handleSelect = (id: string) => {
+  const handleSelect = useCallback((id: string) => {
     setIsOpen(false);
     setQuery('');
     router.push(`/${lang}/emoji/${id}`);
-  };
+  }, [lang, router]);
   
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -62,13 +73,6 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
          router.push(`/${lang}/emojis/all?search=${query}`)
       }
   };
-
-  const handleBlur = () => {
-    if (!isPointerDownOnList.current) {
-        setIsOpen(false);
-    }
-  };
-
 
   return (
     <div className="relative" ref={searchContainerRef}>
@@ -84,22 +88,17 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
               value={query}
               onChange={handleInputChange}
               onFocus={() => query && setIsOpen(true)}
-              onBlur={handleBlur}
             />
             <Search className="absolute right-5 h-6 w-6 text-muted-foreground pointer-events-none" />
         </div>
       </form>
        <div className={cn("absolute top-full mt-2 w-full z-10", isOpen ? "block" : "hidden")}>
-          <Command 
-            className="rounded-lg border shadow-md"
-            onPointerDown={() => { isPointerDownOnList.current = true; }}
-            onPointerUp={() => { isPointerDownOnList.current = false; }}
-          >
+          <Command className="rounded-lg border shadow-md">
             <CommandList>
               {isPending && <CommandLoading>{t('searchLoading')}</CommandLoading>}
               {!isPending && !results.length && debouncedQuery && <CommandEmpty>{t('searchNoResults')}</CommandEmpty>}
               {results.length > 0 && (
-                 <CommandGroup heading={t('searchResults')}>
+                 <CommandGroup>
                     {results.map((emoji) => (
                       <CommandItem
                         key={emoji.id}
