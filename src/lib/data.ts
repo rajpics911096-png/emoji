@@ -51,7 +51,8 @@ export const emojis: Emoji[] = [
       ],
     },
     related: ['rolling-on-the-floor-laughing', 'winking-face'],
-    views: 0,
+    views: 1234,
+    createdAt: new Date('2023-01-15T09:30:00Z').getTime(),
   },
   {
     id: 'rolling-on-the-floor-laughing',
@@ -67,7 +68,8 @@ export const emojis: Emoji[] = [
       video: [],
     },
     related: ['grinning-face', 'winking-face'],
-    views: 0,
+    views: 5678,
+    createdAt: new Date('2023-02-20T14:00:00Z').getTime(),
   },
   {
     id: 'winking-face',
@@ -86,7 +88,8 @@ export const emojis: Emoji[] = [
       video: [],
     },
     related: ['grinning-face', 'rolling-on-the-floor-laughing'],
-    views: 0,
+    views: 9101,
+    createdAt: new Date('2023-03-10T11:20:00Z').getTime(),
   },
   {
     id: 'cat-face',
@@ -102,7 +105,8 @@ export const emojis: Emoji[] = [
       video: [],
     },
     related: ['dog-face', 'lion-face'],
-    views: 0,
+    views: 1121,
+    createdAt: new Date('2023-04-05T18:00:00Z').getTime(),
   },
   {
     id: 'dog-face',
@@ -118,7 +122,8 @@ export const emojis: Emoji[] = [
       video: [],
     },
     related: ['cat-face', 'lion-face'],
-    views: 0,
+    views: 3141,
+    createdAt: new Date('2023-05-01T08:00:00Z').getTime(),
   },
   {
     id: 'lion-face',
@@ -133,7 +138,8 @@ export const emojis: Emoji[] = [
       video: [{ name: 'lion.mp4', size: '4.5 MB', url: '/placeholder.mp4' }],
     },
     related: ['cat-face', 'dog-face'],
-    views: 0,
+    views: 5161,
+    createdAt: new Date('2023-06-22T22:00:00Z').getTime(),
   },
   {
     id: 'pizza',
@@ -148,7 +154,8 @@ export const emojis: Emoji[] = [
       video: [],
     },
     related: ['hamburger', 'french-fries'],
-    views: 0,
+    views: 7181,
+    createdAt: new Date('2023-07-14T12:00:00Z').getTime(),
   },
   {
     id: 'hamburger',
@@ -163,7 +170,8 @@ export const emojis: Emoji[] = [
       video: [],
     },
     related: ['pizza', 'french-fries'],
-    views: 0,
+    views: 9191,
+    createdAt: new Date('2023-08-18T19:45:00Z').getTime(),
   },
   {
     id: 'french-fries',
@@ -178,7 +186,8 @@ export const emojis: Emoji[] = [
         video: []
     },
     related: ['pizza', 'hamburger'],
-    views: 0,
+    views: 2123,
+    createdAt: new Date('2023-09-03T16:15:00Z').getTime(),
   },
   {
     id: 'rocket',
@@ -193,7 +202,8 @@ export const emojis: Emoji[] = [
         video: []
     },
     related: ['airplane', 'statue-of-liberty'],
-    views: 0,
+    views: 4252,
+    createdAt: new Date('2023-10-29T10:00:00Z').getTime(),
   },
     {
     id: 'airplane',
@@ -208,7 +218,8 @@ export const emojis: Emoji[] = [
         video: []
     },
     related: ['rocket', 'statue-of-liberty'],
-    views: 0,
+    views: 6272,
+    createdAt: new Date('2023-11-11T11:11:00Z').getTime(),
   },
   {
     id: 'statue-of-liberty',
@@ -223,7 +234,8 @@ export const emojis: Emoji[] = [
         video: []
     },
     related: ['rocket', 'airplane'],
-    views: 0,
+    views: 8292,
+    createdAt: new Date('2023-12-25T00:00:00Z').getTime(),
   }
 ];
 

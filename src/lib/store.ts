@@ -7,7 +7,7 @@ import { emojis as initialEmojis, categories as initialCategories, pages as init
 // Emoji Store
 interface EmojiState {
   emojis: Emoji[];
-  addEmoji: (emoji: Omit<Emoji, 'id' | 'related' | 'views'>) => void;
+  addEmoji: (emoji: Omit<Emoji, 'id' | 'related' | 'views' | 'createdAt'>) => void;
   updateEmoji: (emoji: Emoji) => void;
   deleteEmoji: (emojiId: string) => void;
   getEmojiById: (id: string) => Emoji | undefined;
@@ -25,6 +25,7 @@ export const useEmojiStore = create<EmojiState>()(
             id: newEmoji.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
             related: [],
             views: 0,
+            createdAt: Date.now(),
         };
         set((state) => ({ emojis: [emojiToAdd, ...state.emojis] }))
       },
@@ -41,13 +42,21 @@ export const useEmojiStore = create<EmojiState>()(
       },
       getRelatedEmojis: (emojiId: string) => {
         const emoji = get().emojis.find(e => e.id === emojiId);
-        if (!emoji) return [];
+        if (!emoji || !emoji.related) return [];
         return get().emojis.filter(e => emoji.related.includes(e.id));
       },
     }),
     {
       name: 'emoji-storage',
       storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.emojis = state.emojis.map(emoji => ({
+            ...emoji,
+            createdAt: emoji.createdAt || new Date('2023-01-01T00:00:00Z').getTime(), // Backfill missing createdAt
+          }));
+        }
+      }
     }
   )
 );

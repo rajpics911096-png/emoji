@@ -20,6 +20,7 @@ export type Emoji = {
   };
   related: string[];
   views: number;
+  createdAt: number;
   metaTitle?: string;
   metaDescription?: string;
 };

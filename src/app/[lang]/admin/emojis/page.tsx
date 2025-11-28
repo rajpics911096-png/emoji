@@ -22,6 +22,8 @@ import { EditEmojiDialog } from "./components/edit-emoji-dialog";
 import Link from "next/link";
 import { useTranslations } from "@/context/translations-context";
 import { useEmojiStore } from "@/lib/store";
+import { format } from 'date-fns';
+
 
 type SortConfig = {
   key: keyof Emoji;
@@ -37,7 +39,7 @@ export default function EmojisPage() {
   
   const { emojis, addEmoji, updateEmoji, deleteEmoji } = useEmojiStore();
   
-  const [sortConfig, setSortConfig] = useState<SortConfig | null>({ key: 'views', direction: 'descending' });
+  const [sortConfig, setSortConfig] = useState<SortConfig | null>({ key: 'createdAt', direction: 'descending' });
   const [emojiListWithViews, setEmojiListWithViews] = useState<Emoji[]>([]);
   
   useEffect(() => {
@@ -45,6 +47,7 @@ export default function EmojisPage() {
     const updatedList = emojis.map(emoji => ({
       ...emoji,
       views: views[emoji.id] || emoji.views || 0,
+      createdAt: emoji.createdAt || 0,
     }));
     setEmojiListWithViews(updatedList);
   }, [emojis]);
@@ -106,7 +109,7 @@ export default function EmojisPage() {
     setIsEditDialogOpen(true);
   };
 
-  const handleAddEmoji = (newEmoji: Omit<Emoji, 'id' | 'related' | 'views'>) => {
+  const handleAddEmoji = (newEmoji: Omit<Emoji, 'id' | 'related' | 'views' | 'createdAt'>) => {
     addEmoji(newEmoji);
     toast({
       title: t('emojis_toast_added_title'),
@@ -162,6 +165,11 @@ export default function EmojisPage() {
                     {t('emojis_table_header_views')} {getSortIndicator('views')}
                 </Button>
               </TableHead>
+               <TableHead>
+                 <Button variant="ghost" onClick={() => requestSort('createdAt')} className="group px-0 h-auto hover:bg-transparent">
+                    Created At {getSortIndicator('createdAt')}
+                </Button>
+              </TableHead>
               <TableHead className="hidden md:table-cell">{t('emojis_table_header_formats')}</TableHead>
               <TableHead>
                 <span className="sr-only">{t('dialog_actions_label')}</span>
@@ -175,6 +183,9 @@ export default function EmojisPage() {
                 <TableCell className="font-medium">{emoji.title}</TableCell>
                 <TableCell className="capitalize">{t(`category_${emoji.category}`)}</TableCell>
                 <TableCell>{(emoji.views || 0).toLocaleString()}</TableCell>
+                <TableCell>
+                  {emoji.createdAt ? format(new Date(emoji.createdAt), 'dd MMM yyyy') : 'N/A'}
+                </TableCell>
                 <TableCell className="hidden md:table-cell">
                     <div className="flex gap-1">
                         {Object.entries(emoji.formats).map(([format, files]) => (
