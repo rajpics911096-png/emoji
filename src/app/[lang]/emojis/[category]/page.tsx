@@ -53,7 +53,7 @@ export default function CategoryPage() {
             </p>
         </div>
         
-        <div className="max-w-2xl mx-auto mb-10 md:mb-12">
+        <div className="max-w-2xl mx-auto my-10 md:my-12">
             <IntelligentSearchBar lang={lang} />
         </div>
         
