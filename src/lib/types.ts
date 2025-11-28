@@ -20,6 +20,8 @@ export type Emoji = {
   };
   related: string[];
   views: number;
+  metaTitle?: string;
+  metaDescription?: string;
 };
 
 export type EmojiCategory = {

@@ -2,6 +2,7 @@
 'use client';
 
 import { notFound, useParams } from 'next/navigation';
+import Head from 'next/head';
 import Link from 'next/link';
 import { getEmojiById, getRelatedEmojis, categories } from '@/lib/data';
 import Header from '@/components/header';
@@ -13,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EmojiDownloads } from './components/emoji-downloads';
 import { useEffect, useMemo, useRef } from 'react';
 import { useTranslations } from '@/context/translations-context';
+import { useSiteSettings } from '@/context/site-settings-context';
 import { AdSlot } from '@/components/ad-slot';
 import { JsonLd } from '@/components/json-ld';
 import type { Thing } from 'schema-dts';
@@ -23,6 +25,7 @@ export default function EmojiPage() {
   const emoji = getEmojiById(id);
   const effectRan = useRef(false);
   const { t } = useTranslations();
+  const { settings } = useSiteSettings();
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'development' && effectRan.current) return;
@@ -46,8 +49,8 @@ export default function EmojiPage() {
     return {
         '@context': 'https://schema.org',
         '@type': 'Thing',
-        name: emoji.title,
-        description: emoji.description,
+        name: emoji.metaTitle || emoji.title,
+        description: emoji.metaDescription || emoji.description,
         image: emojiImage ? `${baseUrl}${emojiImage.url}` : undefined,
         url: `${baseUrl}/${lang}/emoji/${emoji.id}`,
     };
@@ -61,8 +64,17 @@ export default function EmojiPage() {
   const category = categories.find(c => c.id === emoji.category);
   const related = getRelatedEmojis(emoji);
 
+  const metaTitle = emoji.metaTitle || emoji.title;
+  const metaDescription = emoji.metaDescription || settings.metaDescription;
+
   return (
     <>
+      <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
+      </Head>
       <JsonLd data={jsonLdData} />
       <Header lang={lang} />
       <main className="flex-1 py-12 md:py-16">
