@@ -91,9 +91,9 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
                         >
                             <div className="aspect-square bg-muted flex items-center justify-center relative rounded-md overflow-hidden mb-3">
                                 {file.format === 'video' || file.type?.startsWith('video/') ? (
-                                    <video src={file.url} muted loop playsInline className="w-full h-full object-contain" />
+                                    <video src={file.url} autoPlay muted loop playsInline className="w-full h-full object-contain" />
                                 ) : (
-                                    <Image src={file.url} alt={file.name} layout="fill" objectFit="contain" className="p-2" />
+                                    <Image src={file.url} alt={file.name} layout="fill" objectFit="contain" className="p-2" unoptimized={file.format === 'gif'}/>
                                 )}
                             </div>
                             <p className="text-sm font-medium truncate" title={file.name}>{file.name}</p>
