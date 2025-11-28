@@ -6,9 +6,7 @@ import type { Emoji } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Copy, Check, Code, Share2 } from 'lucide-react';
 import { useTranslations } from '@/context/translations-context';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import Link from 'next/link';
-import { SvgIcon } from '@/components/svg-icon';
+import { useToast } from '@/hooks/use-toast';
 
 interface EmojiViewProps {
   emoji: Emoji;
@@ -18,6 +16,7 @@ export function EmojiView({ emoji }: EmojiViewProps) {
   const [isCopied, setIsCopied] = useState(false);
   const [isSvgCopied, setIsSvgCopied] = useState(false);
   const { t } = useTranslations();
+  const { toast } = useToast();
 
   const handleCopy = () => {
     navigator.clipboard.writeText(emoji.emoji);
@@ -35,21 +34,37 @@ export function EmojiView({ emoji }: EmojiViewProps) {
     }
   };
 
+  const copyLinkFallback = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast({
+      title: "Link Copied",
+      description: "The page link has been copied to your clipboard.",
+    });
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: emoji.title,
+      text: `Check out the ${emoji.title} emoji!`,
+      url: window.location.href,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (error) {
+        console.error('Error sharing:', error);
+        // Fallback to copying link if sharing fails (e.g., permission denied, user abort)
+        copyLinkFallback();
+      }
+    } else {
+      // Fallback for browsers that do not support the Web Share API
+      copyLinkFallback();
+    }
+  };
+
+
   const canCopySvg = !!(emoji.formats.png[0] || emoji.formats.image[0]);
-
-  const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
-  const shareTitle = encodeURIComponent(emoji.title);
-  const shareImage = typeof window !== 'undefined' && (emoji.formats.png[0]?.url || emoji.formats.image[0]?.url)
-    ? encodeURIComponent(window.location.origin + (emoji.formats.png[0]?.url || emoji.formats.image[0]?.url))
-    : '';
-
-  const socialShares = [
-    { name: 'facebook', url: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}` },
-    { name: 'twitter', url: `https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitle}` },
-    { name: 'whatsapp', url: `https://api.whatsapp.com/send?text=${shareTitle}%20${shareUrl}` },
-    { name: 'pinterest', url: `https://pinterest.com/pin/create/button/?url=${shareUrl}&media=${shareImage}&description=${shareTitle}` },
-    { name: 'reddit', url: `https://www.reddit.com/submit?url=${shareUrl}&title=${shareTitle}` },
-  ];
 
   return (
     <article>
@@ -81,24 +96,9 @@ export function EmojiView({ emoji }: EmojiViewProps) {
                         )}
                     </Button>
                 )}
-                 <Popover>
-                    <PopoverTrigger asChild>
-                       <Button size="default" variant="outline" className="transition-all">
-                            <Share2 className="mr-2 h-4 w-4" /> Share
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto">
-                        <div className="flex gap-2">
-                            {socialShares.map(social => (
-                                <Button key={social.name} asChild variant="outline" size="icon" title={`Share on ${social.name}`}>
-                                    <Link href={social.url} target="_blank" rel="noopener noreferrer">
-                                        <SvgIcon svg={social.name} className="h-5 w-5" />
-                                    </Link>
-                                </Button>
-                            ))}
-                        </div>
-                    </PopoverContent>
-                </Popover>
+                 <Button onClick={handleShare} size="default" variant="outline" className="transition-all">
+                    <Share2 className="mr-2 h-4 w-4" /> Share
+                </Button>
             </div>
       </div>
     </article>
