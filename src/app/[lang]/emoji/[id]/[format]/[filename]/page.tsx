@@ -93,13 +93,13 @@ const FilePreview = ({ file, format }: { file: EmojiFormatFile; format: string }
 
 
 export default function FileDownloadPage() {
-  const params = useParams<{ id: string; lang: string; format: string; filename: string }>();
+  const params = useParams();
   const { id, lang, format, filename } = params;
   
   const { t } = useTranslations();
   const { getEmojiById } = useEmojiStore();
   const { categories } = useCategoryStore();
-  const emoji = getEmojiById(id);
+  const emoji = getEmojiById(id as string);
 
   const file = useMemo(() => {
     if (!emoji) return null;
@@ -124,7 +124,7 @@ export default function FileDownloadPage() {
 
   return (
     <>
-      <Header lang={lang} />
+      <Header lang={lang as string} />
       <main className="flex-1 py-8 md:py-12 bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4">
             <div className="mb-4">
@@ -139,7 +139,7 @@ export default function FileDownloadPage() {
             <div className="flex flex-col items-center gap-4 text-center">
                  <h1 className="text-3xl font-headline font-bold">{file.name}</h1>
                 <div className="w-full max-w-lg">
-                  <FilePreview file={file} format={format} />
+                  <FilePreview file={file} format={format as string} />
                 </div>
                 
                 <div className="w-full max-w-lg text-center space-y-4">
@@ -160,17 +160,31 @@ export default function FileDownloadPage() {
                     {relatedFiles.length > 0 && (
                         <section>
                           <h2 className="text-2xl font-headline font-bold text-center mb-6">{t('relatedFilesTitle')}</h2>
-                          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2">
+                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
                               {relatedFiles.map(relatedFile => (
-                                  <Link key={relatedFile.url} href={`/${lang}/emoji/${id}/${relatedFile.format}/${encodeURIComponent(relatedFile.name)}`}>
-                                      <Card className="group aspect-square flex items-center justify-center p-1 hover:bg-muted/50 transition-colors overflow-hidden">
-                                         {relatedFile.type?.startsWith('video') ? (
-                                              <video src={relatedFile.url} autoPlay loop muted playsInline className="w-full h-full object-contain" />
-                                          ) : (
-                                              <Image src={relatedFile.url} alt={relatedFile.name} width={40} height={40} objectFit="contain" unoptimized={relatedFile.format === 'gif'} />
-                                          )}
-                                      </Card>
-                                  </Link>
+                                  <Card key={relatedFile.url} className="group overflow-hidden transition-shadow hover:shadow-lg">
+                                    <CardContent className="p-3 flex flex-col h-full">
+                                        <Link 
+                                            href={`/${lang}/emoji/${emoji.id}/${relatedFile.format}/${encodeURIComponent(relatedFile.name)}`}
+                                            className="flex-grow"
+                                        >
+                                            <div className="aspect-square bg-muted flex items-center justify-center relative rounded-md overflow-hidden mb-3">
+                                                {relatedFile.format === 'video' || relatedFile.type?.startsWith('video/') ? (
+                                                    <video src={relatedFile.url} autoPlay muted loop playsInline className="w-full h-full object-contain" />
+                                                ) : (
+                                                    <Image src={relatedFile.url} alt={relatedFile.name} layout="fill" objectFit="contain" className="p-2" unoptimized={relatedFile.format === 'gif'}/>
+                                                )}
+                                            </div>
+                                            <p className="text-sm font-medium truncate" title={relatedFile.name}>{relatedFile.name}</p>
+                                        </Link>
+                                         <Button asChild size="sm" className="w-full mt-2">
+                                             <Link href={`/${lang}/emoji/${emoji.id}/${relatedFile.format}/${encodeURIComponent(relatedFile.name)}`}>
+                                                <Download className="mr-2 h-4 w-4" />
+                                                {t('downloadButton')}
+                                            </Link>
+                                         </Button>
+                                    </CardContent>
+                                </Card>
                               ))}
                           </div>
                         </section>
@@ -191,7 +205,7 @@ export default function FileDownloadPage() {
             </div>
         </div>
       </main>
-      <Footer lang={lang} />
+      <Footer lang={lang as string} />
     </>
   );
 }
