@@ -23,6 +23,7 @@ import {
   FileText,
   Library,
   Megaphone,
+  Palette,
 } from "lucide-react";
 import { useSiteSettings } from "@/context/site-settings-context";
 import { useTranslations } from "@/context/translations-context";
@@ -102,6 +103,12 @@ export function AdminSidebar() {
       label: "Ads.txt",
       icon: FileText,
       activeMatch: '/admin/ads-txt',
+    },
+     {
+      href: `/admin/colors`,
+      label: 'Colors',
+      icon: Palette,
+      activeMatch: '/admin/colors',
     },
     {
       href: `/admin/settings`,

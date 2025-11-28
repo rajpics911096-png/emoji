@@ -9,6 +9,7 @@ import { TranslationsProvider } from '@/context/translations-context';
 import { FirebaseProvider } from '@/firebase/provider';
 import { DynamicFavicon } from '@/components/dynamic-favicon';
 import Head from 'next/head';
+import { useEffect } from 'react';
 
 function SiteHead() {
   const { settings } = useSiteSettings();
@@ -26,6 +27,23 @@ function SiteHead() {
       <meta name="twitter:image" content="/og-image.png" />
     </Head>
   );
+}
+
+function DynamicTheme() {
+    const { settings } = useSiteSettings();
+
+    useEffect(() => {
+        const root = document.documentElement;
+        if (settings.colors) {
+            for (const [name, hsl] of Object.entries(settings.colors)) {
+                if (hsl) {
+                    root.style.setProperty(`--${name}`, `${hsl.h} ${hsl.s}% ${hsl.l}%`);
+                }
+            }
+        }
+    }, [settings.colors]);
+
+    return null;
 }
 
 
@@ -57,6 +75,7 @@ export default function RootLayout({
             <TranslationsProvider language={lang}>
                 <SiteHead />
                 <DynamicFavicon />
+                <DynamicTheme />
                 {children}
                 <Toaster />
             </TranslationsProvider>

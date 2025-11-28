@@ -94,5 +94,14 @@ export const defaultSiteSettings: SiteSettings = {
          style="border: 0; max-width: 100%; height: auto; margin: 0 auto;">
   </a>
 </div>`, enabled: true, align: 'center' },
-    ]
+    ],
+    colors: {
+        background: { h: 220, s: 20, l: 96 },
+        foreground: { h: 275, s: 100, l: 10 },
+        card: { h: 0, s: 0, l: 100 },
+        primary: { h: 275, s: 100, l: 41 },
+        secondary: { h: 0, s: 0, l: 96.1 },
+        muted: { h: 0, s: 0, l: 96.1 },
+        accent: { h: 182, s: 100, l: 74 },
+    }
 };

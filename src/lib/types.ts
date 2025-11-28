@@ -1,3 +1,4 @@
+
 export type EmojiFormatFile = {
   url: string;
   size: string;
@@ -61,6 +62,22 @@ export type AdSetting = {
   align?: 'left' | 'center' | 'right';
 };
 
+export type HSLColor = {
+  h: number;
+  s: number;
+  l: number;
+};
+
+export type ColorSettings = {
+  background?: HSLColor;
+  foreground?: HSLColor;
+  card?: HSLColor;
+  primary?: HSLColor;
+  secondary?: HSLColor;
+  muted?: HSLColor;
+  accent?: HSLColor;
+}
+
 export type SiteSettings = {
   name: string;
   logo: string; // SVG code as a string
@@ -70,4 +87,5 @@ export type SiteSettings = {
   downloadTimer: number;
   adSettings: AdSetting[];
   adsTxtContent?: string;
+  colors?: ColorSettings;
 };
