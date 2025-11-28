@@ -51,6 +51,9 @@ export default function CategoryPage() {
             <p className="mt-3 text-lg md:text-xl max-w-3xl mx-auto text-foreground/80">
                 {t('categoryDescription', { categoryName: categoryName })}
             </p>
+             <div className="mt-8 max-w-2xl mx-auto">
+              <IntelligentSearchBar lang={lang} />
+            </div>
         </div>
         
         {emojiList.length > 0 ? (
