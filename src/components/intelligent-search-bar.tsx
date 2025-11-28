@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -21,31 +21,34 @@ import { useTranslations } from "@/context/translations-context";
 
 export default function IntelligentSearchBar({ lang }: { lang: string }) {
   const [query, setQuery] = useState("");
+  const debouncedQuery = useDebounce(query, 300);
   const [results, setResults] = useState<Emoji[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const { t } = useTranslations();
 
-  const handleSearch = (searchQuery: string) => {
-    if (!searchQuery) {
-      setResults([]);
-      setIsOpen(false);
-      return;
-    }
-    setIsOpen(true);
-    startTransition(async () => {
-      const { results } = await searchEmojisAction(searchQuery);
-      setResults(results);
-    });
-  };
+  useEffect(() => {
+    const handleSearch = (searchQuery: string) => {
+      if (!searchQuery) {
+        setResults([]);
+        setIsOpen(false);
+        return;
+      }
+      setIsOpen(true);
+      startTransition(async () => {
+        const { results } = await searchEmojisAction(searchQuery);
+        setResults(results);
+      });
+    };
+    
+    handleSearch(debouncedQuery);
+  }, [debouncedQuery]);
 
-  const debouncedSearch = useDebounce(handleSearch, 300);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
-    debouncedSearch(value);
   };
   
   const handleSelect = (id: string) => {
@@ -60,6 +63,7 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
         onSubmit={(e) => {
           e.preventDefault();
           if (query) {
+             setIsOpen(false);
              router.push(`/${lang}/emojis/all?search=${query}`)
           }
         }}
