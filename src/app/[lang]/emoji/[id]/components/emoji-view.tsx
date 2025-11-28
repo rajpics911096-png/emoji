@@ -7,6 +7,12 @@ import { Button } from '@/components/ui/button';
 import { Copy, Check, Code, Share2 } from 'lucide-react';
 import { useTranslations } from '@/context/translations-context';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { SvgIcon } from '@/components/svg-icon';
 
 interface EmojiViewProps {
   emoji: Emoji;
@@ -53,7 +59,6 @@ export function EmojiView({ emoji }: EmojiViewProps) {
       try {
         await navigator.share(shareData);
       } catch (error) {
-        console.error('Error sharing:', error);
         // Fallback to copying link if sharing fails (e.g., permission denied, user abort)
         copyLinkFallback();
       }
