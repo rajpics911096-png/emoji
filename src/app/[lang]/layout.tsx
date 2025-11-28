@@ -1,3 +1,7 @@
+// Mark this as a client component because it contains client-side logic
+// and providers that use hooks like useContext and useState.
+'use client';
+
 import { Toaster } from '@/components/ui/toaster';
 import '../globals.css';
 import { cn } from '@/lib/utils';
@@ -8,6 +12,7 @@ import { DynamicFavicon } from '@/components/dynamic-favicon';
 import Head from 'next/head';
 import type { ReactNode } from 'react';
 import { DynamicTheme } from '@/components/dynamic-theme';
+
 
 function SiteHead() {
   const { settings } = useSiteSettings();
