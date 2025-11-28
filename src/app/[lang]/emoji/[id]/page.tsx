@@ -127,7 +127,7 @@ export default function EmojiPage() {
                     <Link href={`/${lang}/emojis/${category.id}`} className="group flex items-center gap-4">
                         <SvgIcon svg={category.icon} className="w-10 h-10 text-primary" />
                         <div>
-                            <p className="font-semibold text-lg group-hover:text-primary transition-colors">{t(`category_${category.id}`)}</p>
+                            <p className="font-semibold text-lg group-hover:text-primary transition-colors">{t(`category_${category.id.replace(/-/g, '_')}`)}</p>
                             <p className="text-sm text-muted-foreground">{t('viewAllInCategory')}</p>
                         </div>
                     </Link>
