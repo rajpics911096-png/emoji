@@ -8,7 +8,7 @@ import Footer from '@/components/footer';
 import { SvgIcon } from '@/components/svg-icon';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Download, File as FileIcon, Hourglass, ArrowLeft, Video } from 'lucide-react';
+import { Download, File as FileIcon, Hourglass, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { useTranslations } from '@/context/translations-context';
@@ -19,7 +19,7 @@ import { Separator } from '@/components/ui/separator';
 import { AdSlot } from '@/components/ad-slot';
 import { useEmojiStore, useCategoryStore } from '@/lib/store';
 
-const DownloadButton = ({ file }: { file: EmojiFormatFile }) => {
+const DownloadButton = ({ file, format }: { file: EmojiFormatFile, format: string }) => {
   const { settings } = useSiteSettings();
   const { t } = useTranslations();
   const [timer, setTimer] = useState(0);
@@ -66,7 +66,7 @@ const DownloadButton = ({ file }: { file: EmojiFormatFile }) => {
       ) : (
         <>
           <Download className="mr-2 h-5 w-5" />
-          {t('downloadButton')}
+          {t('downloadButtonWithFormat', { format: format.toUpperCase() })}
         </>
       )}
     </Button>
@@ -94,12 +94,12 @@ const FilePreview = ({ file, format }: { file: EmojiFormatFile; format: string }
 
 export default function FileDownloadPage() {
   const params = useParams();
-  const { id, lang, format, filename } = params;
+  const { id, lang, format, filename } = params as { id: string; lang: string; format: string; filename: string; };
   
   const { t } = useTranslations();
   const { getEmojiById } = useEmojiStore();
   const { categories } = useCategoryStore();
-  const emoji = getEmojiById(id as string);
+  const emoji = getEmojiById(id);
 
   const file = useMemo(() => {
     if (!emoji) return null;
@@ -124,7 +124,7 @@ export default function FileDownloadPage() {
 
   return (
     <>
-      <Header lang={lang as string} />
+      <Header lang={lang} />
       <main className="flex-1 py-8 md:py-12 bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4">
             <div className="mb-4">
@@ -139,7 +139,7 @@ export default function FileDownloadPage() {
             <div className="flex flex-col items-center gap-4 text-center">
                  <h1 className="text-3xl font-headline font-bold">{file.name}</h1>
                 <div className="w-full max-w-lg">
-                  <FilePreview file={file} format={format as string} />
+                  <FilePreview file={file} format={format} />
                 </div>
                 
                 <div className="w-full max-w-lg text-center space-y-4">
@@ -147,7 +147,7 @@ export default function FileDownloadPage() {
                         <Badge variant="outline" className="capitalize">{format}</Badge>
                         <Badge variant="outline">{file.size}</Badge>
                     </div>
-                    <DownloadButton file={file} />
+                    <DownloadButton file={file} format={format} />
                 </div>
                 
                 <div className="my-4 w-full max-w-5xl">
@@ -205,7 +205,7 @@ export default function FileDownloadPage() {
             </div>
         </div>
       </main>
-      <Footer lang={lang as string} />
+      <Footer lang={lang} />
     </>
   );
 }
