@@ -17,6 +17,8 @@ import { SvgIcon } from '@/components/svg-icon';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { useTranslations } from '@/context/translations-context';
 import { useCategoryStore, useEmojiStore } from '@/lib/store';
+import { FeaturedFiles } from '@/components/featured-files';
+import { useMemo } from 'react';
 
 export default function Home() {
   const params = useParams<{ lang: string }>();
@@ -25,7 +27,26 @@ export default function Home() {
   const { t } = useTranslations();
   const { emojis } = useEmojiStore();
   const { categories } = useCategoryStore();
-  const featuredEmojis = emojis.slice(0, 8);
+  
+  const featuredEmojis = useMemo(() => {
+    return [...emojis].sort(() => 0.5 - Math.random()).slice(0, 8);
+  }, [emojis]);
+  
+  const allFiles = useMemo(() => {
+    return emojis.flatMap(emoji => 
+        Object.entries(emoji.formats).flatMap(([format, files]) => 
+            files.map(file => ({
+                ...file,
+                emojiId: emoji.id,
+                format: format,
+            }))
+        )
+    );
+  }, [emojis]);
+  
+  const featuredFiles = useMemo(() => {
+      return [...allFiles].sort(() => 0.5 - Math.random()).slice(0, 8);
+  }, [allFiles]);
 
   return (
     <>
@@ -87,9 +108,19 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {featuredFiles.length > 0 && (
+          <section id="featured-files" className="py-16 md:py-24">
+            <div className="container mx-auto px-4">
+              <h2 className="text-3xl font-headline font-bold text-center mb-10">
+                Featured Files
+              </h2>
+              <FeaturedFiles files={featuredFiles} lang={lang} />
+            </div>
+          </section>
+        )}
       </main>
       <Footer lang={lang} />
     </>
   );
 }
-
