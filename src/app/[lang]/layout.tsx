@@ -9,6 +9,7 @@ import { i18n } from '@/lib/i18n-config';
 import { FirebaseProvider } from '@/firebase/provider';
 import { defaultSiteSettings } from '@/lib/site-settings';
 import translations from '@/lib/translations';
+import { DynamicFavicon } from '@/components/dynamic-favicon';
 
 type Props = {
   params: { lang: string }
@@ -71,9 +72,7 @@ export async function generateMetadata(
       description: t('siteDescription'),
       images: ['/og-image.png'],
     },
-    icons: {
-        icon: `data:image/svg+xml,${encodeURIComponent(siteSettings.favicon)}`
-    }
+     // Favicon is now handled by DynamicFavicon client component
   }
 }
 
@@ -107,6 +106,7 @@ export default function RootLayout({
         <FirebaseProvider>
             <SiteSettingsProvider>
             <TranslationsProvider language={lang}>
+                <DynamicFavicon />
                 {children}
                 <Toaster />
             </TranslationsProvider>
