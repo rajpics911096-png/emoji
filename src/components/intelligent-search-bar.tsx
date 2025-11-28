@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -18,7 +17,7 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
   
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (query) {
+      if (query.trim()) {
          router.push(`/${lang}/emojis/all?search=${query}`)
       }
   };
@@ -33,11 +32,11 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
             <Input
               type="search"
               placeholder={t('searchPlaceholder')}
-              className="pl-4 pr-12 h-14 text-lg bg-transparent border-none rounded-full focus-visible:ring-0 focus-visible:ring-offset-0 w-full"
+              className="pl-4 pr-12 h-12 text-base bg-transparent border-none rounded-full focus-visible:ring-0 focus-visible:ring-offset-0 w-full"
               value={query}
               onChange={handleInputChange}
             />
-            <button type="submit" aria-label="Search" className="absolute right-5 h-6 w-6 text-muted-foreground">
+            <button type="submit" aria-label="Search" className="absolute right-4 h-6 w-6 text-muted-foreground">
               <Search />
             </button>
         </div>
