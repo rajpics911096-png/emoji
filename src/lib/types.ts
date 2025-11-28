@@ -62,6 +62,7 @@ export type AdSetting = {
 export type SiteSettings = {
   name: string;
   logo: string; // SVG code as a string
+  favicon: string; // SVG code as a string
   downloadTimer: number;
   adSettings: AdSetting[];
   adsTxtContent?: string;

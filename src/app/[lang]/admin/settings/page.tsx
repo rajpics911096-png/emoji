@@ -175,7 +175,7 @@ export default function SettingsPage() {
             {t('settings_branding_desc')}
           </CardDescription>
         </CardHeader>
-        <CardContent className="grid md:grid-cols-2 gap-6">
+        <CardContent className="grid md:grid-cols-1 gap-6">
           <div className="space-y-2">
             <Label htmlFor="site-name">{t('settings_site_name_label')}</Label>
             <Input
@@ -198,6 +198,18 @@ export default function SettingsPage() {
             />
             <p className="text-sm text-muted-foreground">
               {t('settings_logo_desc')}
+            </p>
+          </div>
+           <div className="space-y-2">
+            <Label htmlFor="site-favicon">Favicon (SVG Code)</Label>
+            <Textarea
+              id="site-favicon"
+              value={settings.favicon}
+              onChange={(e) => setSettings({ ...settings, favicon: e.target.value })}
+              rows={4}
+            />
+            <p className="text-sm text-muted-foreground">
+              Paste the SVG code for your website's favicon.
             </p>
           </div>
         </CardContent>

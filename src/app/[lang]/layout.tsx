@@ -20,11 +20,15 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const lang = (i18n.locales.includes(params.lang as any) ? params.lang : i18n.defaultLocale) as keyof typeof translations;
   const t = (key: string) => translations[lang]?.[key] || translations['en'][key] || key;
+  
+  // This is a workaround to get the settings from local storage on the server.
+  // In a real app, this would be fetched from a database.
+  const siteSettings = defaultSiteSettings;
 
   return {
     title: {
-      default: defaultSiteSettings.name,
-      template: `%s | ${defaultSiteSettings.name}`,
+      default: siteSettings.name,
+      template: `%s | ${siteSettings.name}`,
     },
     description: t('siteDescription'),
     metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
@@ -36,10 +40,10 @@ export async function generateMetadata(
       }, {} as Record<string, string>),
     },
      openGraph: {
-      title: defaultSiteSettings.name,
+      title: siteSettings.name,
       description: t('siteDescription'),
       url: '/',
-      siteName: defaultSiteSettings.name,
+      siteName: siteSettings.name,
       images: [
         {
           url: '/og-image.png',
@@ -63,10 +67,13 @@ export async function generateMetadata(
     },
     twitter: {
       card: 'summary_large_image',
-      title: defaultSiteSettings.name,
+      title: siteSettings.name,
       description: t('siteDescription'),
       images: ['/og-image.png'],
     },
+    icons: {
+        icon: `data:image/svg+xml,${encodeURIComponent(siteSettings.favicon)}`
+    }
   }
 }
 
