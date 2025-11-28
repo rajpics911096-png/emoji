@@ -30,7 +30,7 @@ export default function Header({ lang }: { lang: string }) {
 
   return (
     <>
-    <header className="sticky top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
+    <header className="w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
       <div className="container flex h-16 items-center">
         <div className="flex items-center md:hidden">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -90,9 +90,6 @@ export default function Header({ lang }: { lang: string }) {
           <ThemeToggle />
           <LanguageSwitcher />
         </div>
-      </div>
-      <div className="md:hidden p-4 border-t">
-        <IntelligentSearchBar lang={lang} />
       </div>
     </header>
     <AdSlot location="header" />
