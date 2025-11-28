@@ -1,6 +1,8 @@
+
 import { cn } from "@/lib/utils";
 import { iconMap } from "@/lib/icon-map";
 import { Smile } from "lucide-react";
+import type React from 'react';
 
 interface SvgIconProps {
   svg: string; // Can be an icon name or raw SVG
@@ -8,17 +10,34 @@ interface SvgIconProps {
 }
 
 export function SvgIcon({ svg, className }: SvgIconProps) {
-  // Check if svg is a key in iconMap
-  if (svg in iconMap) {
-    const IconComponent = iconMap[svg] || Smile;
-    return <IconComponent className={className} />;
+  const IconSource = iconMap[svg];
+
+  // If IconSource is a string, it's raw SVG
+  if (typeof IconSource === 'string') {
+    return (
+      <div
+        className={cn("inline-block", className)}
+        dangerouslySetInnerHTML={{ __html: IconSource }}
+      />
+    );
   }
 
-  // Otherwise, assume it's raw SVG and render it
-  return (
-    <div
-      className={cn("inline-block", className)}
-      dangerouslySetInnerHTML={{ __html: svg }}
-    />
-  );
+  // If IconSource is a component
+  if (IconSource) {
+    const IconComponent = IconSource as React.ComponentType<{ className?: string }>;
+    return <IconComponent className={className} />;
+  }
+  
+  // If svg is not in map, assume it's raw SVG
+  if (svg.trim().startsWith('<svg')) {
+    return (
+      <div
+        className={cn("inline-block", className)}
+        dangerouslySetInnerHTML={{ __html: svg }}
+      />
+    );
+  }
+
+  // Fallback to a default icon
+  return <Smile className={className} />;
 }

@@ -4,10 +4,11 @@
 import { useState } from 'react';
 import type { Emoji } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { Copy, Check, Code, Share2, Twitter, Facebook, MessageCircle, Linkedin, Reddit, Pinterest } from 'lucide-react';
+import { Copy, Check, Code, Share2 } from 'lucide-react';
 import { useTranslations } from '@/context/translations-context';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import Link from 'next/link';
+import { SvgIcon } from '@/components/svg-icon';
 
 interface EmojiViewProps {
   emoji: Emoji;
@@ -43,11 +44,11 @@ export function EmojiView({ emoji }: EmojiViewProps) {
     : '';
 
   const socialShares = [
-    { name: 'Facebook', icon: Facebook, url: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}` },
-    { name: 'Twitter', icon: Twitter, url: `https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitle}` },
-    { name: 'WhatsApp', icon: MessageCircle, url: `https://api.whatsapp.com/send?text=${shareTitle}%20${shareUrl}` },
-    { name: 'Pinterest', icon: Pinterest, url: `https://pinterest.com/pin/create/button/?url=${shareUrl}&media=${shareImage}&description=${shareTitle}` },
-    { name: 'Reddit', icon: Reddit, url: `https://www.reddit.com/submit?url=${shareUrl}&title=${shareTitle}` },
+    { name: 'facebook', url: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}` },
+    { name: 'twitter', url: `https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitle}` },
+    { name: 'whatsapp', url: `https://api.whatsapp.com/send?text=${shareTitle}%20${shareUrl}` },
+    { name: 'pinterest', url: `https://pinterest.com/pin/create/button/?url=${shareUrl}&media=${shareImage}&description=${shareTitle}` },
+    { name: 'reddit', url: `https://www.reddit.com/submit?url=${shareUrl}&title=${shareTitle}` },
   ];
 
   return (
@@ -91,7 +92,7 @@ export function EmojiView({ emoji }: EmojiViewProps) {
                             {socialShares.map(social => (
                                 <Button key={social.name} asChild variant="outline" size="icon" title={`Share on ${social.name}`}>
                                     <Link href={social.url} target="_blank" rel="noopener noreferrer">
-                                        <social.icon className="h-5 w-5" />
+                                        <SvgIcon svg={social.name} className="h-5 w-5" />
                                     </Link>
                                 </Button>
                             ))}
