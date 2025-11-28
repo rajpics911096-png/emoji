@@ -14,11 +14,12 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useSiteSettings } from "@/context/site-settings-context";
 import { useTranslations } from "@/context/translations-context";
+import type { HSLColor } from "@/lib/types";
 
-type ColorName = 'background' | 'primary' | 'accent';
+type ColorName = 'background' | 'foreground' | 'card' | 'primary' | 'secondary' | 'muted' | 'accent' | 'destructive';
 
 // Helper to convert HEX to HSL
-const hexToHsl = (hex: string): { h: number; s: number; l: number } => {
+const hexToHsl = (hex: string): HSLColor => {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     if (!result) {
         return { h: 0, s: 0, l: 0 };
@@ -71,17 +72,6 @@ export default function ColorsSettingsPage() {
         ...settings.colors,
         [colorName]: hslValue
     };
-    
-    // Also update related colors for a cohesive theme
-    if (colorName === 'background') {
-        newColors.card = { h: hslValue.h, s: hslValue.s, l: Math.min(hslValue.l + 5, 100) };
-        newColors.secondary = { h: hslValue.h, s: hslValue.s, l: Math.max(hslValue.l - 4, 0) };
-        newColors.muted = { h: hslValue.h, s: hslValue.s, l: Math.max(hslValue.l - 4, 0) };
-    }
-    if (colorName === 'primary') {
-        newColors.foreground = { h: hslValue.h, s: Math.max(hslValue.s - 40, 0), l: Math.max(hslValue.l - 30, 0) };
-    }
-
     setSettings({ ...settings, colors: newColors });
   };
   
@@ -93,12 +83,12 @@ export default function ColorsSettingsPage() {
     });
   };
 
-  const ColorEditor = ({ name, title }: { name: ColorName, title: string }) => {
+  const ColorEditor = ({ name, title, description }: { name: ColorName, title: string, description?: string }) => {
     const color = colors[name] || { h: 0, s: 0, l: 0 };
     const hexColor = hslToHex(color.h, color.s, color.l);
 
     return (
-      <div className="space-y-2 rounded-lg border p-4">
+      <div className="space-y-2">
         <Label htmlFor={`color-${name}`} className="font-medium capitalize">{title}</Label>
         <div className="flex items-center gap-4">
             <Input
@@ -115,6 +105,7 @@ export default function ColorsSettingsPage() {
                 className="font-mono"
             />
         </div>
+        {description && <p className="text-sm text-muted-foreground">{description}</p>}
       </div>
     );
   };
@@ -131,13 +122,33 @@ export default function ColorsSettingsPage() {
         <CardHeader>
           <CardTitle>Color Customization</CardTitle>
           <CardDescription>
-            Choose your website's main colors. Other theme colors will be adjusted automatically.
+            Choose your website's main colors. Changes will apply across the entire site.
           </CardDescription>
         </CardHeader>
-        <CardContent className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <ColorEditor name="background" title="Background" />
-            <ColorEditor name="primary" title="Primary" />
-            <ColorEditor name="accent" title="Accent" />
+        <CardContent className="space-y-8">
+          <div>
+            <h3 className="text-lg font-semibold mb-4 border-b pb-2">Base Colors</h3>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <ColorEditor name="background" title="Background" description="Main page background." />
+                <ColorEditor name="foreground" title="Foreground" description="Main text color." />
+                <ColorEditor name="card" title="Card Background" description="Background for cards and popovers." />
+            </div>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-4 border-b pb-2">Primary & Secondary Colors</h3>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <ColorEditor name="primary" title="Primary" description="Main brand color for buttons, links." />
+                <ColorEditor name="secondary" title="Secondary" description="For less prominent elements." />
+            </div>
+          </div>
+           <div>
+            <h3 className="text-lg font-semibold mb-4 border-b pb-2">Other Colors</h3>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <ColorEditor name="accent" title="Accent" description="Highlights for specific elements." />
+                <ColorEditor name="muted" title="Muted" description="For subtle text and borders." />
+                <ColorEditor name="destructive" title="Destructive" description="For error messages and delete actions." />
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -79,6 +79,7 @@ export type ColorSettings = {
   secondary?: HSLColor;
   muted?: HSLColor;
   accent?: HSLColor;
+  destructive?: HSLColor;
 }
 
 export type SiteSettings = {
