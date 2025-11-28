@@ -53,10 +53,6 @@ export default function CategoryPage() {
             </p>
         </div>
         
-        <div className="max-w-2xl mx-auto my-10 md:my-12">
-            <IntelligentSearchBar lang={lang} />
-        </div>
-        
         {emojiList.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
             {emojiList.map((emoji) => (

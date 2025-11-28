@@ -91,6 +91,9 @@ export default function Header({ lang }: { lang: string }) {
           <LanguageSwitcher />
         </div>
       </div>
+      <div className="md:hidden p-4 border-t">
+        <IntelligentSearchBar lang={lang} />
+      </div>
     </header>
     <AdSlot location="header" />
     </>
