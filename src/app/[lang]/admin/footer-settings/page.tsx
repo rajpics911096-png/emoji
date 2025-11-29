@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,7 @@ import type { LinkItem, SocialLink } from '@/lib/types';
 import { Trash2 } from 'lucide-react';
 import { useTranslations } from '@/context/translations-context';
 import { useFooterStore } from '@/lib/store';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function FooterSettingsPage() {
   const { t } = useTranslations();
@@ -181,15 +183,54 @@ export default function FooterSettingsPage() {
             </div>
             {social.map((link, index) => (
               <div key={index} className="flex items-end gap-2">
-                <div className="grid grid-cols-3 gap-2 flex-1">
-                  <div className="space-y-1">
-                    <Label
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 flex-1">
+                  <div className="space-y-1 md:col-span-2 grid grid-cols-subgrid">
+                     <div className="space-y-1">
+                        <Label
+                          htmlFor={`social-label-${index}`}
+                          className="text-xs"
+                        >
+                          {t('footer_settings_aria_label')}
+                        </Label>
+                        <Input
+                          id={`social-label-${index}`}
+                          value={link['aria-label']}
+                          onChange={(e) =>
+                            handleFooterChange(
+                              'social',
+                              index,
+                              'aria-label',
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor={`social-href-${index}`} className="text-xs">
+                          {t('footer_settings_url_label')}
+                        </Label>
+                        <Input
+                          id={`social-href-${index}`}
+                          value={link.href}
+                          onChange={(e) =>
+                            handleFooterChange(
+                              'social',
+                              index,
+                              'href',
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+                  </div>
+                  <div className="space-y-1 md:col-span-2">
+                     <Label
                       htmlFor={`social-icon-${index}`}
                       className="text-xs"
                     >
-                      {t('footer_settings_icon_name_label')}
+                      {t('footer_settings_icon_name_label')} (name or SVG)
                     </Label>
-                    <Input
+                    <Textarea
                       id={`social-icon-${index}`}
                       value={link.icon}
                       onChange={(e) =>
@@ -200,43 +241,8 @@ export default function FooterSettingsPage() {
                           e.target.value
                         )
                       }
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label
-                      htmlFor={`social-label-${index}`}
-                      className="text-xs"
-                    >
-                      {t('footer_settings_aria_label')}
-                    </Label>
-                    <Input
-                      id={`social-label-${index}`}
-                      value={link['aria-label']}
-                      onChange={(e) =>
-                        handleFooterChange(
-                          'social',
-                          index,
-                          'aria-label',
-                          e.target.value
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label htmlFor={`social-href-${index}`} className="text-xs">
-                      {t('footer_settings_url_label')}
-                    </Label>
-                    <Input
-                      id={`social-href-${index}`}
-                      value={link.href}
-                      onChange={(e) =>
-                        handleFooterChange(
-                          'social',
-                          index,
-                          'href',
-                          e.target.value
-                        )
-                      }
+                      rows={3}
+                      placeholder="e.g. 'twitter' or <svg>...</svg>"
                     />
                   </div>
                 </div>

@@ -3,16 +3,10 @@
 
 import Link from 'next/link';
 import { SvgIcon } from './svg-icon';
-import { iconMap } from '@/lib/icon-map';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { useTranslations } from '@/context/translations-context';
 import { AdSlot } from './ad-slot';
 import { useFooterStore } from '@/lib/store';
-
-const SocialIcon = ({ iconName, className }: { iconName: string; className?: string }) => {
-  const IconComponent = iconMap[iconName] || iconMap.twitter;
-  return <IconComponent className={className} />;
-};
 
 export default function Footer({ lang }: { lang: string }) {
   const { settings } = useSiteSettings();
@@ -55,7 +49,7 @@ export default function Footer({ lang }: { lang: string }) {
             <div className="flex space-x-4">
               {social.map((item, index) => (
                 <Link key={index} href={item.href} aria-label={item['aria-label']}>
-                  <SocialIcon iconName={item.icon} className="h-6 w-6 text-foreground/70 hover:text-primary transition-colors" />
+                  <SvgIcon svg={item.icon} className="h-6 w-6 text-foreground/70 hover:text-primary transition-colors" />
                 </Link>
               ))}
             </div>
