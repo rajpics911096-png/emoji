@@ -67,7 +67,9 @@ export default function EmojiPage() {
   }
 
   const emojiTitle = t(emoji.title);
-  const emojiDescription = t(emoji.description);
+  const rawDescription = t(emoji.description);
+  const emojiDescription = rawDescription.includes('<p>') ? rawDescription : `<p>${rawDescription}</p>`;
+
 
   const jsonLdData: Thing = useMemo(() => {
     const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';

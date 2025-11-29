@@ -12,7 +12,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -28,6 +27,8 @@ import { useEffect, useState, useMemo } from "react";
 import { useTranslations } from "@/context/translations-context";
 import { UploadedFileCard } from "./uploaded-file-card";
 import { useCategoryStore } from "@/lib/store";
+import { RichTextEditor } from "@/components/rich-text-editor";
+import { Textarea } from "@/components/ui/textarea";
 
 
 const emojiSchema = z.object({
@@ -130,7 +131,14 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
 
   const onSubmit = (data: EmojiFormData) => {
     // When saving, we save the translation KEY, not the translated value
-    onEditEmoji({ ...emoji, ...data, title: emoji.title, description: emoji.description, formats: uploadedFiles });
+    const finalData = {
+        ...emoji,
+        ...data,
+        title: emoji.title, // Keep original key
+        description: data.description, // Use the HTML content from rich editor
+        formats: uploadedFiles
+    };
+    onEditEmoji(finalData);
   };
   
   const handleOpenChange = (open: boolean) => {
@@ -149,7 +157,7 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-3xl">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>{t('edit_emoji_dialog_title')}</DialogTitle>
@@ -185,7 +193,11 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
             <div className="grid grid-cols-1 md:grid-cols-4 items-start gap-4">
               <Label htmlFor="description" className="text-left md:text-right pt-2">{t('emoji_form_description_label')}</Label>
               <div className="md:col-span-3">
-                <Textarea id="description" {...register("description")} />
+                <Controller
+                    name="description"
+                    control={control}
+                    render={({ field }) => <RichTextEditor value={field.value} onChange={field.onChange} />}
+                />
                 {errors.description && <p className="text-destructive text-sm mt-1">{errors.description.message}</p>}
               </div>
             </div>
