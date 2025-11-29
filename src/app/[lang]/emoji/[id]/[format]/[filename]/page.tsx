@@ -81,7 +81,7 @@ const FilePreview = ({ file, format }: { file: EmojiFormatFile; format: string }
     return (
       <div className="aspect-square w-full max-w-lg mx-auto bg-muted/50 flex items-center justify-center relative rounded-lg border overflow-hidden shadow-sm">
         {isImage ? (
-            <Image src={file.url} alt={file.name} layout="fill" objectFit="contain" className="p-4" unoptimized={file.format === 'gif'} />
+            <Image src={file.url} alt={file.name} layout="fill" objectFit="contain" className="p-4" unoptimized={format === 'gif'} />
         ) : isVideo ? (
             <video src={file.url} autoPlay muted loop className="w-full h-full object-contain" />
         ) : (
@@ -93,8 +93,8 @@ const FilePreview = ({ file, format }: { file: EmojiFormatFile; format: string }
 
 
 export default function FileDownloadPage() {
-  const params = useParams();
-  const { id, lang, format, filename } = params as { id: string; lang: string; format: string; filename: string; };
+  const params = useParams<{ id: string; lang: string; format: string; filename: string; }>();
+  const { id, lang, format, filename } = params;
   
   const { t } = useTranslations();
   const { getEmojiById } = useEmojiStore();
@@ -132,7 +132,7 @@ export default function FileDownloadPage() {
                  <Button asChild variant="outline" className="text-muted-foreground hover:text-primary">
                     <Link href={`/${lang}/emoji/${id}`}>
                         <ArrowLeft className="mr-2 h-4 w-4" />
-                        Back to {emoji.title}
+                        Back to {t(emoji.title)}
                     </Link>
                  </Button>
             </div>

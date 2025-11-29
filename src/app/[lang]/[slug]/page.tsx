@@ -39,6 +39,7 @@ export default function GenericPage() {
       <main className="flex-1 py-12 md:py-16">
         <div className="container mx-auto px-4">
             <div className="prose lg:prose-xl dark:prose-invert max-w-4xl mx-auto">
+                <h1>{page.title}</h1>
                 <div dangerouslySetInnerHTML={{ __html: page.content || '' }} />
             </div>
         </div>
