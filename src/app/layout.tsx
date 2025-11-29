@@ -1,20 +1,16 @@
 
-import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { cn } from '@/lib/utils';
-import { ClientProviders } from '@/components/client-providers';
 import type { ReactNode } from 'react';
 import { ThemeProvider } from "@/components/theme-provider";
 
 export default function RootLayout({
   children,
-  params,
 }: Readonly<{
-  children: React.ReactNode;
-  params: { lang: string };
+  children: ReactNode;
 }>) {
   return (
-    <html lang={params.lang} dir={params.lang === 'ar' || params.lang === 'ur' ? 'rtl' : 'ltr'} suppressHydrationWarning>
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -34,10 +30,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
         >
-          <ClientProviders lang={params.lang}>
-            {children}
-            <Toaster />
-          </ClientProviders>
+          {children}
         </ThemeProvider>
       </body>
     </html>
