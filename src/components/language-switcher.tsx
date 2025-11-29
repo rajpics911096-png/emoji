@@ -13,7 +13,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { i18n } from "@/lib/i18n-config";
 
 export function LanguageSwitcher() {
-  const { language } = useTranslations();
+  const { language, languages } = useTranslations();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -32,7 +32,7 @@ export function LanguageSwitcher() {
       </SelectTrigger>
       <SelectContent>
         {i18n.locales.map((langCode) => (
-            <SelectItem key={langCode} value={langCode}>{langCode.toUpperCase()}</SelectItem>
+            <SelectItem key={langCode} value={langCode}>{languages[langCode]}</SelectItem>
         ))}
       </SelectContent>
     </Select>
