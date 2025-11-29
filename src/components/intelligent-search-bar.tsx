@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useTransition, useEffect } from "react";
+import { useState, useTransition, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search, Loader2 } from "lucide-react";
 import { useTranslations } from "@/context/translations-context";
@@ -19,6 +19,7 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
   const { t } = useTranslations();
   const debouncedQuery = useDebounce(query, 300);
   const searchParams = useSearchParams();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const newQuery = searchParams.get('search');
@@ -39,10 +40,6 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
        if (isOpen) setIsOpen(false);
     }
   }, [debouncedQuery, lang, isOpen]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
-  };
   
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -56,33 +53,37 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
     router.push(`/${lang}/emoji/${emojiId}`);
     setIsOpen(false);
   }
-  
-  const handleBlur = () => {
-    // Delay closing to allow for click events on results
-    setTimeout(() => {
-        if(isOpen) setIsOpen(false);
-    }, 200);
-  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
-    <div className="relative">
-      <Command shouldFilter={false} onBlur={handleBlur} className="overflow-visible bg-transparent">
+    <div className="relative w-full" ref={containerRef}>
+      <Command shouldFilter={false} className="overflow-visible bg-transparent">
         <form
           className="w-full"
           onSubmit={handleFormSubmit}
         >
           <div className="relative flex items-center w-full bg-background border border-input rounded-full shadow-sm focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background transition-all">
               <CommandInput
-                type="search"
                 value={query}
                 onValueChange={setQuery}
-                onFocus={() => { if(results.length > 0) setIsOpen(true); }}
+                onFocus={() => { if(query.length > 1) setIsOpen(true); }}
                 placeholder={t('searchPlaceholder')}
-                className="pl-4 pr-12 h-12 text-base bg-transparent border-none rounded-full focus-visible:ring-0 focus-visible:ring-offset-0 w-full"
+                className="pl-12 pr-4 h-12 text-base bg-transparent border-none rounded-full focus-visible:ring-0 focus-visible:ring-offset-0 w-full"
               />
-              <button type="submit" aria-label="Search" className="absolute right-4 h-6 w-6 text-muted-foreground z-10">
+              <div className="absolute left-4 h-6 w-6 text-muted-foreground z-10 pointer-events-none">
                 {isPending ? <Loader2 className="animate-spin" /> : <Search />}
-              </button>
+              </div>
           </div>
         </form>
 

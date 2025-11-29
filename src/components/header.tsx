@@ -6,9 +6,6 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import {
@@ -33,8 +30,8 @@ export default function Header({ lang }: { lang: string }) {
   return (
     <>
     <header className="sticky top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
-      <div className="container flex h-14 items-center">
-        <div className="flex items-center">
+      <div className="container flex h-16 items-center">
+        <div className="flex items-center md:hidden">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
                 <Button
@@ -42,14 +39,10 @@ export default function Header({ lang }: { lang: string }) {
                 size="icon"
                 aria-label="Open menu"
                 >
-                <Menu className="h-6 w-6" />
+                <Menu className="h-5 w-5" />
                 </Button>
             </SheetTrigger>
             <SheetContent side="left">
-                <SheetHeader className="sr-only">
-                  <SheetTitle>Mobile Menu</SheetTitle>
-                  <SheetDescription>Main navigation links for the site.</SheetDescription>
-                </SheetHeader>
                 <Link href={`/${lang}`} className="flex items-center space-x-2" onClick={() => setIsMobileMenuOpen(false)}>
                 <SvgIcon svg={settings.logo} className="h-6 w-6" />
                 <span className="font-bold font-headline text-lg">{settings.name}</span>
@@ -68,19 +61,31 @@ export default function Header({ lang }: { lang: string }) {
                 </div>
             </SheetContent>
             </Sheet>
-             <Link href={`/${lang}`} className="ml-2 flex items-center space-x-2">
-              <SvgIcon svg={settings.logo} className="h-6 w-6" />
-            </Link>
+        </div>
+
+        <div className="mr-4 hidden md:flex items-center flex-1">
+          <Link href={`/${lang}`} className="mr-6 flex items-center space-x-2">
+            <SvgIcon svg={settings.logo} className="h-6 w-6" />
+            <span className="hidden font-bold sm:inline-block font-headline text-lg">
+              {settings.name}
+            </span>
+          </Link>
+          <div className="w-full max-w-lg">
+            <IntelligentSearchBar lang={lang} />
+          </div>
         </div>
         
-        <div className="flex-1 flex justify-center md:justify-start px-4">
-            <div className="w-full max-w-lg">
-              <IntelligentSearchBar lang={lang} />
-            </div>
+        <div className="flex-1 flex justify-center md:hidden">
+            <Link href={`/${lang}`} className="flex items-center space-x-2">
+              <SvgIcon svg={settings.logo} className="h-6 w-6" />
+              <span className="font-bold sm:inline-block font-headline text-lg">
+                {settings.name}
+              </span>
+            </Link>
         </div>
 
 
-        <div className="flex items-center justify-end space-x-2">
+        <div className="flex flex-1 items-center justify-end space-x-2">
           <LanguageSwitcher />
         </div>
       </div>
