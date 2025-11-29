@@ -20,7 +20,6 @@ export default function SettingsPage() {
   const { toast } = useToast();
   const { settings, setSettings, resetSettings } = useSiteSettings();
   
-  const [currentPassword, setCurrentPassword] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -41,108 +40,20 @@ export default function SettingsPage() {
     });
   }
 
-  const reauthenticate = async (password: string): Promise<boolean> => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (!user || !user.email) return false;
-
-    const credential = EmailAuthProvider.credential(user.email, password);
-    try {
-      await reauthenticateWithCredential(user, credential);
-      return true;
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Authentication Failed",
-        description: "Could not re-authenticate. Please check your current password.",
-      });
-      return false;
-    }
-  }
-
   const handleChangeEmail = async () => {
-    if (!newEmail || !currentPassword) {
-      toast({
-        variant: "destructive",
-        title: "Fields Required",
-        description: "Please enter your current password and a new email address.",
-      });
-      return;
-    }
-
-    const isAuthenticated = await reauthenticate(currentPassword);
-    if (!isAuthenticated) return;
-
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (user) {
-        try {
-            await updateEmail(user, newEmail);
-            toast({
-                title: "Email Updated",
-                description: `Your login email has been changed to ${newEmail}.`,
-            });
-            setNewEmail("");
-            setCurrentPassword("");
-        } catch (error: any) {
-             toast({
-                variant: "destructive",
-                title: "Email Change Failed",
-                description: error.message || "An error occurred.",
-            });
-        }
-    }
+    toast({
+      variant: "destructive",
+      title: "Function Disabled",
+      description: "Changing email is currently disabled.",
+    });
   };
 
   const handleChangePassword = async () => {
-    if (!newPassword || !currentPassword) {
-      toast({
-        variant: "destructive",
-        title: "Fields Required",
-        description: "Please enter your current password and a new password.",
-      });
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      toast({
-        variant: "destructive",
-        title: "Passwords do not match",
-        description: "Please ensure both password fields are identical.",
-      });
-      return;
-    }
-    if (newPassword.length < 6) {
-      toast({
-        variant: "destructive",
-        title: "Password too short",
-        description: "Your new password must be at least 6 characters long.",
-      });
-      return;
-    }
-    
-    const isAuthenticated = await reauthenticate(currentPassword);
-    if (!isAuthenticated) return;
-
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (user) {
-        try {
-            await updatePassword(user, newPassword);
-            toast({
-                title: "Password Updated",
-                description: "Your password has been changed successfully.",
-            });
-            setNewPassword("");
-            setConfirmPassword("");
-            setCurrentPassword("");
-        } catch (error: any) {
-            toast({
-                variant: "destructive",
-                title: "Password Change Failed",
-                description: error.message || "An error occurred.",
-            });
-        }
-    }
+    toast({
+      variant: "destructive",
+      title: "Function Disabled",
+      description: "Changing password is currently disabled.",
+    });
   };
 
   return (
@@ -229,22 +140,6 @@ export default function SettingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="current-password-auth">Current Password</Label>
-              <Input
-                id="current-password-auth"
-                type="password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                placeholder="Enter your current password"
-              />
-               <p className="text-sm text-muted-foreground">
-                Required to change email or password.
-              </p>
-            </div>
-            
-            <Separator />
-
             <div className="space-y-4">
                 <h3 className="font-medium text-lg">Change Email</h3>
                 <div className="space-y-2">
