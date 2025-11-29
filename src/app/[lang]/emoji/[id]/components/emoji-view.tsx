@@ -53,7 +53,7 @@ export function EmojiView({ emoji }: EmojiViewProps) {
   const handleShare = async () => {
     const shareData = {
       title: t(emoji.title),
-      text: `Check out the ${t(emoji.title)} emoji!`,
+      text: `Check out the ${emoji.emoji} emoji!`,
       url: window.location.href,
     };
 
