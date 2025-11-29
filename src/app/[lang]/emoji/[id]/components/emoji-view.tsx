@@ -31,7 +31,9 @@ export function EmojiView({ emoji }: EmojiViewProps) {
   };
   
   const handleCopySvg = () => {
-    const imageUrl = emoji.formats.png[0]?.url || emoji.formats.gif[0]?.url || emoji.formats.image[0]?.url;
+    const formats = emoji.formats;
+    const imageUrl = (formats.png?.[0] || formats.gif?.[0] || formats.image?.[0])?.url;
+    
     if (imageUrl) {
         const svgString = `<svg width="128" height="128" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><image href="${window.location.origin}${imageUrl}" height="128" width="128"/></svg>`;
         navigator.clipboard.writeText(svgString);
