@@ -12,16 +12,6 @@ import { useTranslations } from "@/context/translations-context";
 import { useState } from "react";
 import { getAuth, updatePassword, updateEmail, type User, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { Separator } from "@/components/ui/separator";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
 import Link from "next/link";
 
 
@@ -29,13 +19,11 @@ export default function SettingsPage() {
   const { t } = useTranslations();
   const { toast } = useToast();
   const { settings, setSettings, resetSettings } = useSiteSettings();
+  
+  const [currentPassword, setCurrentPassword] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showReauthDialog, setShowReauthDialog] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [actionToRetry, setActionToRetry] = useState<(() => Promise<void>) | null>(null);
-
 
   const handleSave = () => {
     setSettings(settings);
@@ -52,8 +40,39 @@ export default function SettingsPage() {
       description: t('settings_toast_reset_desc'),
     });
   }
-  
-  const performEmailChange = async () => {
+
+  const reauthenticate = async (password: string): Promise<boolean> => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user || !user.email) return false;
+
+    const credential = EmailAuthProvider.credential(user.email, password);
+    try {
+      await reauthenticateWithCredential(user, credential);
+      return true;
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Authentication Failed",
+        description: "Could not re-authenticate. Please check your current password.",
+      });
+      return false;
+    }
+  }
+
+  const handleChangeEmail = async () => {
+    if (!newEmail || !currentPassword) {
+      toast({
+        variant: "destructive",
+        title: "Fields Required",
+        description: "Please enter your current password and a new email address.",
+      });
+      return;
+    }
+
+    const isAuthenticated = await reauthenticate(currentPassword);
+    if (!isAuthenticated) return;
+
     const auth = getAuth();
     const user = auth.currentUser;
     if (user) {
@@ -64,86 +83,26 @@ export default function SettingsPage() {
                 description: `Your login email has been changed to ${newEmail}.`,
             });
             setNewEmail("");
+            setCurrentPassword("");
         } catch (error: any) {
-            if (error.code === 'auth/requires-recent-login') {
-                setActionToRetry(() => performEmailChange);
-                setShowReauthDialog(true);
-            } else {
-                toast({
-                    variant: "destructive",
-                    title: "Email Change Failed",
-                    description: error.message || "An error occurred.",
-                });
-            }
+             toast({
+                variant: "destructive",
+                title: "Email Change Failed",
+                description: error.message || "An error occurred.",
+            });
         }
     }
   };
 
-  const handleChangeEmail = async () => {
-    if (!newEmail) {
+  const handleChangePassword = async () => {
+    if (!newPassword || !currentPassword) {
       toast({
         variant: "destructive",
-        title: "Email is required",
-        description: "Please enter a new email address.",
+        title: "Fields Required",
+        description: "Please enter your current password and a new password.",
       });
       return;
     }
-    await performEmailChange();
-  };
-
-  const performPasswordChange = async () => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if (user) {
-        try {
-            await updatePassword(user, newPassword);
-            toast({
-                title: "Password Updated",
-                description: "Your password has been changed successfully.",
-            });
-            setNewPassword("");
-            setConfirmPassword("");
-        } catch (error: any) {
-            if (error.code === 'auth/requires-recent-login') {
-                setActionToRetry(() => performPasswordChange);
-                setShowReauthDialog(true);
-            } else {
-                toast({
-                    variant: "destructive",
-                    title: "Password Change Failed",
-                    description: error.message || "An error occurred.",
-                });
-            }
-        }
-    }
-  }
-
-  const handleReauthenticateAndRetry = async () => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if (user && user.email) {
-      const credential = EmailAuthProvider.credential(user.email, currentPassword);
-      try {
-        await reauthenticateWithCredential(user, credential);
-        setShowReauthDialog(false);
-        setCurrentPassword("");
-        if (actionToRetry) {
-          await actionToRetry();
-          setActionToRetry(null);
-        }
-      } catch (error: any) {
-        toast({
-          variant: "destructive",
-          title: "Authentication Failed",
-          description: error.message || "Could not re-authenticate. Please check your password.",
-        });
-      }
-    }
-  }
-
-  const handleChangePassword = async () => {
     if (newPassword !== confirmPassword) {
       toast({
         variant: "destructive",
@@ -160,7 +119,30 @@ export default function SettingsPage() {
       });
       return;
     }
-    await performPasswordChange();
+    
+    const isAuthenticated = await reauthenticate(currentPassword);
+    if (!isAuthenticated) return;
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+        try {
+            await updatePassword(user, newPassword);
+            toast({
+                title: "Password Updated",
+                description: "Your password has been changed successfully.",
+            });
+            setNewPassword("");
+            setConfirmPassword("");
+            setCurrentPassword("");
+        } catch (error: any) {
+            toast({
+                variant: "destructive",
+                title: "Password Change Failed",
+                description: error.message || "An error occurred.",
+            });
+        }
+    }
   };
 
   return (
@@ -243,49 +225,67 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle>Account</CardTitle>
           <CardDescription>
-            Change your login email and password here.
+            Change your login email and password here. You must provide your current password for any changes.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="space-y-4">
-             <div className="space-y-2">
-                <Label htmlFor="new-email">New Email</Label>
-                <Input
-                  id="new-email"
-                  type="email"
-                  value={newEmail}
-                  onChange={(e) => setNewEmail(e.target.value)}
-                  placeholder="Enter your new email"
-                />
-              </div>
-              <Button onClick={handleChangeEmail}>Change Email</Button>
-          </div>
+            <div className="space-y-2">
+              <Label htmlFor="current-password-auth">Current Password</Label>
+              <Input
+                id="current-password-auth"
+                type="password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                placeholder="Enter your current password"
+              />
+               <p className="text-sm text-muted-foreground">
+                Required to change email or password.
+              </p>
+            </div>
+            
+            <Separator />
 
-          <Separator />
-          
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="new-password">New Password</Label>
-              <Input
-                id="new-password"
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="Enter your new password"
-              />
+            <div className="space-y-4">
+                <h3 className="font-medium text-lg">Change Email</h3>
+                <div className="space-y-2">
+                    <Label htmlFor="new-email">New Email</Label>
+                    <Input
+                    id="new-email"
+                    type="email"
+                    value={newEmail}
+                    onChange={(e) => setNewEmail(e.target.value)}
+                    placeholder="Enter your new email"
+                    />
+                </div>
+                <Button onClick={handleChangeEmail}>Change Email</Button>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirm New Password</Label>
-              <Input
-                id="confirm-password"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Confirm your new password"
-              />
+
+            <Separator />
+            
+            <div className="space-y-4">
+                <h3 className="font-medium text-lg">Change Password</h3>
+                <div className="space-y-2">
+                <Label htmlFor="new-password">New Password</Label>
+                <Input
+                    id="new-password"
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Enter your new password"
+                />
+                </div>
+                <div className="space-y-2">
+                <Label htmlFor="confirm-password">Confirm New Password</Label>
+                <Input
+                    id="confirm-password"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Confirm your new password"
+                />
+                </div>
+                <Button onClick={handleChangePassword}>Change Password</Button>
             </div>
-             <Button onClick={handleChangePassword}>Change Password</Button>
-          </div>
         </CardContent>
       </Card>
 
@@ -377,30 +377,6 @@ export default function SettingsPage() {
         <Button onClick={handleSave}>{t('settings_save_button')}</Button>
       </div>
     </div>
-    <AlertDialog open={showReauthDialog} onOpenChange={setShowReauthDialog}>
-        <AlertDialogContent>
-            <AlertDialogHeader>
-            <AlertDialogTitle>Please Re-authenticate</AlertDialogTitle>
-            <AlertDialogDescription>
-                This is a sensitive operation. To continue, please enter your current password to confirm your identity.
-            </AlertDialogDescription>
-            </AlertDialogHeader>
-            <div className="space-y-2">
-            <Label htmlFor="current-password">Current Password</Label>
-            <Input
-                id="current-password"
-                type="password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                placeholder="Enter your current password"
-            />
-            </div>
-            <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleReauthenticateAndRetry}>Confirm</AlertDialogAction>
-            </AlertDialogFooter>
-        </AlertDialogContent>
-    </AlertDialog>
    </>
   );
 }
