@@ -119,7 +119,7 @@ export default function EmojiPage() {
                 <h3 className="font-headline text-2xl font-semibold text-primary">
                   {t('descriptionTitle')}
                 </h3>
-                <div className="prose dark:prose-invert max-w-none text-foreground/80" dangerouslySetInnerHTML={{ __html: emojiDescription }} />
+                <div className="prose dark:prose-invert max-w-none text-foreground/80 break-words overflow-hidden" dangerouslySetInnerHTML={{ __html: emojiDescription }} />
               </div>
 
               {category && (
