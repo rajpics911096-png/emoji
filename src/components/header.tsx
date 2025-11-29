@@ -63,29 +63,22 @@ export default function Header({ lang }: { lang: string }) {
             </Sheet>
         </div>
 
-        <div className="mr-4 hidden md:flex items-center flex-1">
+        <div className="mr-4 hidden md:flex items-center">
           <Link href={`/${lang}`} className="mr-6 flex items-center space-x-2">
             <SvgIcon svg={settings.logo} className="h-6 w-6" />
             <span className="hidden font-bold sm:inline-block font-headline text-lg">
               {settings.name}
             </span>
           </Link>
-          <div className="w-full max-w-lg">
-            <IntelligentSearchBar lang={lang} />
-          </div>
-        </div>
-        
-        <div className="flex-1 flex justify-center md:hidden">
-            <Link href={`/${lang}`} className="flex items-center space-x-2">
-              <SvgIcon svg={settings.logo} className="h-6 w-6" />
-              <span className="font-bold sm:inline-block font-headline text-lg">
-                {settings.name}
-              </span>
-            </Link>
         </div>
 
+        <div className="flex-1 flex items-center justify-center md:justify-start">
+            <div className="w-full max-w-lg">
+                <IntelligentSearchBar lang={lang} />
+            </div>
+        </div>
 
-        <div className="flex flex-1 items-center justify-end space-x-2">
+        <div className="flex items-center justify-end space-x-2">
           <LanguageSwitcher />
         </div>
       </div>
