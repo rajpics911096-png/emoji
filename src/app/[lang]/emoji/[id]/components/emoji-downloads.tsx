@@ -24,7 +24,7 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
   const selectedFormat = searchParams.get('format') || 'all';
 
   const handleTabChange = (value: string) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(Array.from(searchParams.entries()));
     if (value === 'all') {
       params.delete('format');
     } else {
