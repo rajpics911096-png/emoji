@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import type { Emoji } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';

@@ -1,3 +1,4 @@
+
 import { NextResponse, type NextRequest } from 'next/server'
 import { match as matchLocale } from '@formatjs/intl-localematcher'
 import Negotiator from 'negotiator'

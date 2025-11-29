@@ -1,3 +1,4 @@
+
 import { MetadataRoute } from 'next';
 import { emojis as initialEmojis, categories as initialCategories, pages } from '@/lib/data';
 import { i18n } from '@/lib/i18n-config';
