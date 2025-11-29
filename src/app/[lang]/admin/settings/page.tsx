@@ -21,8 +21,11 @@ export default function SettingsPage() {
   const { settings, setSettings, resetSettings } = useSiteSettings();
   
   const [newEmail, setNewEmail] = useState("");
+  const [currentPasswordForEmail, setCurrentPasswordForEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [currentPasswordForPassword, setCurrentPasswordForPassword] = useState("");
+
 
   const handleSave = () => {
     setSettings(settings);
@@ -40,21 +43,68 @@ export default function SettingsPage() {
     });
   }
 
+  const reauthenticate = async (password: string): Promise<User | null> => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user || !user.email) return null;
+
+    try {
+        const credential = EmailAuthProvider.credential(user.email, password);
+        await reauthenticateWithCredential(user, credential);
+        return user;
+    } catch (error: any) {
+        toast({
+            variant: "destructive",
+            title: "Authentication Failed",
+            description: "The password you entered is incorrect. Please try again.",
+        });
+        return null;
+    }
+  }
+
   const handleChangeEmail = async () => {
-    toast({
-      variant: "destructive",
-      title: "Function Disabled",
-      description: "Changing email is currently disabled.",
-    });
+      if (!newEmail || !currentPasswordForEmail) {
+          toast({ variant: "destructive", title: "Missing Information", description: "Please enter your new email and current password." });
+          return;
+      }
+
+      const user = await reauthenticate(currentPasswordForEmail);
+      if (user) {
+          try {
+              await updateEmail(user, newEmail);
+              toast({ title: "Email Updated", description: "Your email has been successfully updated." });
+              setNewEmail("");
+              setCurrentPasswordForEmail("");
+          } catch (error: any) {
+              toast({ variant: "destructive", title: "Email Update Failed", description: error.message });
+          }
+      }
   };
 
   const handleChangePassword = async () => {
-    toast({
-      variant: "destructive",
-      title: "Function Disabled",
-      description: "Changing password is currently disabled.",
-    });
+      if (newPassword !== confirmPassword) {
+          toast({ variant: "destructive", title: "Passwords Do Not Match", description: "The new passwords you entered do not match." });
+          return;
+      }
+      if (!newPassword || !currentPasswordForPassword) {
+          toast({ variant: "destructive", title: "Missing Information", description: "Please fill in all password fields." });
+          return;
+      }
+
+      const user = await reauthenticate(currentPasswordForPassword);
+      if (user) {
+          try {
+              await updatePassword(user, newPassword);
+              toast({ title: "Password Updated", description: "Your password has been successfully updated." });
+              setNewPassword("");
+              setConfirmPassword("");
+              setCurrentPasswordForPassword("");
+          } catch (error: any) {
+              toast({ variant: "destructive", title: "Password Update Failed", description: error.message });
+          }
+      }
   };
+
 
   return (
     <>
@@ -140,47 +190,79 @@ export default function SettingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-            <div className="space-y-4">
-                <h3 className="font-medium text-lg">Change Email</h3>
-                <div className="space-y-2">
-                    <Label htmlFor="new-email">New Email</Label>
-                    <Input
-                    id="new-email"
-                    type="email"
-                    value={newEmail}
-                    onChange={(e) => setNewEmail(e.target.value)}
-                    placeholder="Enter your new email"
-                    />
-                </div>
-                <Button onClick={handleChangeEmail}>Change Email</Button>
-            </div>
+            <Card>
+                <CardHeader>
+                    <CardTitle className="text-xl">Change Email</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="current-password-email">Current Password</Label>
+                        <Input
+                        id="current-password-email"
+                        type="password"
+                        value={currentPasswordForEmail}
+                        onChange={(e) => setCurrentPasswordForEmail(e.target.value)}
+                        placeholder="Enter your current password"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="new-email">New Email</Label>
+                        <Input
+                        id="new-email"
+                        type="email"
+                        value={newEmail}
+                        onChange={(e) => setNewEmail(e.target.value)}
+                        placeholder="Enter your new email"
+                        />
+                    </div>
+                </CardContent>
+                <CardFooter>
+                    <Button onClick={handleChangeEmail}>Change Email</Button>
+                </CardFooter>
+            </Card>
 
             <Separator />
             
-            <div className="space-y-4">
-                <h3 className="font-medium text-lg">Change Password</h3>
-                <div className="space-y-2">
-                <Label htmlFor="new-password">New Password</Label>
-                <Input
-                    id="new-password"
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="Enter your new password"
-                />
-                </div>
-                <div className="space-y-2">
-                <Label htmlFor="confirm-password">Confirm New Password</Label>
-                <Input
-                    id="confirm-password"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Confirm your new password"
-                />
-                </div>
-                <Button onClick={handleChangePassword}>Change Password</Button>
-            </div>
+             <Card>
+                <CardHeader>
+                    <CardTitle className="text-xl">Change Password</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="current-password-password">Current Password</Label>
+                        <Input
+                        id="current-password-password"
+                        type="password"
+                        value={currentPasswordForPassword}
+                        onChange={(e) => setCurrentPasswordForPassword(e.target.value)}
+                        placeholder="Enter your current password"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="new-password">New Password</Label>
+                        <Input
+                            id="new-password"
+                            type="password"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            placeholder="Enter your new password"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="confirm-password">Confirm New Password</Label>
+                        <Input
+                            id="confirm-password"
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder="Confirm your new password"
+                        />
+                    </div>
+                </CardContent>
+                 <CardFooter>
+                    <Button onClick={handleChangePassword}>Change Password</Button>
+                </CardFooter>
+            </Card>
         </CardContent>
       </Card>
 
