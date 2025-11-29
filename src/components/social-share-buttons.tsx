@@ -34,7 +34,7 @@ export function SocialShareButtons({ url, title, className }: SocialShareButtons
       name: 'Twitter',
       icon: 'twitter',
       url: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
-      className: 'bg-[#1DA1F2] hover:bg-[#1DA1F2]/90',
+      className: 'bg-black hover:bg-black/90',
     },
     {
       name: 'WhatsApp',
