@@ -4,11 +4,10 @@
 import { useState, useTransition, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search, Loader2 } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { useTranslations } from "@/context/translations-context";
 import { searchEmojisAction } from "@/lib/actions";
 import { useDebounce } from "@/hooks/use-debounce";
-import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import type { Emoji } from "@/lib/types";
 
 export default function IntelligentSearchBar({ lang }: { lang: string }) {
@@ -73,19 +72,14 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
           onSubmit={handleFormSubmit}
         >
           <div className="relative flex items-center w-full bg-background border border-input rounded-full shadow-sm focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background transition-all">
-              <Input
-                asChild
+              <CommandInput
+                type="search"
                 value={query}
-                onChange={handleInputChange}
+                onValueChange={setQuery}
                 onFocus={() => { if(results.length > 0) setIsOpen(true); }}
-              >
-                  <Command.Input
-                    type="search"
-                    placeholder={t('searchPlaceholder')}
-                    className="pl-4 pr-12 h-12 text-base bg-transparent border-none rounded-full focus-visible:ring-0 focus-visible:ring-offset-0 w-full"
-                  />
-              </Input>
-
+                placeholder={t('searchPlaceholder')}
+                className="pl-4 pr-12 h-12 text-base bg-transparent border-none rounded-full focus-visible:ring-0 focus-visible:ring-offset-0 w-full"
+              />
               <button type="submit" aria-label="Search" className="absolute right-4 h-6 w-6 text-muted-foreground z-10">
                 {isPending ? <Loader2 className="animate-spin" /> : <Search />}
               </button>
