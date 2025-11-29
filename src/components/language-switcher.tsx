@@ -13,12 +13,12 @@ import { usePathname, useRouter } from "next/navigation";
 import { i18n } from "@/lib/i18n-config";
 
 export function LanguageSwitcher() {
-  const { language, languages } = useTranslations();
+  const { language } = useTranslations();
   const pathname = usePathname();
   const router = useRouter();
 
   const handleLanguageChange = (newLang: string) => {
-    if (i18n.locales.includes(newLang)) {
+    if (i18n.locales.includes(newLang as any)) {
       const newPath = pathname.replace(`/${language}`, `/${newLang}`);
       router.replace(newPath);
     }
@@ -31,8 +31,8 @@ export function LanguageSwitcher() {
         <SelectValue placeholder="Language" />
       </SelectTrigger>
       <SelectContent>
-        {Object.entries(languages).map(([langCode, langName]) => (
-            <SelectItem key={langCode} value={langCode}>{langName}</SelectItem>
+        {i18n.locales.map((langCode) => (
+            <SelectItem key={langCode} value={langCode}>{langCode.toUpperCase()}</SelectItem>
         ))}
       </SelectContent>
     </Select>

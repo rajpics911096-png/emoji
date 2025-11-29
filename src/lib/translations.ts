@@ -748,7 +748,17 @@ const translations = {
         page_form_status_label: 'Status',
         page_form_status_placeholder: 'Select status',
         add_page_dialog_add_button: 'Add Page',
-    }
+    },
+    it: {
+      languageName: 'Italian',
+      welcomeMessage: 'Benvenuto a {{siteName}}',
+      siteDescription: 'Il tuo universo di emoji. Scopri, copia e scarica migliaia di emoji in vari formati.',
+    },
+    tr: {
+        languageName: 'Turkish',
+        welcomeMessage: '{{siteName}}\'a Hoş Geldiniz',
+        siteDescription: 'Emoji evreniniz. Binlerce emojiyi çeşitli formatlarda keşfedin, kopyalayın ve indirin.',
+    },
 };
 
 export type Translations = typeof translations;
