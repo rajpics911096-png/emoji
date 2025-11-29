@@ -8,9 +8,11 @@ import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { useTranslations } from '@/context/translations-context';
 import { useEmojiStore, usePageStore, useCategoryStore } from '@/lib/store';
+import { useParams } from 'next/navigation';
 
 export default function DashboardPage() {
-    const { t, language } = useTranslations();
+    const params = useParams<{ lang: string }>();
+    const { t } = useTranslations();
     const { emojis } = useEmojiStore();
     const { pages } = usePageStore();
     const { categories } = useCategoryStore();
@@ -37,9 +39,9 @@ export default function DashboardPage() {
     ];
 
     const quickActions = [
-        { label: t('dashboard_add_emoji'), href: `/${language}/admin/emojis`, icon: PlusCircle },
-        { label: t('dashboard_add_page'), href: `/${language}/admin/pages`, icon: FilePlus },
-        { label: t('dashboard_manage_categories'), href: `/${language}/admin/categories`, icon: ArrowRight },
+        { label: t('dashboard_add_emoji'), href: `/${params.lang}/admin/emojis`, icon: PlusCircle },
+        { label: t('dashboard_add_page'), href: `/${params.lang}/admin/pages`, icon: FilePlus },
+        { label: t('dashboard_manage_categories'), href: `/${params.lang}/admin/categories`, icon: ArrowRight },
     ];
 
     return (
