@@ -72,7 +72,7 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
                 <TabsTrigger 
                     key={format} 
                     value={format}
-                    className="capitalize rounded-full text-sm font-semibold h-auto px-6 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
+                    className="capitalize rounded-full text-sm font-semibold h-auto px-4 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
                 >
                     {t(`downloadsTab${format.charAt(0).toUpperCase() + format.slice(1)}`)}
                 </TabsTrigger>
