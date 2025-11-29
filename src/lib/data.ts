@@ -16,9 +16,8 @@ export const emojis: Emoji[] = [
   {
     id: 'grinning-face',
     emoji: '😀',
-    title: 'Grinning Face',
-    description:
-      'A yellow face with simple, open eyes and a broad, open smile, showing upper teeth and tongue on some platforms. Often conveys general pleasure and good cheer or humor.',
+    title: 'emoji_grinning_face_title',
+    description: 'emoji_grinning_face_desc',
     category: 'smileys-and-people',
     formats: {
       png: [
@@ -57,9 +56,8 @@ export const emojis: Emoji[] = [
   {
     id: 'rolling-on-the-floor-laughing',
     emoji: '🤣',
-    title: 'Rolling on the Floor Laughing',
-    description:
-      'A yellow face with a big grin and scrunched, X-shaped eyes, tilted on its side as if rolling on the floor laughing. Shedding two tears and widely used to show something is hilarious.',
+    title: 'emoji_rofl_title',
+    description: 'emoji_rofl_desc',
     category: 'smileys-and-people',
     formats: {
       png: [],
@@ -74,9 +72,8 @@ export const emojis: Emoji[] = [
   {
     id: 'winking-face',
     emoji: '😉',
-    title: 'Winking Face',
-    description:
-      'A yellow face with a slight smile or smirk and one eye winking, usually the left. May signal a joke, flirtation, hidden meaning, or general positivity. Tone varies, including playful, affectionate, or ironic.',
+    title: 'emoji_winking_face_title',
+    description: 'emoji_winking_face_desc',
     category: 'smileys-and-people',
     formats: {
       png: [
@@ -94,9 +91,8 @@ export const emojis: Emoji[] = [
   {
     id: 'cat-face',
     emoji: '🐱',
-    title: 'Cat Face',
-    description:
-      'A cartoon-styled face of a cat. Generally depicted as a yellowish-orange cat face with pointed ears and whiskers. May be used with a more affectionate tone than the full-bodied 🐈 Cat, though their applications generally overlap.',
+    title: 'emoji_cat_face_title',
+    description: 'emoji_cat_face_desc',
     category: 'animals-and-nature',
     formats: {
       png: [],
@@ -111,9 +107,8 @@ export const emojis: Emoji[] = [
   {
     id: 'dog-face',
     emoji: '🐶',
-    title: 'Dog Face',
-    description:
-      'A cartoon-styled face of a dog. Generally depicted as a generic, light-brown dog face with perky ears and its tongue hanging out. Often used with an affectionate or friendly tone.',
+    title: 'emoji_dog_face_title',
+    description: 'emoji_dog_face_desc',
     category: 'animals-and-nature',
     formats: {
       png: [],
@@ -128,8 +123,8 @@ export const emojis: Emoji[] = [
   {
     id: 'lion-face',
     emoji: '🦁',
-    title: 'Lion Face',
-    description: 'The face of a lion, the king of the jungle. Depicted as a male lion with a golden-brown mane. May be used to represent the Leo astrological sign.',
+    title: 'emoji_lion_face_title',
+    description: 'emoji_lion_face_desc',
     category: 'animals-and-nature',
     formats: {
       png: [],
@@ -144,8 +139,8 @@ export const emojis: Emoji[] = [
   {
     id: 'pizza',
     emoji: '🍕',
-    title: 'Pizza',
-    description: 'A slice of pizza, topped with cheese and pepperoni. A universal symbol of fast food and a favorite dish for many.',
+    title: 'emoji_pizza_title',
+    description: 'emoji_pizza_desc',
     category: 'food-and-drink',
     formats: {
       png: [{ name: 'pizza-slice.png', size: '22 KB', url: '/placeholder.png' }],
@@ -160,8 +155,8 @@ export const emojis: Emoji[] = [
   {
     id: 'hamburger',
     emoji: '🍔',
-    title: 'Hamburger',
-    description: 'A hamburger, a sandwich consisting of a cooked patty of ground meat usually placed inside a sliced bread roll or bun.',
+    title: 'emoji_hamburger_title',
+    description: 'emoji_hamburger_desc',
     category: 'food-and-drink',
     formats: {
       png: [],
@@ -176,8 +171,8 @@ export const emojis: Emoji[] = [
   {
     id: 'french-fries',
     emoji: '🍟',
-    title: 'French Fries',
-    description: 'A serving of french fries, or chips, as served at a fast-food restaurant. Held in a red carton, as at McDonald’s.',
+    title: 'emoji_french_fries_title',
+    description: 'emoji_french_fries_desc',
     category: 'food-and-drink',
     formats: {
         png: [],
@@ -192,8 +187,8 @@ export const emojis: Emoji[] = [
   {
     id: 'rocket',
     emoji: '🚀',
-    title: 'Rocket',
-    description: 'A rocket, used to travel into space. Commonly used to represent speed, progress, and launching new projects.',
+    title: 'emoji_rocket_title',
+    description: 'emoji_rocket_desc',
     category: 'travel-and-places',
     formats: {
         png: [{name: 'rocket_128.png', size: '18kb', url: '/placeholder.png'}],
@@ -208,8 +203,8 @@ export const emojis: Emoji[] = [
     {
     id: 'airplane',
     emoji: '✈️',
-    title: 'Airplane',
-    description: 'An airplane, a fixed-wing aircraft that is propelled forward by thrust from a jet engine, propeller, or rocket engine.',
+    title: 'emoji_airplane_title',
+    description: 'emoji_airplane_desc',
     category: 'travel-and-places',
     formats: {
         png: [],
@@ -224,8 +219,8 @@ export const emojis: Emoji[] = [
   {
     id: 'statue-of-liberty',
     emoji: '🗽',
-    title: 'Statue of Liberty',
-    description: 'The Statue of Liberty, a colossal neoclassical sculpture on Liberty Island in New York Harbor in New York City, in the United States.',
+    title: 'emoji_statue_of_liberty_title',
+    description: 'emoji_statue_of_liberty_desc',
     category: 'travel-and-places',
     formats: {
         png: [],

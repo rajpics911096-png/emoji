@@ -62,30 +62,32 @@ export default function EmojiPage() {
       return [...allFiles].sort(() => 0.5 - Math.random()).slice(0, 8);
   }, [allFiles]);
 
+  if (!emoji) {
+    notFound();
+  }
+
+  const emojiTitle = t(emoji.title);
+  const emojiDescription = t(emoji.description);
+
   const jsonLdData: Thing = useMemo(() => {
-    if (!emoji) return {};
     const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
     const emojiImage = emoji.formats.png[0] || emoji.formats.image[0];
 
     return {
         '@context': 'https://schema.org',
         '@type': 'Thing',
-        name: emoji.metaTitle || emoji.title,
-        description: emoji.metaDescription || emoji.description,
+        name: emoji.metaTitle || emojiTitle,
+        description: emoji.metaDescription || emojiDescription,
         image: emojiImage ? `${baseUrl}${emojiImage.url}` : undefined,
         url: `${baseUrl}/${lang}/emoji/${emoji.id}`,
     };
-  }, [emoji, lang]);
+  }, [emoji, lang, emojiTitle, emojiDescription]);
 
-
-  if (!emoji) {
-    notFound();
-  }
 
   const category = categories.find(c => c.id === emoji.category);
   const related = getRelatedEmojis(emoji.id);
 
-  const metaTitle = emoji.metaTitle || emoji.title;
+  const metaTitle = emoji.metaTitle || emojiTitle;
   const metaDescription = emoji.metaDescription || settings.metaDescription;
 
   return (
@@ -115,7 +117,7 @@ export default function EmojiPage() {
                 <h3 className="font-headline text-2xl font-semibold text-primary">
                   {t('descriptionTitle')}
                 </h3>
-                <div className="prose dark:prose-invert max-w-none text-foreground/80" dangerouslySetInnerHTML={{ __html: emoji.description }} />
+                <div className="prose dark:prose-invert max-w-none text-foreground/80" dangerouslySetInnerHTML={{ __html: emojiDescription }} />
               </div>
 
               {category && (

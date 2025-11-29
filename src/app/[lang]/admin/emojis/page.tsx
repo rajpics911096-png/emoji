@@ -26,7 +26,7 @@ import { format } from 'date-fns';
 
 
 type SortConfig = {
-  key: keyof Emoji;
+  key: keyof Emoji | 'translatedTitle';
   direction: 'ascending' | 'descending';
 };
 
@@ -40,25 +40,24 @@ export default function EmojisPage() {
   const { emojis, addEmoji, updateEmoji, deleteEmoji } = useEmojiStore();
   
   const [sortConfig, setSortConfig] = useState<SortConfig | null>({ key: 'createdAt', direction: 'descending' });
-  const [emojiListWithViews, setEmojiListWithViews] = useState<Emoji[]>([]);
   
-  useEffect(() => {
+  const emojiListWithDetails = useMemo(() => {
     const views = JSON.parse(localStorage.getItem('emojiViews') || '{}');
-    const updatedList = emojis.map(emoji => ({
+    return emojis.map(emoji => ({
       ...emoji,
       views: views[emoji.id] || emoji.views || 0,
       createdAt: emoji.createdAt || 0,
+      translatedTitle: t(emoji.title)
     }));
-    setEmojiListWithViews(updatedList);
-  }, [emojis]);
+  }, [emojis, t]);
 
 
   const sortedEmojiList = useMemo(() => {
-    let sortableItems = [...emojiListWithViews];
+    let sortableItems = [...emojiListWithDetails];
     if (sortConfig !== null) {
       sortableItems.sort((a, b) => {
-        const aValue = a[sortConfig.key];
-        const bValue = b[sortConfig.key];
+        const aValue = a[sortConfig.key as keyof typeof a];
+        const bValue = b[sortConfig.key as keyof typeof b];
 
         if (typeof aValue === 'number' && typeof bValue === 'number') {
             if (aValue < bValue) {
@@ -79,9 +78,9 @@ export default function EmojisPage() {
       });
     }
     return sortableItems;
-  }, [emojiListWithViews, sortConfig]);
+  }, [emojiListWithDetails, sortConfig]);
 
-  const requestSort = (key: keyof Emoji) => {
+  const requestSort = (key: SortConfig['key']) => {
     let direction: 'ascending' | 'descending' = 'ascending';
     if (sortConfig && sortConfig.key === key && sortConfig.direction === 'ascending') {
       direction = 'descending';
@@ -89,7 +88,7 @@ export default function EmojisPage() {
     setSortConfig({ key, direction });
   };
   
-  const getSortIndicator = (key: keyof Emoji) => {
+  const getSortIndicator = (key: SortConfig['key']) => {
     if (!sortConfig || sortConfig.key !== key) {
       return <ArrowUpDown className="ml-2 h-4 w-4 opacity-0 group-hover:opacity-50" />;
     }
@@ -113,7 +112,7 @@ export default function EmojisPage() {
     addEmoji(newEmoji);
     toast({
       title: t('emojis_toast_added_title'),
-      description: t('emojis_toast_added_desc', { title: newEmoji.title }),
+      description: t('emojis_toast_added_desc', { title: t(newEmoji.title) }),
     });
     setIsAddDialogOpen(false);
   };
@@ -122,7 +121,7 @@ export default function EmojisPage() {
     updateEmoji(updatedEmoji);
     toast({
         title: t('emojis_toast_updated_title'),
-        description: t('emojis_toast_updated_desc', { title: updatedEmoji.title }),
+        description: t('emojis_toast_updated_desc', { title: t(updatedEmoji.title) }),
     });
     setIsEditDialogOpen(false);
     setSelectedEmoji(null);
@@ -151,8 +150,8 @@ export default function EmojisPage() {
             <TableRow>
               <TableHead className="w-[80px]">{t('emojis_table_header_emoji')}</TableHead>
               <TableHead>
-                <Button variant="ghost" onClick={() => requestSort('title')} className="group px-0 h-auto hover:bg-transparent">
-                    {t('emojis_table_header_title')} {getSortIndicator('title')}
+                <Button variant="ghost" onClick={() => requestSort('translatedTitle')} className="group px-0 h-auto hover:bg-transparent">
+                    {t('emojis_table_header_title')} {getSortIndicator('translatedTitle')}
                 </Button>
               </TableHead>
               <TableHead>
@@ -180,7 +179,7 @@ export default function EmojisPage() {
             {sortedEmojiList.map((emoji) => (
               <TableRow key={emoji.id}>
                 <TableCell className="font-medium text-2xl">{emoji.emoji}</TableCell>
-                <TableCell className="font-medium">{emoji.title}</TableCell>
+                <TableCell className="font-medium">{emoji.translatedTitle}</TableCell>
                 <TableCell className="capitalize">{t(`category_${emoji.category}`)}</TableCell>
                 <TableCell>{(emoji.views || 0).toLocaleString()}</TableCell>
                 <TableCell>
@@ -211,7 +210,7 @@ export default function EmojisPage() {
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleEditClick(emoji)}>{t('dialog_edit_button')}</DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => handleDelete(emoji.id, emoji.title)} className="text-destructive">{t('dialog_delete_button')}</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleDelete(emoji.id, emoji.translatedTitle)} className="text-destructive">{t('dialog_delete_button')}</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>

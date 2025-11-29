@@ -24,7 +24,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import type { Emoji, EmojiFormatFile } from "@/lib/types";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useTranslations } from "@/context/translations-context";
 import { UploadedFileCard } from "./uploaded-file-card";
 import { useCategoryStore } from "@/lib/store";
@@ -51,6 +51,16 @@ interface EditEmojiDialogProps {
 export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: EditEmojiDialogProps) {
   const { t } = useTranslations();
   const { categories } = useCategoryStore();
+  
+  const defaultValues = useMemo(() => ({
+    emoji: emoji.emoji,
+    title: t(emoji.title),
+    description: t(emoji.description),
+    category: emoji.category,
+    metaTitle: emoji.metaTitle,
+    metaDescription: emoji.metaDescription,
+  }), [emoji, t]);
+
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, EmojiFormatFile[]>>(emoji.formats);
 
   const {
@@ -61,29 +71,15 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
     formState: { errors },
   } = useForm<EmojiFormData>({
     resolver: zodResolver(emojiSchema),
-    defaultValues: {
-      emoji: emoji.emoji,
-      title: emoji.title,
-      description: emoji.description,
-      category: emoji.category,
-      metaTitle: emoji.metaTitle,
-      metaDescription: emoji.metaDescription,
-    },
+    defaultValues: defaultValues,
   });
 
   useEffect(() => {
     if (emoji) {
-      reset({
-        emoji: emoji.emoji,
-        title: emoji.title,
-        description: emoji.description,
-        category: emoji.category,
-        metaTitle: emoji.metaTitle,
-        metaDescription: emoji.metaDescription,
-      });
+      reset(defaultValues);
       setUploadedFiles(emoji.formats);
     }
-  }, [emoji, reset]);
+  }, [emoji, reset, defaultValues]);
   
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -133,7 +129,8 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
 
 
   const onSubmit = (data: EmojiFormData) => {
-    onEditEmoji({ ...emoji, ...data, formats: uploadedFiles });
+    // When saving, we save the translation KEY, not the translated value
+    onEditEmoji({ ...emoji, ...data, title: emoji.title, description: emoji.description, formats: uploadedFiles });
   };
   
   const handleOpenChange = (open: boolean) => {
