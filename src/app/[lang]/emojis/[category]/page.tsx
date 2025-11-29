@@ -28,24 +28,32 @@ export default function CategoryPage() {
   const { emojis, getEmojisByCategory } = useEmojiStore();
   
   const category = categories.find((c) => c.id === categorySlug);
-  if (!category) {
+  const searchTerm = searchParams.get('search');
+
+  if (!category && !searchTerm) {
     notFound();
   }
 
-  const categoryName = t(category.name);
+  const isSearchPage = categorySlug === 'all' && searchTerm;
+  const pageTitle = isSearchPage 
+    ? `Search results for "${searchTerm}"`
+    : t(category?.name || '');
+  const pageDescription = isSearchPage
+    ? `Found results for your query: "${searchTerm}"`
+    : t('categoryDescription', { categoryName: t(category?.name || '') });
 
-  const searchTerm = searchParams.get('search');
-  
+
   const emojiList = useMemo(() => {
     let categoryEmojis = getEmojisByCategory(categorySlug);
     if (searchTerm) {
-        return categoryEmojis.filter(emoji => 
-            emoji.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            emoji.description.toLowerCase().includes(searchTerm.toLowerCase())
+        const lowercasedQuery = searchTerm.toLowerCase();
+        return emojis.filter(emoji => 
+            t(emoji.title).toLowerCase().includes(lowercasedQuery) ||
+            t(emoji.description).toLowerCase().includes(lowercasedQuery)
         );
     }
     return categoryEmojis;
-  }, [getEmojisByCategory, categorySlug, searchTerm]);
+  }, [getEmojisByCategory, emojis, categorySlug, searchTerm, t]);
 
   const featuredFiles = useMemo(() => {
     if (!searchTerm) {
@@ -58,7 +66,7 @@ export default function CategoryPage() {
                 ...file,
                 emojiId: emoji.id,
                 format: format,
-                emojiTitle: emoji.title,
+                emojiTitle: t(emoji.title),
             }))
         )
     );
@@ -67,9 +75,9 @@ export default function CategoryPage() {
     return allFiles.filter(file => 
         file.name.toLowerCase().includes(lowercasedQuery) ||
         file.emojiTitle.toLowerCase().includes(lowercasedQuery)
-    ).slice(0, 8); // Limit to 8 results for display
+    ).slice(0, 12); // Limit to 12 results for display
 
-  }, [emojis, searchTerm]);
+  }, [emojis, searchTerm, t]);
 
 
   return (
@@ -79,37 +87,41 @@ export default function CategoryPage() {
         
         <div className="text-center mb-8 md:mb-10">
             <h1 className="text-4xl md:text-5xl font-headline font-bold text-primary tracking-tighter">
-                {categoryName}
+                {pageTitle}
             </h1>
             <p className="mt-3 text-lg md:text-xl max-w-3xl mx-auto text-foreground/80">
-                {t('categoryDescription', { categoryName: categoryName })}
+                {pageDescription}
             </p>
         </div>
         
-        {emojiList.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
-            {emojiList.map((emoji) => (
-              <EmojiCard key={emoji.id} emoji={emoji} lang={lang} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-16">
-            <p className="text-xl text-muted-foreground">{t('categoryNoResults', { searchTerm: searchTerm || '' })}</p>
-          </div>
+        {emojiList.length > 0 && (
+            <section id="emoji-results">
+                {isSearchPage && <h2 className="text-2xl font-headline font-bold mb-6">Emoji Results</h2>}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
+                    {emojiList.map((emoji) => (
+                    <EmojiCard key={emoji.id} emoji={emoji} lang={lang} />
+                    ))}
+                </div>
+            </section>
         )}
 
         {featuredFiles.length > 0 && (
             <section id="featured-files" className="mt-12 md:mt-16">
-                <div className="container mx-auto px-4">
-                <h2 className="text-3xl font-headline font-bold text-center mb-8">
-                    Featured Files
+                <h2 className="text-2xl font-headline font-bold text-center md:text-left mb-6">
+                    File Results
                 </h2>
                 <FeaturedFiles files={featuredFiles} lang={lang} />
-                </div>
             </section>
+        )}
+
+        {emojiList.length === 0 && featuredFiles.length === 0 && searchTerm && (
+          <div className="text-center py-16">
+            <p className="text-xl text-muted-foreground">{t('categoryNoResults', { searchTerm: searchTerm || '' })}</p>
+          </div>
         )}
       </main>
       <Footer lang={lang} />
     </>
   );
 }
+
