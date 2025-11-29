@@ -1,9 +1,10 @@
+
 "use client";
 
 import { useState, useMemo } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MoreVertical, Upload, Copy, Download, Trash2, File as FileIcon, X } from "lucide-react";
+import { MoreVertical, Upload, Copy, Download, Trash2, File as FileIcon, X, Share2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -141,6 +142,25 @@ export default function MediaPage() {
         setSelectedFiles([]);
     }
 
+    const handleShare = async (file: MediaFile) => {
+        const shareData = {
+          title: file.name,
+          text: `Check out this file: ${file.name}`,
+          url: window.location.origin + file.url,
+        };
+
+        if (navigator.share) {
+          try {
+            await navigator.share(shareData);
+          } catch (error) {
+            console.error('Error sharing:', error);
+            copyToClipboard(file.url);
+          }
+        } else {
+          copyToClipboard(file.url);
+        }
+    };
+
     const FilePreview = ({ file }: { file: MediaFile }) => {
         const isImage = ['png', 'gif', 'image', 'jpeg', 'webp'].includes(file.format) || file.url.startsWith('blob:image');
         const isVideo = file.format === 'video' || file.url.startsWith('blob:video');
@@ -237,6 +257,10 @@ export default function MediaPage() {
                                         </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
+                                        <DropdownMenuItem onSelect={() => handleShare(file)}>
+                                            <Share2 className="mr-2 h-4 w-4" />
+                                            <span>Share</span>
+                                        </DropdownMenuItem>
                                         <DropdownMenuItem onSelect={() => copyToClipboard(file.url)}>
                                             <Copy className="mr-2 h-4 w-4" />
                                             <span>{t('media_toast_url_copied_title')}</span>
@@ -267,3 +291,5 @@ export default function MediaPage() {
         </div>
     );
 }
+
+    
