@@ -291,6 +291,43 @@ export default function SettingsPage() {
 
       <Card>
         <CardHeader>
+          <CardTitle>Header &amp; Body Scripts</CardTitle>
+          <CardDescription>
+            Add custom scripts to the &lt;head&gt; and &lt;body&gt; tags of your site.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="header-scripts">Header Scripts</Label>
+            <Textarea
+              id="header-scripts"
+              value={settings.headerScripts || ''}
+              onChange={(e) => setSettings({ ...settings, headerScripts: e.target.value })}
+              rows={5}
+              placeholder="e.g. <script>...</script> or <meta ...>"
+            />
+            <p className="text-sm text-muted-foreground">
+              Scripts/tags to be injected before the closing &lt;/head&gt; tag.
+            </p>
+          </div>
+           <div className="space-y-2">
+            <Label htmlFor="body-scripts">Body Scripts</Label>
+            <Textarea
+              id="body-scripts"
+              value={settings.bodyScripts || ''}
+              onChange={(e) => setSettings({ ...settings, bodyScripts: e.target.value })}
+              rows={5}
+              placeholder="e.g. <script>...</script> for analytics"
+            />
+            <p className="text-sm text-muted-foreground">
+              Scripts/tags to be injected at the start of the &lt;body&gt; tag.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
           <CardTitle>{t('settings_content_title')}</CardTitle>
           <CardDescription>
             {t('settings_content_desc')}
@@ -354,5 +391,3 @@ export default function SettingsPage() {
    </>
   );
 }
-
-    

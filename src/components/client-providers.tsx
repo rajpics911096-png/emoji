@@ -24,8 +24,19 @@ function SiteHead() {
       <meta name="twitter:title" content={settings.metaTitle || settings.name} />
       <meta name="twitter:description" content={settings.metaDescription} />
       <meta name="twitter:image" content="/og-image.png" />
+      {settings.headerScripts && (
+        <div dangerouslySetInnerHTML={{ __html: settings.headerScripts }} />
+      )}
     </Head>
   );
+}
+
+function BodyScripts() {
+    const { settings } = useSiteSettings();
+    if (!settings.bodyScripts) return null;
+    return (
+        <div dangerouslySetInnerHTML={{ __html: settings.bodyScripts }} />
+    )
 }
 
 export function ClientProviders({ children, lang }: { children: ReactNode, lang: string }) {
@@ -36,6 +47,7 @@ export function ClientProviders({ children, lang }: { children: ReactNode, lang:
                     <SiteHead />
                     <DynamicFavicon />
                     <DynamicTheme />
+                    <BodyScripts />
                     {children}
                 </TranslationsProvider>
             </SiteSettingsProvider>

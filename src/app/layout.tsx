@@ -3,14 +3,17 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
 import { ThemeProvider } from "@/components/theme-provider";
+import { ClientProviders } from '@/components/client-providers';
 
 export default function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: ReactNode;
+  params: { lang: string };
 }>) {
   return (
-    <html lang="en" dir="ltr" suppressHydrationWarning>
+    <html lang={params.lang || "en"} dir="ltr" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -30,7 +33,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
         >
-          {children}
+          <ClientProviders lang={params.lang}>
+            {children}
+          </ClientProviders>
         </ThemeProvider>
       </body>
     </html>

@@ -104,5 +104,7 @@ export const defaultSiteSettings: SiteSettings = {
         muted: { h: 0, s: 0, l: 96.1 },
         accent: { h: 182, s: 100, l: 74 },
         destructive: { h: 0, s: 84.2, l: 60.2 },
-    }
+    },
+    headerScripts: '',
+    bodyScripts: '',
 };

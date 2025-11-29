@@ -92,4 +92,6 @@ export type SiteSettings = {
   adSettings: AdSetting[];
   adsTxtContent?: string;
   colors?: ColorSettings;
+  headerScripts?: string;
+  bodyScripts?: string;
 };
