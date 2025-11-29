@@ -11,7 +11,7 @@ import { EmojiView } from './components/emoji-view';
 import { SvgIcon } from '@/components/svg-icon';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EmojiDownloads } from './components/emoji-downloads';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from '@/context/translations-context';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { AdSlot } from '@/components/ad-slot';
@@ -31,6 +31,7 @@ export default function EmojiPage() {
   const effectRan = useRef(false);
   const { t } = useTranslations();
   const { settings } = useSiteSettings();
+  const [featuredFiles, setFeaturedFiles] = useState<any[]>([]);
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'development' && effectRan.current) return;
@@ -46,8 +47,8 @@ export default function EmojiPage() {
     };
   }, [emoji]);
   
-  const allFiles = useMemo(() => {
-    return emojis.flatMap(emojiItem => 
+  useEffect(() => {
+    const allFiles = emojis.flatMap(emojiItem => 
         Object.entries(emojiItem.formats).flatMap(([format, files]) => 
             files.map(file => ({
                 ...file,
@@ -56,11 +57,9 @@ export default function EmojiPage() {
             }))
         )
     );
+    const randomFiles = [...allFiles].sort(() => 0.5 - Math.random()).slice(0, 8);
+    setFeaturedFiles(randomFiles);
   }, [emojis]);
-  
-  const featuredFiles = useMemo(() => {
-      return [...allFiles].sort(() => 0.5 - Math.random()).slice(0, 8);
-  }, [allFiles]);
 
   if (!emoji) {
     notFound();

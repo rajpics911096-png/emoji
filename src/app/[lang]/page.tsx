@@ -17,7 +17,7 @@ import { useSiteSettings } from '@/context/site-settings-context';
 import { useTranslations } from '@/context/translations-context';
 import { useCategoryStore, useEmojiStore } from '@/lib/store';
 import { FeaturedFiles } from '@/components/featured-files';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 export default function Home() {
   const params = useParams<{ lang: string }>();
@@ -26,13 +26,14 @@ export default function Home() {
   const { t } = useTranslations();
   const { emojis } = useEmojiStore();
   const { categories } = useCategoryStore();
-  
+  const [featuredFiles, setFeaturedFiles] = useState<any[]>([]);
+
   const featuredEmojis = useMemo(() => {
     return [...emojis].sort(() => 0.5 - Math.random()).slice(0, 8);
   }, [emojis]);
   
-  const allFiles = useMemo(() => {
-    return emojis.flatMap(emoji => 
+  useEffect(() => {
+    const allFiles = emojis.flatMap(emoji => 
         Object.entries(emoji.formats).flatMap(([format, files]) => 
             files.map(file => ({
                 ...file,
@@ -41,11 +42,10 @@ export default function Home() {
             }))
         )
     );
+    const randomFiles = [...allFiles].sort(() => 0.5 - Math.random()).slice(0, 8);
+    setFeaturedFiles(randomFiles);
   }, [emojis]);
-  
-  const featuredFiles = useMemo(() => {
-      return [...allFiles].sort(() => 0.5 - Math.random()).slice(0, 8);
-  }, [allFiles]);
+
 
   const sortedCategories = useMemo(() => {
     const allCategory = categories.find(c => c.id === 'all');
