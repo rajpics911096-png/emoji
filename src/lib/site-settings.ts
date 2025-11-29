@@ -107,4 +107,5 @@ export const defaultSiteSettings: SiteSettings = {
     },
     headerScripts: '',
     bodyScripts: '',
+    footerScripts: '',
 };

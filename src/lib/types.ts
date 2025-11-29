@@ -94,4 +94,5 @@ export type SiteSettings = {
   colors?: ColorSettings;
   headerScripts?: string;
   bodyScripts?: string;
+  footerScripts?: string;
 };

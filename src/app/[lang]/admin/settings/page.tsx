@@ -291,7 +291,7 @@ export default function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Header &amp; Body Scripts</CardTitle>
+          <CardTitle>Header & Body Scripts</CardTitle>
           <CardDescription>
             Add custom scripts to the &lt;head&gt; and &lt;body&gt; tags of your site.
           </CardDescription>
@@ -321,6 +321,19 @@ export default function SettingsPage() {
             />
             <p className="text-sm text-muted-foreground">
               Scripts/tags to be injected at the start of the &lt;body&gt; tag.
+            </p>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="footer-scripts">Footer Scripts</Label>
+            <Textarea
+              id="footer-scripts"
+              value={settings.footerScripts || ''}
+              onChange={(e) => setSettings({ ...settings, footerScripts: e.target.value })}
+              rows={5}
+              placeholder="e.g. <script>...</script> for tracking pixels"
+            />
+            <p className="text-sm text-muted-foreground">
+              Scripts/tags to be injected before the closing &lt;/body&gt; tag.
             </p>
           </div>
         </CardContent>

@@ -39,6 +39,15 @@ function BodyScripts() {
     )
 }
 
+function FooterScripts() {
+    const { settings } = useSiteSettings();
+    if (!settings.footerScripts) return null;
+    return (
+        <div dangerouslySetInnerHTML={{ __html: settings.footerScripts }} />
+    )
+}
+
+
 export function ClientProviders({ children, lang }: { children: ReactNode, lang: string }) {
     return (
         <FirebaseProvider>
@@ -49,6 +58,7 @@ export function ClientProviders({ children, lang }: { children: ReactNode, lang:
                     <DynamicTheme />
                     <BodyScripts />
                     {children}
+                    <FooterScripts />
                 </TranslationsProvider>
             </SiteSettingsProvider>
         </FirebaseProvider>
