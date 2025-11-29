@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClientProviders } from '@/components/client-providers';
+import { i18n } from '@/lib/i18n-config';
 
 export default function RootLayout({
   children,
@@ -12,8 +13,10 @@ export default function RootLayout({
   children: ReactNode;
   params: { lang: string };
 }>) {
+  const lang = i18n.locales.includes(params.lang as any) ? params.lang : i18n.defaultLocale;
+
   return (
-    <html lang={params.lang || "en"} dir="ltr" suppressHydrationWarning>
+    <html lang={lang} dir="ltr" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -33,7 +36,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
         >
-          <ClientProviders lang={params.lang}>
+          <ClientProviders lang={lang}>
             {children}
           </ClientProviders>
         </ThemeProvider>
