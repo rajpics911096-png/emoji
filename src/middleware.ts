@@ -41,7 +41,7 @@ export const config = {
   // Matcher ignoring `/_next/` and `/api/`
   matcher: [
     // Skip all internal paths (_next)
-    '/((?!_next|api|.*\\..*).*)',
+    '/((?!_next|api|ads.txt|sitemap.xml|.*\\..*).*)',
     // Optional: only run on root (/) URL
     // '/'
   ],
