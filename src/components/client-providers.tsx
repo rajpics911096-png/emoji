@@ -9,8 +9,6 @@ import { DynamicFavicon } from '@/components/dynamic-favicon';
 import Head from 'next/head';
 import type { ReactNode } from 'react';
 import { DynamicTheme } from '@/components/dynamic-theme';
-import { ThemeProvider } from './theme-provider';
-
 
 function SiteHead() {
   const { settings } = useSiteSettings();
@@ -32,22 +30,15 @@ function SiteHead() {
 
 export function ClientProviders({ children, lang }: { children: ReactNode, lang: string }) {
     return (
-        <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-        >
-            <FirebaseProvider>
-                <SiteSettingsProvider>
-                    <TranslationsProvider language={lang}>
-                        <SiteHead />
-                        <DynamicFavicon />
-                        <DynamicTheme />
-                        {children}
-                    </TranslationsProvider>
-                </SiteSettingsProvider>
-            </FirebaseProvider>
-        </ThemeProvider>
+        <FirebaseProvider>
+            <SiteSettingsProvider>
+                <TranslationsProvider language={lang}>
+                    <SiteHead />
+                    <DynamicFavicon />
+                    <DynamicTheme />
+                    {children}
+                </TranslationsProvider>
+            </SiteSettingsProvider>
+        </FirebaseProvider>
     );
 }
