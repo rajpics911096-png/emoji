@@ -1,9 +1,9 @@
 
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Search, Loader2 } from "lucide-react";
+import { Search } from "lucide-react";
 import { useTranslations } from "@/context/translations-context";
 import { Input } from "@/components/ui/input";
 
@@ -39,9 +39,9 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t('searchPlaceholder')}
-              className="pl-4 pr-10 h-12 text-base bg-background border border-input rounded-full shadow-sm focus:ring-2 focus:ring-ring focus:ring-offset-2 focus-visible:ring-offset-background transition-all w-full"
+              className="pl-4 pr-12 h-12 text-base bg-background border border-input rounded-full shadow-sm focus:ring-2 focus:ring-ring focus:ring-offset-2 focus-visible:ring-offset-background transition-all w-full"
           />
-          <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 h-6 w-6 text-muted-foreground" aria-label="Search">
+          <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 h-6 w-6 text-primary" aria-label="Search">
             <Search />
           </button>
         </div>
