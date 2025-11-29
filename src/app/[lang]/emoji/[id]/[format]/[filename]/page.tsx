@@ -18,6 +18,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { AdSlot } from '@/components/ad-slot';
 import { useEmojiStore, useCategoryStore } from '@/lib/store';
+import { SocialShareButtons } from '@/components/social-share-buttons';
 
 const DownloadButton = ({ file, format }: { file: EmojiFormatFile, format: string }) => {
   const { settings } = useSiteSettings();
@@ -100,6 +101,13 @@ export default function FileDownloadPage() {
   const { getEmojiById } = useEmojiStore();
   const { categories } = useCategoryStore();
   const emoji = getEmojiById(id);
+  const [pageUrl, setPageUrl] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+        setPageUrl(window.location.href);
+    }
+  }, []);
 
   const file = useMemo(() => {
     if (!emoji) return null;
@@ -149,6 +157,7 @@ export default function FileDownloadPage() {
                         <Badge variant="outline">{file.size}</Badge>
                     </div>
                     <DownloadButton file={file} format={format} />
+                    <SocialShareButtons url={pageUrl} title={`Download ${file.name}`} />
                 </div>
                 
                 <div className="my-4 w-full max-w-5xl">
@@ -210,3 +219,4 @@ export default function FileDownloadPage() {
     </>
   );
 }
+
