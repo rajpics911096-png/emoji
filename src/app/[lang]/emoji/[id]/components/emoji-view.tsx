@@ -76,7 +76,7 @@ export function EmojiView({ emoji }: EmojiViewProps) {
   return (
     <article>
         <div className="flex flex-col items-center text-center p-4 sm:p-8 border rounded-lg bg-card shadow-sm">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-headline font-bold text-primary tracking-tighter">{t(emoji.title)}</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-headline font-bold text-foreground tracking-tighter">{t(emoji.title)}</h1>
             <div className="my-6 sm:my-8 text-8xl sm:text-9xl md:text-[10rem] break-words">{emoji.emoji}</div>
             <div className="flex flex-wrap justify-center gap-2">
                 <Button onClick={handleCopy} size="default" className="transition-all">
