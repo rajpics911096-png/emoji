@@ -130,12 +130,18 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
 
 
   const onSubmit = (data: EmojiFormData) => {
-    // When saving, we save the translation KEY, not the translated value
+    // When saving, we keep the original translation KEY for title,
+    // but create a new one if it's a new title.
+    // The description from the rich text editor is saved as-is (as HTML).
+    const isNewTitle = data.title !== t(emoji.title);
+    
     const finalData = {
         ...emoji,
         ...data,
-        title: emoji.title, // Keep original key
-        description: data.description, // Use the HTML content from rich editor
+        // If the title hasn't changed, keep the original key.
+        // If it has, the new title itself becomes the key (or would be handled by i18n logic).
+        title: isNewTitle ? data.title : emoji.title,
+        description: data.description,
         formats: uploadedFiles
     };
     onEditEmoji(finalData);
