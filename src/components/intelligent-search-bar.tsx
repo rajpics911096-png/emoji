@@ -44,7 +44,7 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (query.trim()) {
-         router.push(`/${lang}/emojis/all?search=${query}`);
+         router.push(`/${lang}/emojis/all?search=${encodeURIComponent(query)}`);
          setIsOpen(false);
       }
   };
@@ -79,9 +79,9 @@ export default function IntelligentSearchBar({ lang }: { lang: string }) {
                 onValueChange={setQuery}
                 onFocus={() => { if(query.length > 1) setIsOpen(true); }}
                 placeholder={t('searchPlaceholder')}
-                className="pl-12 pr-4 h-12 text-base bg-background border border-input rounded-full shadow-sm focus:ring-2 focus:ring-ring focus:ring-offset-2 focus-visible:ring-offset-background transition-all w-full"
+                className="pl-4 pr-12 h-12 text-base bg-background border border-input rounded-full shadow-sm focus:ring-2 focus:ring-ring focus:ring-offset-2 focus-visible:ring-offset-background transition-all w-full"
             />
-             <div className="absolute left-4 top-1/2 -translate-y-1/2 h-6 w-6 text-muted-foreground pointer-events-none">
+             <div className="absolute right-4 top-1/2 -translate-y-1/2 h-6 w-6 text-muted-foreground pointer-events-none">
                 {isPending ? <Loader2 className="animate-spin" /> : <Search />}
               </div>
           </div>
