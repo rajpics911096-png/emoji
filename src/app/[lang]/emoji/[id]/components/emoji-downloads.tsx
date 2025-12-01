@@ -59,7 +59,7 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
     }
   }, [formats, selectedFormat]);
 
-  if (fileTypes.length <= 1) {
+  if (fileTypes.length <= 1 && filteredFiles.length === 0) {
     return null;
   }
 
@@ -67,12 +67,12 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
     <section className="mt-12 md:mt-16">
       <Tabs defaultValue={selectedFormat} onValueChange={handleTabChange} className="w-full">
         <div className="flex justify-center mb-8">
-            <TabsList className="bg-background border rounded-full p-1.5 h-auto flex-wrap">
+            <TabsList className="bg-background border rounded-full p-1 h-auto flex-wrap">
                 {fileTypes.map(format => (
                 <TabsTrigger 
                     key={format} 
                     value={format}
-                    className="capitalize rounded-full text-sm font-semibold h-auto px-4 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
+                    className="capitalize rounded-full text-sm font-semibold h-auto px-3 py-1.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
                 >
                     {t(`downloadsTab${format.charAt(0).toUpperCase() + format.slice(1)}`)}
                 </TabsTrigger>

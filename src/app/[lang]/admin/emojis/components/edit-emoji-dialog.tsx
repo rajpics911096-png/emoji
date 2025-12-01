@@ -87,7 +87,6 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
     if (!files) return;
 
     const newFilesMap = Array.from(files).reduce((acc, file) => {
-      const fileType = file.type.split('/')[1];
       const simpleFormat = file.type.startsWith('image/png') ? 'png' :
                            file.type.startsWith('image/gif') ? 'gif' :
                            file.type.startsWith('image/') ? 'image' :
@@ -130,18 +129,14 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
 
 
   const onSubmit = (data: EmojiFormData) => {
-    // When saving, we keep the original translation KEY for title,
-    // but create a new one if it's a new title.
-    // The description from the rich text editor is saved as-is (as HTML).
     const isNewTitle = data.title !== t(emoji.title);
-    
-    const finalData = {
+    const isNewDescription = data.description !== t(emoji.description);
+
+    const finalData: Emoji = {
         ...emoji,
         ...data,
-        // If the title hasn't changed, keep the original key.
-        // If it has, the new title itself becomes the key (or would be handled by i18n logic).
         title: isNewTitle ? data.title : emoji.title,
-        description: data.description,
+        description: isNewDescription ? data.description : emoji.description,
         formats: uploadedFiles
     };
     onEditEmoji(finalData);
@@ -202,6 +197,7 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
                 <Controller
                     name="description"
                     control={control}
+                    defaultValue={defaultValues.description}
                     render={({ field }) => <RichTextEditor value={field.value} onChange={field.onChange} />}
                 />
                 {errors.description && <p className="text-destructive text-sm mt-1">{errors.description.message}</p>}

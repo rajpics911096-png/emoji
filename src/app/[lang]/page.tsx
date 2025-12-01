@@ -33,6 +33,7 @@ export default function Home() {
   }, [emojis]);
   
   useEffect(() => {
+    if (emojis.length === 0) return;
     const allFiles = emojis.flatMap(emoji => 
         Object.entries(emoji.formats).flatMap(([format, files]) => 
             files.map(file => ({

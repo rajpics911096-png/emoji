@@ -7,9 +7,10 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { useTranslations } from '@/context/translations-context';
 import { useCategoryStore, useEmojiStore } from '@/lib/store';
-import { useMemo } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { FeaturedFiles } from '@/components/featured-files';
 import type { EmojiFormatFile } from '@/lib/types';
+import Head from 'next/head';
 
 type FeaturedFile = EmojiFormatFile & {
     emojiId: string;
@@ -26,33 +27,37 @@ export default function CategoryPage() {
   const { t } = useTranslations();
   const { categories } = useCategoryStore();
   const { emojis, getEmojisByCategory } = useEmojiStore();
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
   
   const category = categories.find((c) => c.id === categorySlug);
-  const searchTerm = searchParams.get('search');
+  
+  useEffect(() => {
+    setSearchTerm(searchParams.get('search') || '');
+  }, [searchParams]);
 
-  if (!category && !searchTerm) {
+  if (!category && categorySlug !== 'all') {
     notFound();
   }
 
   const isSearchPage = categorySlug === 'all' && searchTerm;
   const pageTitle = isSearchPage 
     ? `Search results for "${searchTerm}"`
-    : t(category?.name || '');
+    : t(category?.name || 'category_all');
   const pageDescription = isSearchPage
     ? `Found results for your query: "${searchTerm}"`
-    : t('categoryDescription', { categoryName: t(category?.name || '') });
+    : t('categoryDescription', { categoryName: t(category?.name || 'category_all') });
 
 
   const emojiList = useMemo(() => {
-    let categoryEmojis = getEmojisByCategory(categorySlug);
     if (searchTerm) {
         const lowercasedQuery = searchTerm.toLowerCase();
-        return emojis.filter(emoji => 
+        const categoryEmojis = categorySlug === 'all' ? emojis : getEmojisByCategory(categorySlug);
+        return categoryEmojis.filter(emoji => 
             t(emoji.title).toLowerCase().includes(lowercasedQuery) ||
             t(emoji.description).toLowerCase().includes(lowercasedQuery)
         );
     }
-    return categoryEmojis;
+    return getEmojisByCategory(categorySlug);
   }, [getEmojisByCategory, emojis, categorySlug, searchTerm, t]);
 
   const featuredFiles = useMemo(() => {
@@ -82,6 +87,10 @@ export default function CategoryPage() {
 
   return (
     <>
+      <Head>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+      </Head>
       <Header lang={lang} />
       <main className="flex-1 container mx-auto py-8 px-4">
         

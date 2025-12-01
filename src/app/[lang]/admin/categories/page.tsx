@@ -21,7 +21,7 @@ import { EditCategoryDialog } from "./components/edit-category-dialog";
 import { SvgIcon } from "@/components/svg-icon";
 import Link from "next/link";
 import { useTranslations } from "@/context/translations-context";
-import { useCategoryStore } from "@/lib/store";
+import { useCategoryStore, useEmojiStore } from "@/lib/store";
 
 export default function CategoriesPage() {
   const { t, language } = useTranslations();
@@ -31,6 +31,7 @@ export default function CategoriesPage() {
   const [selectedCategory, setSelectedCategory] = useState<EmojiCategory | null>(null);
   
   const { categories, addCategory, updateCategory, deleteCategory } = useCategoryStore();
+  const { emojis } = useEmojiStore();
 
   const handleDelete = (categoryId: string, categoryName: string) => {
     if (categoryId === 'all') {
@@ -41,10 +42,21 @@ export default function CategoriesPage() {
         });
         return;
     }
+
+    const isCategoryInUse = emojis.some(emoji => emoji.category === categoryId);
+    if (isCategoryInUse) {
+        toast({
+            variant: "destructive",
+            title: "Category in Use",
+            description: `Cannot delete "${t(categoryName)}" as it is currently assigned to one or more emojis.`,
+        });
+        return;
+    }
+
     deleteCategory(categoryId);
     toast({
       title: t('categories_toast_deleted_title'),
-      description: t('categories_toast_deleted_desc', { name: categoryName }),
+      description: t('categories_toast_deleted_desc', { name: t(categoryName) }),
     });
   };
 
@@ -80,12 +92,12 @@ export default function CategoriesPage() {
     <>
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
                 <CardTitle>{t('categories_title')}</CardTitle>
                 <CardDescription>{t('categories_description')}</CardDescription>
             </div>
-            <Button size="sm" className="gap-1" onClick={() => setIsAddDialogOpen(true)}>
+            <Button size="sm" className="gap-1 w-full sm:w-auto" onClick={() => setIsAddDialogOpen(true)}>
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">{t('categories_add_button')}</span>
             </Button>

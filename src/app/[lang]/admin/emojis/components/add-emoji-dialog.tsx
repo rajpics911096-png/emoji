@@ -169,6 +169,7 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
                  <Controller
                     name="description"
                     control={control}
+                    defaultValue=""
                     render={({ field }) => <RichTextEditor value={field.value} onChange={field.onChange} />}
                 />
                 {errors.description && <p className="text-destructive text-sm mt-1">{errors.description.message}</p>}
