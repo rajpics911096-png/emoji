@@ -1,6 +1,5 @@
 
 import { Toaster } from '@/components/ui/toaster';
-import '../globals.css';
 import { ClientProviders } from '@/components/client-providers';
 import type { ReactNode } from 'react';
 import { i18n } from '@/lib/i18n-config';
