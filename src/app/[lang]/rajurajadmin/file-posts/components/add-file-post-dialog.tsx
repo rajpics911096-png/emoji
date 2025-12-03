@@ -130,12 +130,6 @@ export function AddFilePostDialog({ isOpen, onOpenChange, onAddPost }: AddFilePo
           </DialogHeader>
           <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto px-1">
             <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
-              <Label htmlFor="emoji" className="text-left md:text-right">Emoji (Optional)</Label>
-              <div className="md:col-span-3">
-                <Input id="emoji" {...register("emoji")} />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
               <Label htmlFor="title" className="text-left md:text-right">Title</Label>
               <div className="md:col-span-3">
                 <Input id="title" {...register("title")} />
