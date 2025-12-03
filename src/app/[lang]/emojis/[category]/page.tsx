@@ -1,7 +1,7 @@
 
 'use client';
 
-import { notFound, useParams, useSearchParams, useRouter } from 'next/navigation';
+import { notFound, useParams, useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { EmojiCard } from '@/components/emoji-card';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
@@ -39,6 +39,11 @@ export default function CategoryPage() {
   useEffect(() => {
     setSearchTerm(searchParams.get('search') || '');
   }, [searchParams]);
+
+  const category = useMemo(() => {
+      return categories.find((cat) => cat.id === categorySlug);
+  }, [categories, categorySlug]);
+
 
   if (!category && categorySlug !== 'all') {
     notFound();
