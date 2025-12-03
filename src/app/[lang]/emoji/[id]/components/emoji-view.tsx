@@ -81,49 +81,40 @@ export function EmojiView({ emoji }: EmojiViewProps) {
         <div className="flex flex-col items-center text-center p-4 sm:p-8 border rounded-lg bg-card shadow-sm">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-headline font-bold text-foreground tracking-tighter">{t(emoji.title)}</h1>
             
-            {isFilePost ? (
-                <div className="my-6 sm:my-8 aspect-video w-full max-w-xl relative bg-muted rounded-lg overflow-hidden">
-                    {featuredImage?.url && (
-                        <Image src={featuredImage.url} alt={t(emoji.title)} layout="fill" objectFit="cover" unoptimized={featuredImage.format === 'gif'} />
-                    )}
-                </div>
-            ) : (
+            {!isFilePost && (
+              <>
                 <div className="my-6 sm:my-8 text-8xl sm:text-9xl md:text-[10rem] break-words">{emoji.emoji}</div>
-            )}
-            
-            <div className="flex flex-wrap justify-center gap-2">
-                {!isFilePost && (
-                  <>
-                    <Button onClick={handleCopy} size="default" className="transition-all">
-                        {isCopied ? (
-                        <>
-                            <Check className="mr-2 h-4 w-4" /> {t('copyButtonCopied')}
-                        </>
-                        ) : (
-                        <>
-                            <Copy className="mr-2 h-4 w-4" /> {t('copyButton')}
-                        </>
-                        )}
-                    </Button>
-                    {canCopySvg && (
-                        <Button onClick={handleCopySvg} size="default" variant="secondary" className="transition-all">
-                            {isSvgCopied ? (
-                                <>
-                                    <Check className="mr-2 h-4 w-4" /> SVG Copied
-                                </>
-                                ) : (
-                                <>
-                                    <Code className="mr-2 h-4 w-4" /> Copy SVG
-                                </>
-                            )}
-                        </Button>
-                    )}
-                  </>
-                )}
-                 <Button onClick={handleShare} size="default" variant="outline" className="transition-all">
+                <div className="flex flex-wrap justify-center gap-2">
+                  <Button onClick={handleCopy} size="default" className="transition-all">
+                      {isCopied ? (
+                      <>
+                          <Check className="mr-2 h-4 w-4" /> {t('copyButtonCopied')}
+                      </>
+                      ) : (
+                      <>
+                          <Copy className="mr-2 h-4 w-4" /> {t('copyButton')}
+                      </>
+                      )}
+                  </Button>
+                  {canCopySvg && (
+                      <Button onClick={handleCopySvg} size="default" variant="secondary" className="transition-all">
+                          {isSvgCopied ? (
+                              <>
+                                  <Check className="mr-2 h-4 w-4" /> SVG Copied
+                              </>
+                              ) : (
+                              <>
+                                  <Code className="mr-2 h-4 w-4" /> Copy SVG
+                              </>
+                          )}
+                      </Button>
+                  )}
+                  <Button onClick={handleShare} size="default" variant="outline" className="transition-all">
                     <Share2 className="mr-2 h-4 w-4" /> Share
-                </Button>
-            </div>
+                  </Button>
+                </div>
+              </>
+            )}
       </div>
     </article>
   );
