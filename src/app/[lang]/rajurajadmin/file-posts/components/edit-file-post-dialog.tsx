@@ -35,7 +35,6 @@ const postSchema = z.object({
   emoji: z.string().optional(),
   title: z.string().min(1, "Title is required."),
   description: z.string().min(1, "Description is required."),
-  category: z.string().min(1, "Category is required."),
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
 });
@@ -57,7 +56,6 @@ export function EditFilePostDialog({ isOpen, onOpenChange, onEditPost, post }: E
     emoji: post.emoji,
     title: t(post.title),
     description: t(post.description),
-    category: post.category,
     metaTitle: post.metaTitle,
     metaDescription: post.metaDescription,
   }), [post, t]);
@@ -194,30 +192,6 @@ export function EditFilePostDialog({ isOpen, onOpenChange, onEditPost, post }: E
                     render={({ field }) => <RichTextEditor value={field.value} onChange={field.onChange} />}
                 />
                 {errors.description && <p className="text-destructive text-sm mt-1">{errors.description.message}</p>}
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
-              <Label htmlFor="category" className="text-left md:text-right">Category</Label>
-              <div className="md:col-span-3">
-                <Controller
-                  name="category"
-                  control={control}
-                  render={({ field }) => (
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {categories.filter(c => c.id !== 'all').map((cat) => (
-                          <SelectItem key={cat.id} value={cat.id}>
-                            {t(cat.name)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-                {errors.category && <p className="text-destructive text-sm mt-1">{errors.category.message}</p>}
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 items-start gap-4">
