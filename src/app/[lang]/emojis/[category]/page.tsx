@@ -77,10 +77,25 @@ export default function CategoryPage() {
     );
 
     const lowercasedQuery = searchTerm.toLowerCase();
-    return allFiles.filter(file => 
+    const filteredFiles = allFiles.filter(file => 
         file.name.toLowerCase().includes(lowercasedQuery) ||
         file.emojiTitle.toLowerCase().includes(lowercasedQuery)
-    ).slice(0, 12); // Limit to 12 results for display
+    );
+    
+    return filteredFiles.map((file, index) => {
+        let formatName = file.format.toUpperCase();
+        if (file.format === 'image') {
+            const extension = file.name.split('.').pop()?.toUpperCase();
+            formatName = extension || formatName;
+        } else if (file.format === 'video') {
+            formatName = 'Video';
+        }
+        
+        return {
+            ...file,
+            name: `${index + 1}. ${searchTerm} ${formatName}`,
+        };
+    }).slice(0, 12);
 
   }, [emojis, searchTerm, t]);
 
