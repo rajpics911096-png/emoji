@@ -21,7 +21,6 @@ import { SvgIcon } from "@/components/svg-icon";
 import { useSiteSettings } from "@/context/site-settings-context";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AdminSidebar } from "@/app/[lang]/rajurajadmin/components/admin-sidebar";
-import { AdminHeader } from "@/app/[lang]/rajurajadmin/components/admin-header";
 
 
 function LoginPage() {
@@ -114,7 +113,6 @@ export function AuthGuard({ children }: { children: ReactNode }) {
       <SidebarProvider>
         <AdminSidebar />
         <SidebarInset>
-            <AdminHeader />
             <main className="p-4 sm:p-6 lg:p-8 flex-1">
                 {children}
             </main>
