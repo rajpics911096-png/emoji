@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
-import { Smile, FilePlus, Download, ArrowRight, Tags, PlusCircle } from "lucide-react";
+import { Smile, FilePlus, Download, ArrowRight, Tags, PlusCircle, FileUp } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { useTranslations } from '@/context/translations-context';
@@ -26,13 +26,15 @@ export default function DashboardPage() {
         }
     }, []);
     
-    const emojiCount = emojis.length;
+    const emojiCount = emojis.filter(p => p.emoji).length;
+    const filePostCount = emojis.filter(p => !p.emoji).length;
     const pageCount = pages.length;
     const categoryCount = categories.length > 0 ? categories.length - 1 : 0; // Subtract "All" category
 
 
     const stats = [
         { title: t('dashboard_total_emojis'), value: emojiCount.toLocaleString(), icon: Smile, change: "20.1%", color: "bg-blue-500", href: `/${params.lang}/rajurajadmin/emojis` },
+        { title: t('dashboard_total_file_posts'), value: filePostCount.toLocaleString(), icon: FileUp, change: "12.5%", color: "bg-indigo-500", href: `/${params.lang}/rajurajadmin/file-posts` },
         { title: t('dashboard_total_pages'), value: pageCount.toLocaleString(), icon: FilePlus, change: "5", color: "bg-green-500", href: `/${params.lang}/rajurajadmin/pages` },
         { title: t('dashboard_total_categories'), value: categoryCount.toLocaleString(), icon: Tags, change: "2", color: "bg-yellow-500", href: `/${params.lang}/rajurajadmin/categories` },
         { title: t('dashboard_total_downloads'), value: downloadCount.toLocaleString(), icon: Download, change: "22%", color: "bg-red-500", href: `/${params.lang}/rajurajadmin/media` },
@@ -40,6 +42,7 @@ export default function DashboardPage() {
 
     const quickActions = [
         { label: t('dashboard_add_emoji'), href: `/${params.lang}/rajurajadmin/emojis`, icon: PlusCircle },
+        { label: 'Add New File Post', href: `/${params.lang}/rajurajadmin/file-posts`, icon: FileUp },
         { label: t('dashboard_add_page'), href: `/${params.lang}/rajurajadmin/pages`, icon: FilePlus },
         { label: t('dashboard_manage_categories'), href: `/${params.lang}/rajurajadmin/categories`, icon: ArrowRight },
     ];
@@ -48,7 +51,7 @@ export default function DashboardPage() {
         <div className="space-y-6 md:space-y-8">
         <h1 className="text-3xl font-headline font-bold">{t('dashboard_title')}</h1>
         
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
             {stats.map((stat) => (
             <Link href={stat.href} key={stat.title}>
                 <Card className="hover:bg-muted/50 transition-colors">
