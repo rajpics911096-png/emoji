@@ -333,6 +333,298 @@
     "related": [],
     "views": 720,
     "createdAt": 1721125000000
+  },
+   {
+    "id": "ui-sound-effects-pack",
+    "emoji": "",
+    "title": "UI Sound Effects Pack",
+    "description": "A collection of essential sound effects for user interface interactions, including clicks, alerts, and notifications.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [],
+      "gif": [],
+      "image": [],
+      "video": []
+    },
+    "related": [],
+    "views": 550,
+    "createdAt": 1721124000000
+  },
+  {
+    "id": "retro-8-bit-game-assets",
+    "emoji": "",
+    "title": "Retro 8-Bit Game Assets",
+    "description": "A complete asset pack for creating a retro 8-bit platformer game, including sprites and tilesets.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [
+        {
+          "name": "player_sprite.png",
+          "size": "12 KB",
+          "url": "https://picsum.photos/seed/8bit1/128/128", "data-ai-hint": "pixel character"
+        },
+        {
+          "name": "tileset.png",
+          "size": "45 KB",
+          "url": "https://picsum.photos/seed/8bit2/256/256", "data-ai-hint": "pixel tileset"
+        }
+      ],
+      "gif": [],
+      "image": [],
+      "video": []
+    },
+    "related": [],
+    "views": 480,
+    "createdAt": 1721123000000
+  },
+  {
+    "id": "animated-weather-icons",
+    "emoji": "",
+    "title": "Animated Weather Icons",
+    "description": "A set of looping animated icons for sunny, cloudy, rainy, and snowy weather conditions.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [],
+      "gif": [
+        {
+          "name": "sunny.gif",
+          "size": "1.1 MB",
+          "url": "https://picsum.photos/seed/weather1/150/150", "data-ai-hint": "sun animation"
+        },
+        {
+          "name": "rainy.gif",
+          "size": "1.5 MB",
+          "url": "https://picsum.photos/seed/weather2/150/150", "data-ai-hint": "rain animation"
+        }
+      ],
+      "image": [],
+      "video": []
+    },
+    "related": [],
+    "views": 680,
+    "createdAt": 1721122000000
+  },
+  {
+    "id": "drone-footage-beach",
+    "emoji": "",
+    "title": "4K Drone Footage of Beach",
+    "description": "Stunning aerial video of waves crashing on a tropical beach, perfect for travel vlogs.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [],
+      "gif": [],
+      "image": [],
+      "video": [
+        {
+          "name": "beach_drone.mp4",
+          "size": "35.2 MB",
+          "url": "/placeholders/video/beach.mp4"
+        }
+      ]
+    },
+    "related": [],
+    "views": 290,
+    "createdAt": 1721121000000
+  },
+  {
+    "id": "business-infographic-templates",
+    "emoji": "",
+    "title": "Business Infographic Templates",
+    "description": "A set of editable infographic templates for business reports and presentations.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [],
+      "gif": [],
+      "image": [
+        {
+          "name": "infographic1.jpg",
+          "size": "500 KB",
+          "url": "https://picsum.photos/seed/info1/600/900", "data-ai-hint": "business infographic"
+        },
+        {
+          "name": "infographic2.jpg",
+          "size": "550 KB",
+          "url": "https://picsum.photos/seed/info2/600/900", "data-ai-hint": "data visualization"
+        }
+      ],
+      "video": []
+    },
+    "related": [],
+    "views": 410,
+    "createdAt": 1721120000000
+  },
+  {
+    "id": "animated-loading-spinners",
+    "emoji": "",
+    "title": "Animated Loading Spinners",
+    "description": "A pack of smooth, modern loading spinners in GIF format for web and app interfaces.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [],
+      "gif": [
+        {
+          "name": "spinner1.gif",
+          "size": "50 KB",
+          "url": "https://picsum.photos/seed/spinner1/100/100", "data-ai-hint": "loading spinner"
+        },
+        {
+          "name": "spinner2.gif",
+          "size": "60 KB",
+          "url": "https://picsum.photos/seed/spinner2/100/100", "data-ai-hint": "progress animation"
+        }
+      ],
+      "image": [],
+      "video": []
+    },
+    "related": [],
+    "views": 890,
+    "createdAt": 1721119000000
+  },
+  {
+    "id": "watercolor-flower-illustrations",
+    "emoji": "",
+    "title": "Watercolor Flower Illustrations",
+    "description": "A beautiful collection of hand-painted watercolor flowers in high-resolution PNG format.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [
+        {
+          "name": "rose.png",
+          "size": "800 KB",
+          "url": "https://picsum.photos/seed/flower1/500/500", "data-ai-hint": "watercolor rose"
+        },
+        {
+          "name": "lily.png",
+          "size": "750 KB",
+          "url": "https://picsum.photos/seed/flower2/500/500", "data-ai-hint": "watercolor lily"
+        }
+      ],
+      "gif": [],
+      "image": [],
+      "video": []
+    },
+    "related": [],
+    "views": 610,
+    "createdAt": 1721118000000
+  },
+  {
+    "id": "podcast-intro-music",
+    "emoji": "",
+    "title": "Upbeat Podcast Intro Music",
+    "description": "A royalty-free, upbeat music track perfect for podcast intros and outros.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [],
+      "gif": [],
+      "image": [],
+      "video": []
+    },
+    "related": [],
+    "views": 350,
+    "createdAt": 1721117000000
+  },
+  {
+    "id": "3d-character-renders",
+    "emoji": "",
+    "title": "3D Character Renders",
+    "description": "High-quality 3D renders of cartoon characters, suitable for marketing and web use.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [
+        {
+          "name": "character1.png",
+          "size": "1.2 MB",
+          "url": "https://picsum.photos/seed/3dchar1/600/600", "data-ai-hint": "3d character"
+        },
+        {
+          "name": "character2.png",
+          "size": "1.4 MB",
+          "url": "https://picsum.photos/seed/3dchar2/600/600", "data-ai-hint": "cartoon mascot"
+        }
+      ],
+      "gif": [],
+      "image": [],
+      "video": []
+    },
+    "related": [],
+    "views": 490,
+    "createdAt": 1721116000000
+  },
+  {
+    "id": "stop-motion-animation-food",
+    "emoji": "",
+    "title": "Food Stop-Motion Animation",
+    "description": "A short, playful stop-motion animation of ingredients coming together to form a dish.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [],
+      "gif": [],
+      "image": [],
+      "video": [
+        {
+          "name": "food_stopmotion.mp4",
+          "size": "15.8 MB",
+          "url": "/placeholders/video/food.mp4"
+        }
+      ]
+    },
+    "related": [],
+    "views": 220,
+    "createdAt": 1721115000000
+  },
+  {
+    "id": "mockup-templates-devices",
+    "emoji": "",
+    "title": "Device Mockup Templates",
+    "description": "A set of high-resolution device mockups (phone, tablet, laptop) to showcase your app or website.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [],
+      "gif": [],
+      "image": [
+        {
+          "name": "phone_mockup.jpg",
+          "size": "1.8 MB",
+          "url": "https://picsum.photos/seed/mockup1/1200/800", "data-ai-hint": "phone mockup"
+        },
+        {
+          "name": "laptop_mockup.jpg",
+          "size": "2.2 MB",
+          "url": "https://picsum.photos/seed/mockup2/1200/800", "data-ai-hint": "laptop screen"
+        }
+      ],
+      "video": []
+    },
+    "related": [],
+    "views": 780,
+    "createdAt": 1721114000000
+  },
+  {
+    "id": "paper-texture-pack",
+    "emoji": "",
+    "title": "Paper Texture Pack",
+    "description": "A collection of various paper textures to add a vintage or tactile feel to your designs.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [],
+      "gif": [],
+      "image": [
+        {
+          "name": "texture1.jpg",
+          "size": "1.1 MB",
+          "url": "https://picsum.photos/seed/paper1/1000/1000", "data-ai-hint": "paper texture"
+        },
+        {
+          "name": "texture2.jpg",
+          "size": "1.3 MB",
+          "url": "https://picsum.photos/seed/paper2/1000/1000", "data-ai-hint": "cardboard texture"
+        }
+      ],
+      "video": []
+    },
+    "related": [],
+    "views": 530,
+    "createdAt": 1721113000000
   }
 ]
 
