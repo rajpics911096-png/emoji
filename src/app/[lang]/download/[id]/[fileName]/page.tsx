@@ -29,6 +29,7 @@ export default function DownloadPage() {
   const { t } = useTranslations();
 
   const [timer, setTimer] = useState(settings.downloadTimer || 10);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const { post, file } = useMemo(() => {
     const post = getEmojiById(id);
@@ -42,7 +43,7 @@ export default function DownloadPage() {
   }, [id, fileName, getEmojiById]);
 
   useEffect(() => {
-    if (!file) return;
+    if (!file || !isDownloading) return;
 
     if (timer > 0) {
       const interval = setInterval(() => {
@@ -62,7 +63,7 @@ export default function DownloadPage() {
         downloadLink.click();
         document.body.removeChild(downloadLink);
     }
-  }, [timer, file, post]);
+  }, [timer, file, post, isDownloading]);
   
 
   if (!post || !file) {
@@ -75,6 +76,10 @@ export default function DownloadPage() {
                        .filter(f => f.name !== file.name)
                        .slice(0, 3);
   const isVideo = file.type?.startsWith('video/');
+
+  const handleDownloadClick = () => {
+    setIsDownloading(true);
+  };
 
   return (
     <>
@@ -105,9 +110,9 @@ export default function DownloadPage() {
                 <span>Size: <span className="font-semibold text-foreground">{file.size}</span></span>
             </div>
 
-            <Button size="lg" disabled={timer > 0}>
+            <Button size="lg" disabled={isDownloading} onClick={handleDownloadClick}>
                 <Download className="mr-2 h-5 w-5" />
-                {timer > 0 ? `Downloading in ${timer}s...` : 'Download Now'}
+                {isDownloading && timer > 0 ? `Downloading in ${timer}s...` : 'Download Now'}
             </Button>
             
             <div className="mt-4">
