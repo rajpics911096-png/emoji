@@ -34,7 +34,7 @@ export default function LoginPage() {
     const auth = getAuth();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push(`/${language}/admin`);
+      router.push(`/${language}/rajuadmindashboard`);
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -55,7 +55,7 @@ export default function LoginPage() {
         title: "Account Created",
         description: "Your account has been created successfully. You are now logged in.",
       });
-      router.push(`/${language}/admin`);
+      router.push(`/${language}/rajuadmindashboard`);
     } catch (error: any) {
        toast({
         variant: "destructive",
