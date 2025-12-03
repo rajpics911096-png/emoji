@@ -16,6 +16,7 @@ type FeaturedFile = EmojiFormatFile & {
     emojiId: string;
     format: string;
     emojiTitle: string;
+    displayName: string;
 };
 
 
@@ -65,7 +66,7 @@ export default function CategoryPage() {
       return [];
     }
 
-    const allFiles: FeaturedFile[] = emojis.flatMap(emoji =>
+    const allFiles: (EmojiFormatFile & { emojiId: string; format: string; emojiTitle: string })[] = emojis.flatMap(emoji =>
         Object.entries(emoji.formats).flatMap(([format, files]) =>
             files.map(file => ({
                 ...file,
@@ -93,7 +94,7 @@ export default function CategoryPage() {
         
         return {
             ...file,
-            name: `${index + 1}. ${searchTerm} ${formatName}`,
+            displayName: `${index + 1}. "${searchTerm}" ${formatName}`,
         };
     }).slice(0, 12);
 
