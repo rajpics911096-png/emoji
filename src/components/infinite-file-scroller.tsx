@@ -94,8 +94,8 @@ export function InfiniteFileScroller({ allFiles, lang, itemsPerPage = 12 }: Infi
   return (
     <div>
         <div className="flex justify-center mb-8">
-            <Tabs value={filter} onValueChange={setFilter} className="w-full">
-                <TabsList className="bg-background border rounded-full p-1 h-auto flex-wrap">
+            <Tabs value={filter} onValueChange={setFilter}>
+                <TabsList className="bg-background border rounded-full p-1 h-auto flex-wrap justify-center">
                     {fileTypes.map(format => (
                     <TabsTrigger 
                         key={format} 
