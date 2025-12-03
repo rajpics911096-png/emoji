@@ -19,7 +19,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useTranslations } from "@/context/translations-context";
 import { SvgIcon } from "@/components/svg-icon";
 import { useSiteSettings } from "@/context/site-settings-context";
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AdminSidebar } from "@/app/[lang]/rajurajadmin/components/admin-sidebar";
 
 
@@ -113,6 +113,9 @@ export function AuthGuard({ children }: { children: ReactNode }) {
       <SidebarProvider>
         <AdminSidebar />
         <SidebarInset>
+            <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 md:hidden">
+              <SidebarTrigger />
+            </header>
             <main className="p-4 sm:p-6 lg:p-8 flex-1">
                 {children}
             </main>
