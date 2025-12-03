@@ -2,8 +2,7 @@
 "use client";
 
 import { useUser } from "@/firebase/use-user";
-import { useEffect, useState, type ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { useState, type ReactNode } from "react";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,9 +25,8 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
   const { toast } = useToast();
-  const { t, language } = useTranslations();
+  const { t } = useTranslations();
   const { settings } = useSiteSettings();
 
   const handleLogin = async () => {
