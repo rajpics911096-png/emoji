@@ -1,20 +1,15 @@
 
 import { AuthGuard } from "@/components/auth-guard";
 import type { ReactNode } from 'react';
-import { ClientProviders } from "@/components/client-providers-admin";
 
 export default function AdminRootLayout({
-  children,
-  params
+  children
 }: {
   children: ReactNode;
-  params: { lang: string };
 }) {
   return (
-      <ClientProviders lang={params.lang}>
-          <AuthGuard>
-              {children}
-          </AuthGuard>
-      </ClientProviders>
+      <AuthGuard>
+          {children}
+      </AuthGuard>
   );
 }
