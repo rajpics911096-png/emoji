@@ -99,12 +99,6 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
                             </div>
                             <p className="text-sm font-medium truncate" title={file.name}>{file.name}</p>
                         </Link>
-                         <Button asChild size="sm" className="w-full mt-2">
-                             <Link href={downloadUrl}>
-                                <Download className="mr-2 h-4 w-4" />
-                                {t('downloadButton')}
-                            </Link>
-                         </Button>
                     </CardContent>
                 </Card>
               );
