@@ -50,13 +50,13 @@ export default function EmojiPage() {
   
   useEffect(() => {
     // Feature files from posts that are primarily file-based (no emoji character)
-    const filePosts = emojis.filter(emoji => !emoji.emoji);
+    const filePosts = emojis.filter(p => !p.emoji);
     const randomFeaturedPosts = [...filePosts].sort(() => 0.5 - Math.random()).slice(0, 8);
     setFeaturedPosts(randomFeaturedPosts);
   }, [emojis]);
 
 
-  if (!emoji || !emoji.emoji) { // Check if it's an emoji post
+  if (!emoji || !emoji.emoji) { // Only show emoji posts
     notFound();
   }
 
@@ -67,13 +67,13 @@ export default function EmojiPage() {
 
   const jsonLdData: Thing = useMemo(() => {
     const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-    const emojiImage = emoji.formats.png[0] || emoji.formats.image[0];
+    const emojiImage = Object.values(emoji.formats).flat()[0];
 
     return {
         '@context': 'https://schema.org',
         '@type': 'Thing',
         name: emoji.metaTitle || emojiTitle,
-        description: emoji.metaDescription || emojiDescription,
+        description: emoji.metaDescription || emojiDescription.replace(/<[^>]+>/g, ''),
         image: emojiImage ? `${baseUrl}${emojiImage.url}` : undefined,
         url: `${baseUrl}/${lang}/emoji/${emoji.id}`,
     };
@@ -84,7 +84,7 @@ export default function EmojiPage() {
   const related = getRelatedEmojis(emoji.id);
 
   const metaTitle = emoji.metaTitle || emojiTitle;
-  const metaDescription = emoji.metaDescription || settings.metaDescription;
+  const metaDescription = emoji.metaDescription || emojiDescription.replace(/<[^>]+>/g, '').substring(0, 160);
 
   return (
     <>
