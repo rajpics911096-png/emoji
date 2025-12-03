@@ -131,13 +131,19 @@ export default function CategoryPage() {
     allFoundFiles.forEach(file => {
         if (file.format === 'png') foundFormats.add('PNG');
         if (file.format === 'gif') foundFormats.add('GIF');
-        if (file.format === 'image') foundFormats.add('Images');
+        if (file.format === 'image' && !file.type?.includes('png') && !file.type?.includes('gif')) foundFormats.add('Images');
         if (file.format === 'video') foundFormats.add('Video');
     });
     
     const formatsString = Array.from(foundFormats).join(', ');
     
-    return `${totalResults} "${searchTerm}" ${formatsString} Images`;
+    let title = `${totalResults} "${searchTerm}" ${formatsString}`;
+    if (!foundFormats.has('Images') && allFoundFiles.some(f => f.format === 'image')) {
+        title += ' Images';
+    }
+    
+    return title.trim();
+
   }, [isSearchPage, t, category, totalResults, searchTerm, allFoundFiles]);
 
   const pageDescription = useMemo(() => {
