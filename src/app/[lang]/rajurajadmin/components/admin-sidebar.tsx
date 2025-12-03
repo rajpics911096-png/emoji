@@ -140,7 +140,6 @@ export function AdminSidebar() {
             <p className="text-xs text-sidebar-foreground/70">{t('admin_sidebar_title')}</p>
           </div>
         </div>
-        <SidebarTrigger className="group-data-[collapsible=icon]:hidden" />
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
