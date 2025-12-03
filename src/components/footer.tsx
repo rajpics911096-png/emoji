@@ -6,12 +6,13 @@ import { SvgIcon } from './svg-icon';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { useTranslations } from '@/context/translations-context';
 import { AdSlot } from './ad-slot';
-import { useFooterStore } from '@/lib/store';
+import { useFooterStore, useCategoryStore } from '@/lib/store';
 
 export default function Footer({ lang }: { lang: string }) {
   const { settings } = useSiteSettings();
   const { t } = useTranslations();
   const { navigation, legal, social } = useFooterStore();
+  const { categories } = useCategoryStore();
 
   const createLink = (href: string) => {
     try {
@@ -23,12 +24,14 @@ export default function Footer({ lang }: { lang: string }) {
     }
   };
   
+  const displayCategories = categories.filter(c => c.id !== 'all');
+
   return (
     <>
     <AdSlot location="footer" />
     <footer className="bg-primary/5 border-t">
       <div className="container mx-auto py-12 px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8">
           <div className="sm:col-span-2 md:col-span-1">
             <Link href={`/${lang}`} className="flex items-center space-x-2 mb-4">
               <SvgIcon svg={settings.logo} className="h-8 w-8" />
@@ -43,6 +46,18 @@ export default function Footer({ lang }: { lang: string }) {
             <ul className="space-y-2">
               {navigation.map((item, index) => (
                  <li key={index}><Link href={createLink(item.href)} className="text-sm hover:text-primary transition-colors">{t(item.label)}</Link></li>
+              ))}
+            </ul>
+          </div>
+           <div>
+            <h3 className="font-headline font-semibold mb-4">{t('exploreCategories')}</h3>
+            <ul className="space-y-2">
+              {displayCategories.map((category) => (
+                 <li key={category.id}>
+                    <Link href={`/${lang}/emojis/${category.id}`} className="text-sm hover:text-primary transition-colors">
+                        {t(category.name)}
+                    </Link>
+                </li>
               ))}
             </ul>
           </div>
