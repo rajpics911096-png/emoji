@@ -27,7 +27,7 @@ export default function Home() {
   const { t } = useTranslations();
   const { emojis } = useEmojiStore();
   const { categories } = useCategoryStore();
-  const [featuredFiles, setFeaturedFiles] = useState<any[]>([]);
+  const [featuredPosts, setFeaturedPosts] = useState<any[]>([]);
   const [randomFiles, setRandomFiles] = useState<any[]>([]);
 
   const featuredEmojis = useMemo(() => {
@@ -40,18 +40,8 @@ export default function Home() {
     
     // Feature files from posts that are primarily file-based (no emoji character)
     const filePosts = emojis.filter(emoji => !emoji.emoji);
-    const filesFromPosts = filePosts.flatMap(emoji => 
-        Object.entries(emoji.formats).flatMap(([format, files]) => 
-            files.map(file => ({
-                ...file,
-                emojiId: emoji.id,
-                format: format,
-                displayName: file.name, // Keep it simple for the homepage
-            }))
-        )
-    );
-    const randomFeaturedFiles = [...filesFromPosts].sort(() => 0.5 - Math.random()).slice(0, 8);
-    setFeaturedFiles(randomFeaturedFiles);
+    const randomFeaturedPosts = [...filePosts].sort(() => 0.5 - Math.random()).slice(0, 8);
+    setFeaturedPosts(randomFeaturedPosts);
 
     // Get all files for the infinite scroller
     const allFiles = emojis.flatMap(emoji => 
@@ -137,13 +127,13 @@ export default function Home() {
           </section>
         )}
 
-        {featuredFiles.length > 0 && (
+        {featuredPosts.length > 0 && (
           <section id="featured-files" className="py-12 md:py-16">
             <div className="container mx-auto px-4">
               <h2 className="text-3xl font-headline font-bold text-center mb-10">
                 Featured Files
               </h2>
-              <FeaturedFiles files={featuredFiles} lang={lang} />
+              <FeaturedFiles posts={featuredPosts} lang={lang} />
             </div>
           </section>
         )}

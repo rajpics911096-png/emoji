@@ -4,57 +4,56 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Download } from 'lucide-react';
-import type { EmojiFormatFile } from '@/lib/types';
+import type { Emoji } from '@/lib/types';
 import { useTranslations } from '@/context/translations-context';
 
-type FeaturedFile = EmojiFormatFile & {
-    emojiId: string;
-    format: string;
-    displayName: string;
-};
-
 interface FeaturedFilesProps {
-  files: FeaturedFile[];
+  posts: Emoji[];
   lang: string;
 }
 
-export function FeaturedFiles({ files, lang }: FeaturedFilesProps) {
+export function FeaturedFiles({ posts, lang }: FeaturedFilesProps) {
   const { t } = useTranslations();
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
-      {files.map((file) => (
-        <Card key={`${file.emojiId}-${file.name}`} className="group overflow-hidden transition-shadow hover:shadow-lg">
-          <CardContent className="p-3 flex flex-col h-full">
-            <Link
-              href={`/${lang}/emoji/${file.emojiId}/${file.format}/${encodeURIComponent(file.name)}`}
-              className="flex-grow"
-            >
-              <div className="aspect-square bg-muted flex items-center justify-center relative rounded-md overflow-hidden mb-3">
-                {file.type?.startsWith('video/') ? (
-                  <video src={file.url} autoPlay muted loop playsInline className="w-full h-full object-contain" />
-                ) : (
-                  <Image src={file.url} alt={file.name} layout="fill" objectFit="contain" className="p-2" unoptimized={file.format === 'gif'} />
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+      {posts.map((post) => {
+        const firstFile = Object.values(post.formats).flat()[0];
+        const totalFiles = Object.values(post.formats).flat().length;
+        
+        return (
+          <Link
+            key={post.id}
+            href={`/${lang}/emoji/${post.id}`}
+            className="group block"
+          >
+            <div className="relative aspect-[3/4] rounded-xl overflow-hidden transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl">
+              {/* Stacked card effect */}
+              <div className="absolute inset-0 bg-card rounded-xl transform -translate-x-2 -translate-y-2 group-hover:-translate-x-3 group-hover:-translate-y-3 transition-transform duration-300"></div>
+              <div className="absolute inset-0 bg-card/80 rounded-xl transform -translate-x-1 -translate-y-1 group-hover:-translate-x-1.5 group-hover:-translate-y-1.5 transition-transform duration-300"></div>
+              
+              <Card className="relative w-full h-full overflow-hidden transition-shadow group-hover:shadow-lg">
+                {firstFile?.url && (
+                    <Image 
+                        src={firstFile.url} 
+                        alt={t(post.title)} 
+                        layout="fill" 
+                        objectFit="cover" 
+                        className="transition-transform duration-300 group-hover:scale-110"
+                        unoptimized={firstFile.format === 'gif'}
+                    />
                 )}
+                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+              </Card>
+
+              <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                <h3 className="font-headline font-bold text-lg leading-tight truncate">{t(post.title)}</h3>
+                <p className="text-sm text-white/80">{totalFiles} PNG images</p>
               </div>
-              <p className="text-sm font-medium" title={file.displayName}>
-                {file.displayName}
-              </p>
-               <p className="text-xs text-muted-foreground truncate" title={file.name}>
-                {file.name}
-              </p>
-            </Link>
-            <Button asChild size="sm" className="w-full mt-2">
-              <Link href={`/${lang}/emoji/${file.emojiId}/${file.format}/${encodeURIComponent(file.name)}`}>
-                <Download className="mr-2 h-4 w-4" />
-                {t('downloadButton')}
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      ))}
+            </div>
+          </Link>
+        );
+      })}
     </div>
   );
 }
