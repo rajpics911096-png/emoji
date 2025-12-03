@@ -19,6 +19,24 @@ type FeaturedFile = EmojiFormatFile & {
     displayName: string;
 };
 
+const shuffleArray = (array: any[]) => {
+  let currentIndex = array.length, randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex !== 0) {
+
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
+
 
 export default function CategoryPage() {
   const searchParams = useSearchParams();
@@ -104,7 +122,7 @@ export default function CategoryPage() {
     const combined = isFileSearch ? filesFromMatchingEmojis.concat(filesWithNameMatch) : [...filesFromMatchingEmojis, ...filesWithNameMatch];
     const uniqueFiles = Array.from(new Map(combined.map(file => [file.url, file])).values());
 
-    return uniqueFiles;
+    return shuffleArray(uniqueFiles);
 
   }, [emojis, searchTerm, t, isFileSearch]);
   
