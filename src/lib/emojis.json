@@ -625,6 +625,182 @@
     "related": [],
     "views": 530,
     "createdAt": 1721113000000
+  },
+  {
+    "id": "glitch-effect-overlays",
+    "emoji": "",
+    "title": "Glitch Effect Overlays",
+    "description": "A set of video overlays to create a futuristic glitch effect.",
+    "category": "uncategorized",
+    "formats": { "png": [], "gif": [], "image": [], "video": [{ "name": "glitch.mp4", "size": "8.1 MB", "url": "/placeholders/video/glitch.mp4" }] },
+    "related": [],
+    "views": 380,
+    "createdAt": 1721222000000
+  },
+  {
+    "id": "podcast-soundbeds",
+    "emoji": "",
+    "title": "Ambient Podcast Soundbeds",
+    "description": "A collection of ambient background music for podcasts and vlogs.",
+    "category": "uncategorized",
+    "formats": { "png": [], "gif": [], "image": [], "video": [] },
+    "related": [],
+    "views": 250,
+    "createdAt": 1721221000000
+  },
+  {
+    "id": "holographic-stickers",
+    "emoji": "",
+    "title": "Holographic Sticker Pack",
+    "description": "A vibrant pack of holographic stickers with transparent backgrounds (PNG).",
+    "category": "uncategorized",
+    "formats": {
+      "png": [
+        { "name": "holo_sticker_1.png", "size": "150 KB", "url": "https://picsum.photos/seed/holo1/400/400", "data-ai-hint": "holographic sticker" },
+        { "name": "holo_sticker_2.png", "size": "180 KB", "url": "https://picsum.photos/seed/holo2/400/400", "data-ai-hint": "iridescent sticker" }
+      ],
+      "gif": [], "image": [], "video": []
+    },
+    "related": [],
+    "views": 980,
+    "createdAt": 1721220000000
+  },
+  {
+    "id": "vintage-film-grain",
+    "emoji": "",
+    "title": "Vintage Film Grain Textures",
+    "description": "High-resolution JPGs of authentic film grain for a retro photo effect.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [], "gif": [],
+      "image": [
+        { "name": "film_grain_light.jpg", "size": "2.5 MB", "url": "https://picsum.photos/seed/grain1/1920/1080", "data-ai-hint": "film grain" },
+        { "name": "film_grain_heavy.jpg", "size": "3.1 MB", "url": "https://picsum.photos/seed/grain2/1920/1080", "data-ai-hint": "dust scratches" }
+      ],
+      "video": []
+    },
+    "related": [],
+    "views": 450,
+    "createdAt": 1721219000000
+  },
+  {
+    "id": "cyberpunk-city-loop",
+    "emoji": "",
+    "title": "Cyberpunk City Loop",
+    "description": "An animated GIF of a futuristic, neon-lit cyberpunk city street.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [],
+      "gif": [{ "name": "cyberpunk_loop.gif", "size": "8.9 MB", "url": "https://picsum.photos/seed/cyber1/600/400", "data-ai-hint": "cyberpunk city" }],
+      "image": [], "video": []
+    },
+    "related": [],
+    "views": 1100,
+    "createdAt": 1721218000000
+  },
+  {
+    "id": "liquid-transition-effects",
+    "emoji": "",
+    "title": "Liquid Transition Video Effects",
+    "description": "A pack of smooth, liquid-style video transitions for editors.",
+    "category": "uncategorized",
+    "formats": { "png": [], "gif": [], "image": [], "video": [{ "name": "liquid_transition.mp4", "size": "15.2 MB", "url": "/placeholders/video/liquid.mp4" }] },
+    "related": [],
+    "views": 320,
+    "createdAt": 1721217000000
+  },
+  {
+    "id": "comic-book-elements",
+    "emoji": "",
+    "title": "Comic Book Elements Pack",
+    "description": "A set of PNGs with comic book style explosions, speech bubbles, and action words.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [
+        { "name": "boom.png", "size": "90 KB", "url": "https://picsum.photos/seed/comic1/500/500", "data-ai-hint": "comic explosion" },
+        { "name": "speech_bubble.png", "size": "50 KB", "url": "https://picsum.photos/seed/comic2/500/500", "data-ai-hint": "speech bubble" }
+      ],
+      "gif": [], "image": [], "video": []
+    },
+    "related": [],
+    "views": 820,
+    "createdAt": 1721216000000
+  },
+  {
+    "id": "fantasy-world-map",
+    "emoji": "",
+    "title": "Fantasy World Map",
+    "description": "A high-resolution, detailed fantasy world map for games or stories.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [], "gif": [],
+      "image": [{ "name": "world_map.jpg", "size": "10.5 MB", "url": "https://picsum.photos/seed/map1/2000/1500", "data-ai-hint": "fantasy map" }],
+      "video": []
+    },
+    "related": [],
+    "views": 560,
+    "createdAt": 1721215000000
+  },
+  {
+    "id": "dancing-character-gif",
+    "emoji": "",
+    "title": "Dancing Character GIF",
+    "description": "A fun, looping GIF of a cartoon character dancing.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [],
+      "gif": [{ "name": "dancer.gif", "size": "3.1 MB", "url": "https://picsum.photos/seed/dance1/400/400", "data-ai-hint": "cartoon dancing" }],
+      "image": [], "video": []
+    },
+    "related": [],
+    "views": 1500,
+    "createdAt": 1721214000000
+  },
+  {
+    "id": "sci-fi-hud-elements",
+    "emoji": "",
+    "title": "Sci-Fi HUD Elements",
+    "description": "A collection of futuristic Heads-Up Display (HUD) elements for video projects.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [
+        { "name": "hud_circle.png", "size": "210 KB", "url": "https://picsum.photos/seed/hud1/800/800", "data-ai-hint": "sci-fi hud" },
+        { "name": "hud_graph.png", "size": "180 KB", "url": "https://picsum.photos/seed/hud2/800/400", "data-ai-hint": "hologram interface" }
+      ],
+      "gif": [], "image": [], "video": []
+    },
+    "related": [],
+    "views": 680,
+    "createdAt": 1721213000000
+  },
+  {
+    "id": "cinematic-lens-flares",
+    "emoji": "",
+    "title": "Cinematic Lens Flares",
+    "description": "A pack of high-quality lens flare video overlays to add a cinematic touch.",
+    "category": "uncategorized",
+    "formats": { "png": [], "gif": [], "image": [], "video": [{ "name": "lens_flare.mp4", "size": "18.5 MB", "url": "/placeholders/video/flare.mp4" }] },
+    "related": [],
+    "views": 410,
+    "createdAt": 1721212000000
+  },
+  {
+    "id": "grunge-texture-pack",
+    "emoji": "",
+    "title": "Grunge Texture Pack",
+    "description": "A set of distressed and grunge textures for creating an edgy, worn-out look.",
+    "category": "uncategorized",
+    "formats": {
+      "png": [], "gif": [],
+      "image": [
+        { "name": "grunge_texture_1.jpg", "size": "4.1 MB", "url": "https://picsum.photos/seed/grunge1/1200/1200", "data-ai-hint": "grunge texture" },
+        { "name": "grunge_texture_2.jpg", "size": "4.8 MB", "url": "https://picsum.photos/seed/grunge2/1200/1200", "data-ai-hint": "distressed wall" }
+      ],
+      "video": []
+    },
+    "related": [],
+    "views": 590,
+    "createdAt": 1721211000000
   }
 ]
 
