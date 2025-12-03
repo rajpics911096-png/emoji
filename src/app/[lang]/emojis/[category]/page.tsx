@@ -146,8 +146,8 @@ export default function CategoryPage() {
         }).map(f => f.emojiId));
         filtered = allFoundPosts.filter(post => emojiIdsWithFormat.has(post.id));
     }
-    return isFileSearch ? filtered : filtered.slice(0, 12);
-  }, [allFoundFiles, allFoundPosts, selectedFormat, isFileSearch]);
+    return filtered;
+  }, [allFoundFiles, allFoundPosts, selectedFormat]);
   
   const totalResults = emojiList.length + allFoundFiles.length;
   
@@ -230,33 +230,40 @@ export default function CategoryPage() {
             </section>
         )}
         
-        {(isSearchPage || isFileSearch) && fileTypes.length > 1 && (
+        {(isSearchPage || isFileSearch) && featuredPosts.length > 0 && (
              <section className="mt-12 md:mt-16">
-                 <Tabs defaultValue={selectedFormat} onValueChange={handleTabChange} className="w-full">
-                    <div className="flex justify-center mb-8">
-                        <TabsList className="bg-background border rounded-full p-1 h-auto flex-wrap">
-                            {fileTypes.map(format => (
-                            <TabsTrigger 
-                                key={format} 
-                                value={format}
-                                className="capitalize rounded-full text-sm font-semibold h-auto px-3 py-1.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
-                            >
-                                {t(`downloadsTab${format.charAt(0).toUpperCase() + format.slice(1)}`)}
-                            </TabsTrigger>
-                            ))}
-                        </TabsList>
-                    </div>
-                     <TabsContent value={selectedFormat}>
-                        {featuredPosts.length > 0 && (
+                {fileTypes.length > 1 ? (
+                    <Tabs defaultValue={selectedFormat} onValueChange={handleTabChange} className="w-full">
+                        <div className="flex justify-center mb-8">
+                            <TabsList className="bg-background border rounded-full p-1 h-auto flex-wrap">
+                                {fileTypes.map(format => (
+                                <TabsTrigger 
+                                    key={format} 
+                                    value={format}
+                                    className="capitalize rounded-full text-sm font-semibold h-auto px-3 py-1.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
+                                >
+                                    {t(`downloadsTab${format.charAt(0).toUpperCase() + format.slice(1)}`)}
+                                </TabsTrigger>
+                                ))}
+                            </TabsList>
+                        </div>
+                        <TabsContent value={selectedFormat}>
                             <section id="featured-files">
                                 <h2 className="text-2xl font-headline font-bold text-center md:text-left mb-6">
                                     {isFileSearch ? 'All File Posts' : 'File Results'}
                                 </h2>
                                 <FeaturedFiles posts={featuredPosts} lang={lang} />
                             </section>
-                        )}
-                    </TabsContent>
-                </Tabs>
+                        </TabsContent>
+                    </Tabs>
+                ) : (
+                    <section id="featured-files">
+                        <h2 className="text-2xl font-headline font-bold text-center md:text-left mb-6">
+                            {isFileSearch ? 'All File Posts' : 'File Results'}
+                        </h2>
+                        <FeaturedFiles posts={featuredPosts} lang={lang} />
+                    </section>
+                )}
             </section>
         )}
 
