@@ -7,8 +7,6 @@ import type { Emoji, EmojiFormatFile } from '@/lib/types';
 import Image from 'next/image';
 import { useTranslations } from '@/context/translations-context';
 import { useEmojiStore } from '@/lib/store';
-import Header from '@/components/header';
-import Footer from '@/components/footer';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -97,8 +95,6 @@ export default function MediaPage() {
     };
 
     return (
-        <>
-        <Header lang={lang} />
         <main className="flex-1 container mx-auto py-8 px-4">
             <div className="text-center mb-8 md:mb-10">
                 <h1 className="text-4xl md:text-5xl font-headline font-bold text-primary tracking-tighter">
@@ -122,7 +118,5 @@ export default function MediaPage() {
                 </div>
             )}
         </main>
-        <Footer lang={lang} />
-        </>
     );
 }

@@ -3,8 +3,6 @@
 
 import { notFound, useParams, useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { EmojiCard } from '@/components/emoji-card';
-import Header from '@/components/header';
-import Footer from '@/components/footer';
 import { useTranslations } from '@/context/translations-context';
 import { useCategoryStore, useEmojiStore } from '@/lib/store';
 import { useMemo, useEffect, useState } from 'react';
@@ -210,7 +208,6 @@ export default function CategoryPage() {
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
       </Head>
-      <Header lang={lang} />
       <main className="flex-1 container mx-auto py-8 px-4">
         
         <div className="text-center mb-8 md:mb-10">
@@ -270,7 +267,6 @@ export default function CategoryPage() {
           </div>
         )}
       </main>
-      <Footer lang={lang} />
     </>
   );
 }

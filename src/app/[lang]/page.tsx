@@ -49,7 +49,6 @@ export default function Home() {
   }, [categories, t]);
 
   return (
-    <>
       <main className="flex-1">
         
         <section className="relative py-12 md:py-16 bg-primary/10">
@@ -128,6 +127,5 @@ export default function Home() {
         )}
 
       </main>
-    </>
   );
 }
