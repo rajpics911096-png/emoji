@@ -151,7 +151,7 @@ export default function CategoryPage() {
     }).slice(0, 12);
   }, [allFoundFiles, searchTerm, selectedFormat]);
   
-  const totalResults = emojiList.length + featuredFiles.length;
+  const totalResults = emojiList.length + allFoundFiles.length;
   
   const pageTitle = useMemo(() => {
     if (!isSearchPage) {
@@ -165,13 +165,27 @@ export default function CategoryPage() {
         if (file.format === 'video') foundFormats.add('Video');
     });
     
-    const formatsString = Array.from(foundFormats).join(', ');
+    let formatsString = Array.from(foundFormats).join(', ');
+    if (selectedFormat !== 'all') {
+        formatsString = selectedFormat.toUpperCase();
+    }
+    
     return `${totalResults} "${searchTerm}" ${formatsString}`;
-  }, [isSearchPage, t, category, totalResults, searchTerm, allFoundFiles]);
+  }, [isSearchPage, t, category, totalResults, searchTerm, allFoundFiles, selectedFormat]);
 
-  const pageDescription = isSearchPage
-    ? `Found ${totalResults} results for your query: "${searchTerm}"`
-    : t('categoryDescription', { categoryName: t(category?.name || 'category_all') });
+  const pageDescription = useMemo(() => {
+    if (!isSearchPage) {
+      return t('categoryDescription', { categoryName: t(category?.name || 'category_all') });
+    }
+    const formatTypes = fileTypes.filter(f => f !== 'all').join(', ').toUpperCase();
+    const emojiNames = emojiList.slice(0, 3).map(e => t(e.title)).join(', ');
+    
+    let description = `Discover and download ${totalResults}+ free "${searchTerm}" emoji files. Find high-quality ${formatTypes} for your creative projects.`;
+    if (emojiNames) {
+        description += ` Explore emojis like ${emojiNames}.`;
+    }
+    return description.slice(0, 160); // Cap at 160 characters for meta descriptions
+  }, [isSearchPage, t, category, totalResults, searchTerm, fileTypes, emojiList]);
 
   const handleTabChange = (value: string) => {
     const params = new URLSearchParams(Array.from(searchParams.entries()));
