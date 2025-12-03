@@ -96,7 +96,7 @@ export default function Home() {
             </div>
             <div className="text-center mt-8">
               <Button asChild variant="outline">
-                  <Link href={`/${lang}/emojis/all`}>
+                  <Link href={`/${lang}/categories`}>
                       Read More
                   </Link>
               </Button>

@@ -49,6 +49,9 @@ export default function Header({ lang }: { lang: string }) {
                 <span className="font-bold font-headline text-lg">{settings.name}</span>
                 </Link>
                 <div className="mt-6 flex flex-col space-y-4">
+                  <Link href={`/${lang}/categories`} className="text-lg font-medium text-foreground/80 hover:text-primary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                    Categories
+                  </Link>
                   {navCategories.map((category) => (
                     <Link
                       key={category.id}
