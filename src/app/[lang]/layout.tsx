@@ -7,8 +7,6 @@ import type { ReactNode } from 'react';
 import { i18n } from '@/lib/i18n-config';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
-import { usePathname } from 'next/navigation';
-
 
 export default function RootLayout({
   children,
@@ -18,17 +16,6 @@ export default function RootLayout({
   params: { lang: string };
 }>) {
   const lang = i18n.locales.includes(params.lang as any) ? params.lang : i18n.defaultLocale;
-  const pathname = usePathname();
-  const isAdminPage = pathname.includes('/rajurajadmin');
-
-  if (isAdminPage) {
-    return (
-      <ClientProviders lang={lang}>
-        {children}
-        <Toaster />
-      </ClientProviders>
-    );
-  }
 
   return (
     <ClientProviders lang={lang}>
