@@ -6,7 +6,6 @@ import Link from 'next/link';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { SvgIcon } from '@/components/svg-icon';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, File as FileIcon, Hourglass, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
@@ -19,6 +18,7 @@ import { Separator } from '@/components/ui/separator';
 import { AdSlot } from '@/components/ad-slot';
 import { useEmojiStore, useCategoryStore } from '@/lib/store';
 import { SocialShareButtons } from '@/components/social-share-buttons';
+import { InfiniteFileScroller } from '@/components/infinite-file-scroller';
 
 const DownloadButton = ({ file, format, emojiId }: { file: EmojiFormatFile, format: string, emojiId: string }) => {
   const { settings } = useSiteSettings();
@@ -105,16 +105,35 @@ export default function FileDownloadPage() {
   const { id, lang, format, filename } = params;
   
   const { t } = useTranslations();
-  const { getEmojiById } = useEmojiStore();
+  const { emojis, getEmojiById } = useEmojiStore();
   const { categories } = useCategoryStore();
   const emoji = getEmojiById(id);
   const [pageUrl, setPageUrl] = useState('');
+  const [randomFiles, setRandomFiles] = useState<any[]>([]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
         setPageUrl(window.location.href);
     }
   }, []);
+  
+   useEffect(() => {
+    if (emojis.length === 0) return;
+    
+    const allFiles = emojis.flatMap(emoji => 
+        Object.entries(emoji.formats).flatMap(([format, files]) => 
+            files.map(file => ({
+                ...file,
+                emojiId: emoji.id,
+                format: format,
+                displayName: file.name,
+            }))
+        )
+    );
+    setRandomFiles([...allFiles].sort(() => 0.5 - Math.random()));
+
+  }, [emojis]);
+
 
   const file = useMemo(() => {
     if (!emoji) return null;
@@ -128,14 +147,6 @@ export default function FileDownloadPage() {
   if (!emoji || !file) {
     notFound();
   }
-
-  const relatedFiles = useMemo(() => {
-    return (Object.keys(emoji.formats) as (keyof typeof emoji.formats)[])
-      .flatMap(fmt => 
-        emoji.formats[fmt].map(f => ({ ...f, format: fmt }))
-      )
-      .filter(f => f.url !== file.url);
-  }, [emoji.formats, file.url]);
 
   return (
     <>
@@ -171,39 +182,13 @@ export default function FileDownloadPage() {
                     <AdSlot location="below_download" />
                 </div>
 
-                <Separator className="my-2" />
+                <Separator className="my-8" />
                 
                 <div className="w-full max-w-5xl space-y-8">
-                    {relatedFiles.length > 0 && (
+                    {randomFiles.length > 0 && (
                         <section>
-                          <h2 className="text-2xl font-headline font-bold text-center mb-6">{t('relatedFilesTitle')}</h2>
-                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
-                              {relatedFiles.map(relatedFile => (
-                                  <Card key={relatedFile.url} className="group overflow-hidden transition-shadow hover:shadow-lg">
-                                    <CardContent className="p-3 flex flex-col h-full">
-                                        <Link 
-                                            href={`/${lang}/emoji/${emoji.id}/${relatedFile.format}/${encodeURIComponent(relatedFile.name)}`}
-                                            className="flex-grow"
-                                        >
-                                            <div className="aspect-square bg-muted flex items-center justify-center relative rounded-md overflow-hidden mb-3">
-                                                {relatedFile.format === 'video' || relatedFile.type?.startsWith('video/') ? (
-                                                    <video src={relatedFile.url} autoPlay muted loop playsInline className="w-full h-full object-contain" />
-                                                ) : (
-                                                    <Image src={relatedFile.url} alt={relatedFile.name} layout="fill" objectFit="contain" className="p-2" unoptimized={relatedFile.format === 'gif'}/>
-                                                )}
-                                            </div>
-                                            <p className="text-sm font-medium truncate" title={relatedFile.name}>{relatedFile.name}</p>
-                                        </Link>
-                                         <Button asChild size="sm" className="w-full mt-2">
-                                             <Link href={`/${lang}/emoji/${emoji.id}/${relatedFile.format}/${encodeURIComponent(relatedFile.name)}`}>
-                                                <Download className="mr-2 h-4 w-4" />
-                                                {t('downloadButton')}
-                                            </Link>
-                                         </Button>
-                                    </CardContent>
-                                </Card>
-                              ))}
-                          </div>
+                            <h2 className="text-2xl font-headline font-bold text-center mb-6">Explore More Files</h2>
+                            <InfiniteFileScroller allFiles={randomFiles} lang={lang} />
                         </section>
                     )}
 
