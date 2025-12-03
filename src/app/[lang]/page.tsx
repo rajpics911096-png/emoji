@@ -74,9 +74,9 @@ export default function Home() {
   return (
       <main className="flex-1">
         
-        <section className="relative py-16 md:py-24">
+        <section className="relative py-12 md:py-16">
           <div className="container mx-auto text-center px-4">
-            <h1 className="text-4xl md:text-6xl font-headline font-bold text-primary tracking-tighter">
+            <h1 className="text-4xl md:text-5xl font-headline font-bold text-primary tracking-tighter">
               {t('welcomeMessage', { siteName: settings.name })}
             </h1>
             <p className="mt-4 text-lg md:text-xl max-w-3xl mx-auto text-foreground/80">
@@ -99,8 +99,8 @@ export default function Home() {
             <h2 className="text-3xl font-headline font-bold text-center mb-10">
               {t('exploreCategories')}
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
-              {sortedCategories.map((category) => (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6">
+              {sortedCategories.slice(0, 4).map((category) => (
                 <Link key={category.id} href={`/${lang}/emojis/${category.id}`}>
                   <Card className="group transform hover:-translate-y-1 transition-transform duration-300 ease-in-out hover:shadow-xl h-full">
                     <CardContent className="p-4 flex flex-col items-center justify-center text-center h-full">
@@ -112,6 +112,13 @@ export default function Home() {
                   </Card>
                 </Link>
               ))}
+            </div>
+            <div className="text-center mt-10">
+                <Button asChild variant="outline" size="lg">
+                    <Link href={`/${lang}/categories`}>
+                        Read More
+                    </Link>
+                </Button>
             </div>
           </div>
         </section>
