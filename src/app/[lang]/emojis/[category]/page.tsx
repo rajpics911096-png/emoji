@@ -50,18 +50,21 @@ export default function CategoryPage() {
   }
 
   const isSearchPage = categorySlug === 'all' && searchTerm;
+  const isFileSearch = searchTerm === 'files';
 
   const emojiList = useMemo(() => {
+    if (isFileSearch) return [];
     if (searchTerm) {
         const lowercasedQuery = searchTerm.toLowerCase();
         const categoryEmojis = categorySlug === 'all' ? emojis : getEmojisByCategory(categorySlug);
         return categoryEmojis.filter(emoji => 
-            t(emoji.title).toLowerCase().includes(lowercasedQuery) ||
-            t(emoji.description).toLowerCase().includes(lowercasedQuery)
+            emoji.emoji && // Ensure it's an emoji post
+            (t(emoji.title).toLowerCase().includes(lowercasedQuery) ||
+            t(emoji.description).toLowerCase().includes(lowercasedQuery))
         );
     }
-    return getEmojisByCategory(categorySlug);
-  }, [getEmojisByCategory, emojis, categorySlug, searchTerm, t]);
+    return getEmojisByCategory(categorySlug).filter(e => e.emoji);
+  }, [getEmojisByCategory, emojis, categorySlug, searchTerm, t, isFileSearch]);
 
 
   const allFoundFiles: (EmojiFormatFile & { emojiId: string; format: string; emojiTitle: string })[] = useMemo(() => {
@@ -69,7 +72,9 @@ export default function CategoryPage() {
     
     const lowercasedQuery = searchTerm.toLowerCase();
     
-    const matchingEmojis = emojis.filter(emoji => 
+    const emojisToSearch = isFileSearch ? emojis.filter(e => !e.emoji) : emojis;
+
+    const matchingEmojis = emojisToSearch.filter(emoji => 
         t(emoji.title).toLowerCase().includes(lowercasedQuery) ||
         t(emoji.description).toLowerCase().includes(lowercasedQuery)
     );
@@ -85,7 +90,7 @@ export default function CategoryPage() {
         )
     );
     
-    const filesWithNameMatch = emojis.flatMap(emoji =>
+    const filesWithNameMatch = emojisToSearch.flatMap(emoji =>
         Object.entries(emoji.formats).flatMap(([format, files]) =>
             files
                 .filter(file => file.name.toLowerCase().includes(lowercasedQuery))
@@ -98,18 +103,23 @@ export default function CategoryPage() {
         )
     );
 
-    const combined = [...filesFromMatchingEmojis, ...filesWithNameMatch];
+    const combined = isFileSearch ? filesFromMatchingEmojis.concat(filesWithNameMatch) : [...filesFromMatchingEmojis, ...filesWithNameMatch];
     const uniqueFiles = Array.from(new Map(combined.map(file => [file.url, file])).values());
 
     return uniqueFiles;
 
-  }, [emojis, searchTerm, t]);
+  }, [emojis, searchTerm, t, isFileSearch]);
   
   const allFoundPosts: Emoji[] = useMemo(() => {
      if (!searchTerm) return [];
+
+     if (isFileSearch) {
+       return emojis.filter(e => !e.emoji);
+     }
+
      const fileIds = new Set(allFoundFiles.map(f => f.emojiId));
-     return emojis.filter(emoji => fileIds.has(emoji.id));
-  },[allFoundFiles, emojis]);
+     return emojis.filter(emoji => fileIds.has(emoji.id) && !emoji.emoji); // Only file posts in file results
+  },[allFoundFiles, emojis, isFileSearch, searchTerm]);
 
 
   const fileTypes = useMemo(() => {
@@ -138,12 +148,15 @@ export default function CategoryPage() {
         }).map(f => f.emojiId));
         filtered = allFoundPosts.filter(post => emojiIdsWithFormat.has(post.id));
     }
-    return filtered.slice(0, 12);
-  }, [allFoundFiles, allFoundPosts, selectedFormat]);
+    return isFileSearch ? filtered : filtered.slice(0, 12);
+  }, [allFoundFiles, allFoundPosts, selectedFormat, isFileSearch]);
   
   const totalResults = emojiList.length + allFoundFiles.length;
   
   const pageTitle = useMemo(() => {
+    if (isFileSearch) {
+        return "All File Posts"
+    }
     if (!isSearchPage) {
         return t(category?.name || 'category_all');
     }
@@ -161,9 +174,12 @@ export default function CategoryPage() {
     }
     
     return `${totalResults} "${searchTerm}" ${formatsString}`;
-  }, [isSearchPage, t, category, totalResults, searchTerm, allFoundFiles, selectedFormat]);
+  }, [isSearchPage, t, category, totalResults, searchTerm, allFoundFiles, selectedFormat, isFileSearch]);
 
   const pageDescription = useMemo(() => {
+    if (isFileSearch) {
+        return "Browse all available file posts and downloadable content.";
+    }
     if (!isSearchPage) {
       return t('categoryDescription', { categoryName: t(category?.name || 'category_all') });
     }
@@ -175,7 +191,7 @@ export default function CategoryPage() {
         description += ` Explore emojis like ${emojiNames}.`;
     }
     return description.slice(0, 160); // Cap at 160 characters for meta descriptions
-  }, [isSearchPage, t, category, totalResults, searchTerm, fileTypes, emojiList]);
+  }, [isSearchPage, t, category, totalResults, searchTerm, fileTypes, emojiList, isFileSearch]);
 
   const handleTabChange = (value: string) => {
     const params = new URLSearchParams(Array.from(searchParams.entries()));
@@ -206,7 +222,7 @@ export default function CategoryPage() {
             </p>
         </div>
         
-        {emojiList.length > 0 && (
+        {!isFileSearch && emojiList.length > 0 && (
             <section id="emoji-results">
                 {isSearchPage && <h2 className="text-2xl font-headline font-bold mb-6">Emoji Results</h2>}
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
@@ -217,7 +233,7 @@ export default function CategoryPage() {
             </section>
         )}
         
-        {isSearchPage && fileTypes.length > 1 && (
+        {(isSearchPage || isFileSearch) && fileTypes.length > 1 && (
              <section className="mt-12 md:mt-16">
                  <Tabs defaultValue={selectedFormat} onValueChange={handleTabChange} className="w-full">
                     <div className="flex justify-center mb-8">
@@ -237,7 +253,7 @@ export default function CategoryPage() {
                         {featuredPosts.length > 0 && (
                             <section id="featured-files">
                                 <h2 className="text-2xl font-headline font-bold text-center md:text-left mb-6">
-                                    File Results
+                                    {isFileSearch ? 'All File Posts' : 'File Results'}
                                 </h2>
                                 <FeaturedFiles posts={featuredPosts} lang={lang} />
                             </section>

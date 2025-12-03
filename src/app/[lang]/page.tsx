@@ -136,7 +136,7 @@ export default function Home() {
               <FeaturedFiles posts={featuredPosts} lang={lang} />
               <div className="text-center mt-8">
                 <Button asChild variant="outline">
-                    <Link href={`/${lang}/emojis/all?search=`}>
+                    <Link href={`/${lang}/emojis/all?search=files`}>
                         Read More
                     </Link>
                 </Button>
