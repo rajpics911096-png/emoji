@@ -24,6 +24,7 @@ import {
   Library,
   Megaphone,
   Palette,
+  FileUp,
 } from "lucide-react";
 import { useSiteSettings } from "@/context/site-settings-context";
 import { useTranslations } from "@/context/translations-context";
@@ -67,6 +68,12 @@ export function AdminSidebar() {
       label: t('admin_emojis'),
       icon: Smile,
       activeMatch: '/rajurajadmin/emojis',
+    },
+    {
+      href: `/rajurajadmin/file-posts`,
+      label: "File Posts",
+      icon: FileUp,
+      activeMatch: '/rajurajadmin/file-posts',
     },
     {
       href: `/rajurajadmin/pages`,
