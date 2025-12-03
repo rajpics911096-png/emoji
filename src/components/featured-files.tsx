@@ -19,8 +19,12 @@ export function FeaturedFiles({ posts, lang }: FeaturedFilesProps) {
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
       {posts.map((post) => {
         const firstFile = Object.values(post.formats).flat()[0];
-        const totalFiles = Object.values(post.formats).flat().length;
+        const allFiles = Object.values(post.formats).flat();
+        const totalFiles = allFiles.length;
         
+        const availableFormats = [...new Set(allFiles.map(f => f.format))].map(f => f.toUpperCase());
+        const formatsString = availableFormats.join(', ');
+
         return (
           <Link
             key={post.id}
@@ -48,7 +52,7 @@ export function FeaturedFiles({ posts, lang }: FeaturedFilesProps) {
 
               <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                 <h3 className="font-headline font-bold text-lg leading-tight truncate">{t(post.title)}</h3>
-                <p className="text-sm text-white/80">{totalFiles} PNG images</p>
+                <p className="text-sm text-white/80">{`${totalFiles} Files (${formatsString})`}</p>
               </div>
             </div>
           </Link>
