@@ -31,7 +31,7 @@ export default function EmojiPage() {
   const effectRan = useRef(false);
   const { t } = useTranslations();
   const { settings } = useSiteSettings();
-  const [featuredFiles, setFeaturedFiles] = useState<any[]>([]);
+  const [featuredPosts, setFeaturedPosts] = useState<any[]>([]);
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'development' && effectRan.current) return;
@@ -48,18 +48,12 @@ export default function EmojiPage() {
   }, [emoji]);
   
   useEffect(() => {
-    const allFiles = emojis.flatMap(emojiItem => 
-        Object.entries(emojiItem.formats).flatMap(([format, files]) => 
-            files.map(file => ({
-                ...file,
-                emojiId: emojiItem.id,
-                format: format,
-            }))
-        )
-    );
-    const randomFiles = [...allFiles].sort(() => 0.5 - Math.random()).slice(0, 8);
-    setFeaturedFiles(randomFiles);
+    // Feature files from posts that are primarily file-based (no emoji character)
+    const filePosts = emojis.filter(emoji => !emoji.emoji);
+    const randomFeaturedPosts = [...filePosts].sort(() => 0.5 - Math.random()).slice(0, 8);
+    setFeaturedPosts(randomFeaturedPosts);
   }, [emojis]);
+
 
   if (!emoji) {
     notFound();
@@ -157,13 +151,13 @@ export default function EmojiPage() {
             </section>
           )}
 
-          {featuredFiles.length > 0 && (
+          {featuredPosts.length > 0 && (
             <section id="featured-files" className="mt-12 md:mt-16">
                 <div className="container mx-auto px-4">
                 <h2 className="text-3xl font-headline font-bold text-center mb-8">
                     Featured Files
                 </h2>
-                <FeaturedFiles files={featuredFiles} lang={lang} />
+                <FeaturedFiles posts={featuredPosts} lang={lang} />
                 </div>
             </section>
             )}

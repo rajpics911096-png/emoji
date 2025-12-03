@@ -104,6 +104,13 @@ export default function CategoryPage() {
     return uniqueFiles;
 
   }, [emojis, searchTerm, t]);
+  
+  const allFoundPosts: Emoji[] = useMemo(() => {
+     if (!searchTerm) return [];
+     const fileIds = new Set(allFoundFiles.map(f => f.emojiId));
+     return emojis.filter(emoji => fileIds.has(emoji.id));
+  },[allFoundFiles, emojis]);
+
 
   const fileTypes = useMemo(() => {
     const types = new Set<string>(['all']);
@@ -117,10 +124,10 @@ export default function CategoryPage() {
   }, [allFoundFiles]);
   
 
-  const featuredFiles = useMemo(() => {
-    let filtered = allFoundFiles;
+  const featuredPosts = useMemo(() => {
+    let filtered = allFoundPosts;
     if (selectedFormat !== 'all') {
-        filtered = allFoundFiles.filter(file => {
+        const emojiIdsWithFormat = new Set(allFoundFiles.filter(file => {
              switch (selectedFormat) {
                 case 'png': return file.format === 'png';
                 case 'gif': return file.format === 'gif';
@@ -128,28 +135,11 @@ export default function CategoryPage() {
                 case 'videos': return file.format === 'video';
                 default: return true;
             }
-        });
+        }).map(f => f.emojiId));
+        filtered = allFoundPosts.filter(post => emojiIdsWithFormat.has(post.id));
     }
-
-    return filtered.map((file, index) => {
-        let formatName = file.format.toUpperCase();
-        if (file.format === 'image' && file.type) {
-            const extension = file.type.split('/')[1]?.toUpperCase();
-            if (extension && !['PNG', 'GIF'].includes(extension)) {
-               formatName = extension === 'JPEG' ? 'JPG' : extension;
-            } else {
-               formatName = "Image";
-            }
-        } else if (file.format === 'video') {
-            formatName = 'Video';
-        }
-        
-        return {
-            ...file,
-            displayName: `${index + 1}. "${searchTerm}" ${formatName}`,
-        };
-    }).slice(0, 12);
-  }, [allFoundFiles, searchTerm, selectedFormat]);
+    return filtered.slice(0, 12);
+  }, [allFoundFiles, allFoundPosts, selectedFormat]);
   
   const totalResults = emojiList.length + allFoundFiles.length;
   
@@ -244,12 +234,12 @@ export default function CategoryPage() {
                         </TabsList>
                     </div>
                      <TabsContent value={selectedFormat}>
-                        {featuredFiles.length > 0 && (
+                        {featuredPosts.length > 0 && (
                             <section id="featured-files">
                                 <h2 className="text-2xl font-headline font-bold text-center md:text-left mb-6">
                                     File Results
                                 </h2>
-                                <FeaturedFiles files={featuredFiles} lang={lang} />
+                                <FeaturedFiles posts={featuredPosts} lang={lang} />
                             </section>
                         )}
                     </TabsContent>
@@ -258,7 +248,7 @@ export default function CategoryPage() {
         )}
 
 
-        {emojiList.length === 0 && featuredFiles.length === 0 && searchTerm && (
+        {emojiList.length === 0 && featuredPosts.length === 0 && searchTerm && (
           <div className="text-center py-16">
             <p className="text-xl text-muted-foreground">{t('categoryNoResults', { searchTerm: searchTerm || '' })}</p>
           </div>
