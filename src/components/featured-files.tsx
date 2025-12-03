@@ -65,7 +65,7 @@ export function FeaturedFiles({ posts, lang }: FeaturedFilesProps) {
         className={cn("group block relative overflow-hidden rounded-xl", className)}
       >
         <Card className="w-full h-full transition-shadow duration-300 group-hover:shadow-2xl">
-            <div className="aspect-square w-full h-full">
+            <div className="aspect-[4/3] w-full h-full bg-muted">
             {featuredFile?.url && (
                 isVideo ? (
                     <video 
@@ -74,7 +74,7 @@ export function FeaturedFiles({ posts, lang }: FeaturedFilesProps) {
                         loop 
                         muted 
                         playsInline
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                 ) : (
                     <Image 
@@ -82,7 +82,7 @@ export function FeaturedFiles({ posts, lang }: FeaturedFilesProps) {
                         alt={t(post.title)} 
                         layout="fill" 
                         objectFit="cover" 
-                        className="transition-transform duration-300 group-hover:scale-110"
+                        className="transition-transform duration-300 group-hover:scale-105"
                         unoptimized={featuredFile.format === 'gif'}
                     />
                 )
@@ -98,11 +98,19 @@ export function FeaturedFiles({ posts, lang }: FeaturedFilesProps) {
     );
   };
 
+  const firstPost = posts[0];
+  const remainingPosts = posts.slice(1);
+
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
-        ))}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {firstPost && <PostCard post={firstPost} className="md:col-span-1" />}
+        {remainingPosts.length > 0 && (
+            <div className="grid grid-cols-2 gap-4">
+                {remainingPosts.map((post) => (
+                    <PostCard key={post.id} post={post} />
+                ))}
+            </div>
+        )}
     </div>
   );
 }
