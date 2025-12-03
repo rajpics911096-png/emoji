@@ -188,7 +188,7 @@ export default function CategoryPage() {
         
         {allFoundFiles.length > 0 && (
              <section id="file-results" className="mt-12 md:mt-16">
-                <h2 className="text-2xl font-headline font-bold text-center md:text-left mb-6">
+                <h2 className="text-2xl font-headline font-bold text-center mb-6">
                     File Results
                 </h2>
                 <InfiniteFileScroller allFiles={allFoundFiles} lang={lang} />
