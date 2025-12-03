@@ -19,6 +19,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useTranslations } from "@/context/translations-context";
 import { SvgIcon } from "@/components/svg-icon";
 import { useSiteSettings } from "@/context/site-settings-context";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AdminSidebar } from "@/app/[lang]/rajurajadmin/components/admin-sidebar";
 
 
 function LoginPage() {
@@ -132,5 +134,14 @@ export function AuthGuard({ children }: { children: ReactNode }) {
     return <LoginPage />;
   }
 
-  return <>{children}</>;
+  return (
+      <SidebarProvider>
+        <div className="md:flex">
+          <AdminSidebar />
+          <main className="flex-1 p-4 sm:p-6 lg:p-8">
+            {children}
+          </main>
+        </div>
+      </SidebarProvider>
+  );
 }
