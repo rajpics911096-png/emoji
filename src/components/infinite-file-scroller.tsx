@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Download, Loader } from 'lucide-react';
 import type { EmojiFormatFile } from '@/lib/types';
 import { useTranslations } from '@/context/translations-context';
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 
 type FileItem = EmojiFormatFile & {
     emojiId: string;
@@ -28,14 +30,26 @@ export function InfiniteFileScroller({ allFiles, lang, itemsPerPage = 12 }: Infi
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [filter, setFilter] = useState('all');
   const observer = useRef<IntersectionObserver | null>(null);
 
+  const filteredFiles = useMemo(() => {
+    if (filter === 'all') {
+      return allFiles;
+    }
+    return allFiles.filter(file => {
+        if (filter === 'images') return file.format === 'image' && !file.type?.includes('png') && !file.type?.includes('gif');
+        if (filter === 'videos') return file.format === 'video';
+        return file.format === filter;
+    });
+  }, [allFiles, filter]);
+
   useEffect(() => {
-    const initialFiles = allFiles.slice(0, itemsPerPage);
+    const initialFiles = filteredFiles.slice(0, itemsPerPage);
     setVisibleFiles(initialFiles);
     setPage(1);
-    setHasMore(allFiles.length > itemsPerPage);
-  }, [allFiles, itemsPerPage]);
+    setHasMore(filteredFiles.length > itemsPerPage);
+  }, [filteredFiles, itemsPerPage]);
 
   const loadMoreFiles = useCallback(() => {
     if (isLoading || !hasMore) return;
@@ -43,14 +57,14 @@ export function InfiniteFileScroller({ allFiles, lang, itemsPerPage = 12 }: Infi
     setIsLoading(true);
     setTimeout(() => {
         const nextPage = page + 1;
-        const newFiles = allFiles.slice(0, nextPage * itemsPerPage);
+        const newFiles = filteredFiles.slice(0, nextPage * itemsPerPage);
         
         setPage(nextPage);
         setVisibleFiles(newFiles);
-        setHasMore(newFiles.length < allFiles.length);
+        setHasMore(newFiles.length < filteredFiles.length);
         setIsLoading(false);
     }, 500); // Simulate network delay
-  }, [page, isLoading, hasMore, allFiles, itemsPerPage]);
+  }, [page, isLoading, hasMore, filteredFiles, itemsPerPage]);
   
   const lastFileElementRef = useCallback((node: HTMLDivElement | null) => {
     if (isLoading) return;
@@ -64,9 +78,37 @@ export function InfiniteFileScroller({ allFiles, lang, itemsPerPage = 12 }: Infi
 
     if (node) observer.current.observe(node);
   }, [isLoading, hasMore, loadMoreFiles]);
+  
+  const fileTypes = useMemo(() => {
+    const types = new Set(['all']);
+    allFiles.forEach(file => {
+        if (file.format === 'png') types.add('png');
+        if (file.format === 'gif') types.add('gif');
+        const otherImages = file.format === 'image' && !['image/png', 'image/gif'].includes(file.type || '');
+        if (otherImages) types.add('images');
+        if (file.format === 'video') types.add('videos');
+    });
+    return Array.from(types);
+  }, [allFiles]);
 
   return (
     <div>
+        <div className="flex justify-center mb-8">
+            <Tabs value={filter} onValueChange={setFilter} className="w-full">
+                <TabsList className="bg-background border rounded-full p-1 h-auto flex-wrap">
+                    {fileTypes.map(format => (
+                    <TabsTrigger 
+                        key={format} 
+                        value={format}
+                        className="capitalize rounded-full text-sm font-semibold h-auto px-3 py-1.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
+                    >
+                        {t(`downloadsTab${format.charAt(0).toUpperCase() + format.slice(1)}`)}
+                    </TabsTrigger>
+                    ))}
+                </TabsList>
+            </Tabs>
+        </div>
+
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
         {visibleFiles.map((file, index) => (
             <div key={`${file.url}-${index}`} ref={visibleFiles.length === index + 1 ? lastFileElementRef : null}>
@@ -104,7 +146,16 @@ export function InfiniteFileScroller({ allFiles, lang, itemsPerPage = 12 }: Infi
                 <p className="ml-2 text-muted-foreground">Loading more...</p>
             </div>
         )}
+        {!isLoading && !hasMore && visibleFiles.length > 0 && (
+            <div className="text-center py-8 text-muted-foreground">
+                <p>You've reached the end!</p>
+            </div>
+        )}
+         {visibleFiles.length === 0 && !isLoading && (
+            <div className="text-center py-8 text-muted-foreground">
+                <p>No files found for this filter.</p>
+            </div>
+        )}
     </div>
   );
 }
-
