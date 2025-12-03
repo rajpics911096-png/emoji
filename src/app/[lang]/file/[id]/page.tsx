@@ -4,9 +4,6 @@
 import { notFound, useParams } from 'next/navigation';
 import Head from 'next/head';
 import Link from 'next/link';
-import Header from '@/components/header';
-import Footer from '@/components/footer';
-import { EmojiCard } from '@/components/emoji-card';
 import { EmojiView } from '@/app/[lang]/emoji/[id]/components/emoji-view';
 import { SvgIcon } from '@/components/svg-icon';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,6 +16,8 @@ import { JsonLd } from '@/components/json-ld';
 import type { Thing } from 'schema-dts';
 import { useCategoryStore, useEmojiStore } from '@/lib/store';
 import { FeaturedFiles } from '@/components/featured-files';
+import { EmojiCard } from '@/components/emoji-card';
+
 
 export default function FilePostPage() {
   const params = useParams();
@@ -95,7 +94,6 @@ export default function FilePostPage() {
         <meta property="og:description" content={metaDescription} />
       </Head>
       <JsonLd data={jsonLdData} />
-      <Header lang={lang} />
       <main className="flex-1 py-8 md:py-12">
         <div className="container mx-auto px-4">
           
@@ -164,7 +162,6 @@ export default function FilePostPage() {
             )}
         </div>
       </main>
-      <Footer lang={lang} />
     </>
   );
 }

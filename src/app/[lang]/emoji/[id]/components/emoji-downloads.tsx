@@ -82,7 +82,7 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
         <TabsContent value={selectedFormat}>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
             {filteredFiles.flatMap((file, index) => {
-              const downloadUrl = `/${lang}/download/${file.format}/${encodeURIComponent(file.name)}`;
+              const downloadUrl = `/${lang}/download/${emoji.id}/${encodeURIComponent(file.name)}`;
               const fileCard = (
                 <Card key={`${file.url}-${index}`} className="group overflow-hidden transition-shadow hover:shadow-lg">
                     <CardContent className="p-3 flex flex-col h-full">

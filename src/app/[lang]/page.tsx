@@ -9,8 +9,6 @@ import {
 
 import { Button } from '@/components/ui/button';
 import { EmojiCard } from '@/components/emoji-card';
-import Header from '@/components/header';
-import Footer from '@/components/footer';
 import { Card, CardContent } from '@/components/ui/card';
 import { SvgIcon } from '@/components/svg-icon';
 import { useSiteSettings } from '@/context/site-settings-context';
@@ -52,7 +50,6 @@ export default function Home() {
 
   return (
     <>
-      <Header lang={lang} />
       <main className="flex-1">
         
         <section className="relative py-12 md:py-16 bg-primary/10">
@@ -131,7 +128,6 @@ export default function Home() {
         )}
 
       </main>
-      <Footer lang={lang} />
     </>
   );
 }
