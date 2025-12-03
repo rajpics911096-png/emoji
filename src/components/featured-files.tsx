@@ -18,8 +18,10 @@ export function FeaturedFiles({ posts, lang }: FeaturedFilesProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
       {posts.map((post) => {
-        const firstFile = Object.values(post.formats).flat()[0];
-        const allFiles = Object.values(post.formats).flat();
+        const allFiles = (Object.entries(post.formats) as [keyof Emoji['formats'], any[]][])
+          .flatMap(([format, files]) => files.map(file => ({ ...file, format })));
+
+        const firstFile = allFiles[0];
         const totalFiles = allFiles.length;
         
         const availableFormats = [...new Set(allFiles.map(f => f.format))].map(f => f.toUpperCase());
