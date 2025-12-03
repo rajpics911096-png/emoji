@@ -1,7 +1,7 @@
 
 'use client';
 
-import { notFound, useParams, useSearchParams } from 'next/navigation';
+import { notFound, useParams, useSearchParams, useRouter } from 'next/navigation';
 import { EmojiCard } from '@/components/emoji-card';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
@@ -9,8 +9,10 @@ import { useTranslations } from '@/context/translations-context';
 import { useCategoryStore, useEmojiStore } from '@/lib/store';
 import { useMemo, useEffect, useState } from 'react';
 import { FeaturedFiles } from '@/components/featured-files';
-import type { EmojiFormatFile } from '@/lib/types';
+import type { EmojiFormatFile, Emoji } from '@/lib/types';
 import Head from 'next/head';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+
 
 type FeaturedFile = EmojiFormatFile & {
     emojiId: string;
@@ -22,6 +24,8 @@ type FeaturedFile = EmojiFormatFile & {
 
 export default function CategoryPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const params = useParams<{ category: string, lang: string }>();
   const { category: categorySlug, lang } = params;
 
@@ -29,8 +33,8 @@ export default function CategoryPage() {
   const { categories } = useCategoryStore();
   const { emojis, getEmojisByCategory } = useEmojiStore();
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
-  
-  const category = categories.find((c) => c.id === categorySlug);
+  const selectedFormat = searchParams.get('format') || 'all';
+
   
   useEffect(() => {
     setSearchTerm(searchParams.get('search') || '');
@@ -54,12 +58,18 @@ export default function CategoryPage() {
     return getEmojisByCategory(categorySlug);
   }, [getEmojisByCategory, emojis, categorySlug, searchTerm, t]);
 
-  const featuredFiles = useMemo(() => {
-    if (!searchTerm) {
-      return [];
-    }
 
-    const allFiles: (EmojiFormatFile & { emojiId: string; format: string; emojiTitle: string })[] = emojis.flatMap(emoji =>
+  const allFoundFiles: (EmojiFormatFile & { emojiId: string; format: string; emojiTitle: string })[] = useMemo(() => {
+    if (!searchTerm) return [];
+    
+    const lowercasedQuery = searchTerm.toLowerCase();
+    
+    const matchingEmojis = emojis.filter(emoji => 
+        t(emoji.title).toLowerCase().includes(lowercasedQuery) ||
+        t(emoji.description).toLowerCase().includes(lowercasedQuery)
+    );
+
+    const filesFromMatchingEmojis = matchingEmojis.flatMap(emoji =>
         Object.entries(emoji.formats).flatMap(([format, files]) =>
             files.map(file => ({
                 ...file,
@@ -69,14 +79,54 @@ export default function CategoryPage() {
             }))
         )
     );
-
-    const lowercasedQuery = searchTerm.toLowerCase();
-    const filteredFiles = allFiles.filter(file => 
-        file.name.toLowerCase().includes(lowercasedQuery) ||
-        file.emojiTitle.toLowerCase().includes(lowercasedQuery)
-    );
     
-    return filteredFiles.map((file, index) => {
+    const filesWithNameMatch = emojis.flatMap(emoji =>
+        Object.entries(emoji.formats).flatMap(([format, files]) =>
+            files
+                .filter(file => file.name.toLowerCase().includes(lowercasedQuery))
+                .map(file => ({
+                    ...file,
+                    emojiId: emoji.id,
+                    format: format,
+                    emojiTitle: t(emoji.title),
+                }))
+        )
+    );
+
+    const combined = [...filesFromMatchingEmojis, ...filesWithNameMatch];
+    const uniqueFiles = Array.from(new Map(combined.map(file => [file.url, file])).values());
+
+    return uniqueFiles;
+
+  }, [emojis, searchTerm, t]);
+
+  const fileTypes = useMemo(() => {
+    const types = new Set<string>(['all']);
+    allFoundFiles.forEach(file => {
+        if (file.format === 'png') types.add('png');
+        else if (file.format === 'gif') types.add('gif');
+        else if (file.format === 'image') types.add('images');
+        else if (file.format === 'video') types.add('videos');
+    });
+    return Array.from(types);
+  }, [allFoundFiles]);
+  
+
+  const featuredFiles = useMemo(() => {
+    let filtered = allFoundFiles;
+    if (selectedFormat !== 'all') {
+        filtered = allFoundFiles.filter(file => {
+             switch (selectedFormat) {
+                case 'png': return file.format === 'png';
+                case 'gif': return file.format === 'gif';
+                case 'images': return file.format === 'image' && !file.type?.includes('png') && !file.type?.includes('gif');
+                case 'videos': return file.format === 'video';
+                default: return true;
+            }
+        });
+    }
+
+    return filtered.map((file, index) => {
         let formatName = file.format.toUpperCase();
         if (file.format === 'image' && file.type) {
             const extension = file.type.split('/')[1]?.toUpperCase();
@@ -94,8 +144,7 @@ export default function CategoryPage() {
             displayName: `${index + 1}. "${searchTerm}" ${formatName}`,
         };
     }).slice(0, 12);
-
-  }, [emojis, searchTerm, t]);
+  }, [allFoundFiles, searchTerm, selectedFormat]);
   
   const totalResults = emojiList.length + featuredFiles.length;
   
@@ -105,6 +154,16 @@ export default function CategoryPage() {
   const pageDescription = isSearchPage
     ? `Found ${totalResults} results for your query: "${searchTerm}"`
     : t('categoryDescription', { categoryName: t(category?.name || 'category_all') });
+
+  const handleTabChange = (value: string) => {
+    const params = new URLSearchParams(Array.from(searchParams.entries()));
+    if (value === 'all') {
+      params.delete('format');
+    } else {
+      params.set('format', value);
+    }
+    router.replace(`${pathname}?${params.toString()}`);
+  };
 
 
   return (
@@ -135,15 +194,37 @@ export default function CategoryPage() {
                 </div>
             </section>
         )}
-
-        {featuredFiles.length > 0 && (
-            <section id="featured-files" className="mt-12 md:mt-16">
-                <h2 className="text-2xl font-headline font-bold text-center md:text-left mb-6">
-                    File Results
-                </h2>
-                <FeaturedFiles files={featuredFiles} lang={lang} />
+        
+        {isSearchPage && fileTypes.length > 1 && (
+             <section className="mt-12 md:mt-16">
+                 <Tabs defaultValue={selectedFormat} onValueChange={handleTabChange} className="w-full">
+                    <div className="flex justify-center mb-8">
+                        <TabsList className="bg-background border rounded-full p-1 h-auto flex-wrap">
+                            {fileTypes.map(format => (
+                            <TabsTrigger 
+                                key={format} 
+                                value={format}
+                                className="capitalize rounded-full text-sm font-semibold h-auto px-3 py-1.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
+                            >
+                                {t(`downloadsTab${format.charAt(0).toUpperCase() + format.slice(1)}`)}
+                            </TabsTrigger>
+                            ))}
+                        </TabsList>
+                    </div>
+                     <TabsContent value={selectedFormat}>
+                        {featuredFiles.length > 0 && (
+                            <section id="featured-files">
+                                <h2 className="text-2xl font-headline font-bold text-center md:text-left mb-6">
+                                    File Results
+                                </h2>
+                                <FeaturedFiles files={featuredFiles} lang={lang} />
+                            </section>
+                        )}
+                    </TabsContent>
+                </Tabs>
             </section>
         )}
+
 
         {emojiList.length === 0 && featuredFiles.length === 0 && searchTerm && (
           <div className="text-center py-16">
