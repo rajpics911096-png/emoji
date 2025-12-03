@@ -12,13 +12,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const { categories } = useCategoryStore.getState();
   const { pages } = usePageStore.getState();
 
-  const emojiRoutes = emojis.flatMap(emoji =>
-    i18n.locales.map(lang => ({
-      url: `${BASE_URL}/${lang}/emoji/${emoji.id}`,
-      lastModified: new Date(emoji.createdAt || Date.now()),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-    }))
+  const postRoutes = emojis.flatMap(post =>
+    i18n.locales.map(lang => {
+      const path = post.emoji ? 'emoji' : 'file';
+      return {
+        url: `${BASE_URL}/${lang}/${path}/${post.id}`,
+        lastModified: new Date(post.createdAt || Date.now()),
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+      };
+    })
   );
 
   const categoryRoutes = categories.flatMap(category =>
@@ -50,6 +53,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...homeRoutes,
     ...staticPageRoutes,
     ...categoryRoutes,
-    ...emojiRoutes,
+    ...postRoutes,
   ];
 }

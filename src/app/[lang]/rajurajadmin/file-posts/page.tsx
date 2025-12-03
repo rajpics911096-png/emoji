@@ -41,15 +41,17 @@ export default function FilePostsPage() {
   
   const [sortConfig, setSortConfig] = useState<SortConfig | null>({ key: 'createdAt', direction: 'descending' });
   
+  const filePosts = useMemo(() => emojis.filter(p => !p.emoji), [emojis]);
+  
   const postList = useMemo(() => {
     const views = JSON.parse(localStorage.getItem('emojiViews') || '{}');
-    return emojis.map(emoji => ({
-      ...emoji,
-      views: views[emoji.id] || emoji.views || 0,
-      createdAt: emoji.createdAt || 0,
-      translatedTitle: t(emoji.title)
+    return filePosts.map(post => ({
+      ...post,
+      views: views[post.id] || post.views || 0,
+      createdAt: post.createdAt || 0,
+      translatedTitle: t(post.title)
     }));
-  }, [emojis, t]);
+  }, [filePosts, t]);
 
 
   const sortedPostList = useMemo(() => {
@@ -135,7 +137,7 @@ export default function FilePostsPage() {
             <div>
                 <CardTitle>File Posts</CardTitle>
                 <CardDescription>
-                  Manage your website's file posts here. You currently have {emojis.length} posts.
+                  Manage your website's file posts here. You currently have {filePosts.length} posts.
                 </CardDescription>
             </div>
             <Button size="sm" className="gap-1" onClick={() => setIsAddDialogOpen(true)}>
@@ -203,7 +205,7 @@ export default function FilePostsPage() {
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                       <DropdownMenuItem asChild>
-                        <Link href={`/${language}/emoji/${post.id}`} target="_blank">
+                        <Link href={`/${language}/file/${post.id}`} target="_blank">
                           <ExternalLink className="mr-2 h-4 w-4" />
                           Preview
                         </Link>

@@ -41,15 +41,17 @@ export default function EmojisPage() {
   
   const [sortConfig, setSortConfig] = useState<SortConfig | null>({ key: 'createdAt', direction: 'descending' });
   
+  const emojiPosts = useMemo(() => emojis.filter(p => p.emoji), [emojis]);
+
   const emojiListWithDetails = useMemo(() => {
     const views = JSON.parse(localStorage.getItem('emojiViews') || '{}');
-    return emojis.map(emoji => ({
+    return emojiPosts.map(emoji => ({
       ...emoji,
       views: views[emoji.id] || emoji.views || 0,
       createdAt: emoji.createdAt || 0,
       translatedTitle: t(emoji.title)
     }));
-  }, [emojis, t]);
+  }, [emojiPosts, t]);
 
 
   const sortedEmojiList = useMemo(() => {
@@ -135,7 +137,7 @@ export default function EmojisPage() {
             <div>
                 <CardTitle>{t('emojis_title')}</CardTitle>
                 <CardDescription>
-                  {t('emojis_description', { count: emojis.length.toString() })}
+                  {t('emojis_description', { count: emojiPosts.length.toString() })}
                 </CardDescription>
             </div>
             <Button size="sm" className="gap-1" onClick={() => setIsAddDialogOpen(true)}>

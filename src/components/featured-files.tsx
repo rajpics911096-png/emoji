@@ -14,6 +14,11 @@ interface FeaturedFilesProps {
 
 export function FeaturedFiles({ posts, lang }: FeaturedFilesProps) {
   const { t } = useTranslations();
+  const linkPrefix = "/file";
+
+  if (!posts) {
+    return null;
+  }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
@@ -24,13 +29,13 @@ export function FeaturedFiles({ posts, lang }: FeaturedFilesProps) {
         const firstFile = allFiles[0];
         const totalFiles = allFiles.length;
         
-        const availableFormats = [...new Set(allFiles.map(f => f.format))].map(f => f.toUpperCase());
+        const availableFormats = [...new Set(allFiles.map(f => f.format?.toUpperCase()).filter(Boolean))];
         const formatsString = availableFormats.join(', ');
 
         return (
           <Link
             key={post.id}
-            href={`/${lang}/emoji/${post.id}`}
+            href={`/${lang}${linkPrefix}/${post.id}`}
             className="group block"
           >
             <div className="relative aspect-[3/4] rounded-xl overflow-hidden transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl">

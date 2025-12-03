@@ -14,9 +14,10 @@ interface EmojiCardProps {
 export function EmojiCard({ emoji, lang }: EmojiCardProps) {
   const { t } = useTranslations();
   const title = t(emoji.title);
+  const linkUrl = emoji.emoji ? `/${lang}/emoji/${emoji.id}` : `/${lang}/file/${emoji.id}`;
   
   return (
-    <Link href={`/${lang}/emoji/${emoji.id}`} className="group">
+    <Link href={linkUrl} className="group">
       <Card className="h-full transform hover:-translate-y-1 transition-transform duration-300 ease-in-out hover:shadow-xl">
         <CardContent className="p-4 flex flex-col items-center justify-center text-center">
           <div className="text-6xl mb-3">{emoji.emoji}</div>

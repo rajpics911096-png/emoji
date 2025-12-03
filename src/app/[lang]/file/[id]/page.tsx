@@ -7,10 +7,10 @@ import Link from 'next/link';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { EmojiCard } from '@/components/emoji-card';
-import { EmojiView } from './components/emoji-view';
+import { EmojiView } from '@/app/[lang]/emoji/[id]/components/emoji-view';
 import { SvgIcon } from '@/components/svg-icon';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { EmojiDownloads } from './components/emoji-downloads';
+import { EmojiDownloads } from '@/app/[lang]/emoji/[id]/components/emoji-downloads';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from '@/context/translations-context';
 import { useSiteSettings } from '@/context/site-settings-context';
@@ -20,7 +20,7 @@ import type { Thing } from 'schema-dts';
 import { useCategoryStore, useEmojiStore } from '@/lib/store';
 import { FeaturedFiles } from '@/components/featured-files';
 
-export default function EmojiPage() {
+export default function FilePostPage() {
   const params = useParams<{ id: string, lang: string }>();
   const { id, lang } = params;
   
@@ -55,7 +55,7 @@ export default function EmojiPage() {
   }, [emojis]);
 
 
-  if (!emoji || !emoji.emoji) { // Check if it's an emoji post
+  if (!emoji || emoji.emoji) { // Also check if it's a file post
     notFound();
   }
 
@@ -74,7 +74,7 @@ export default function EmojiPage() {
         name: emoji.metaTitle || emojiTitle,
         description: emoji.metaDescription || emojiDescription,
         image: emojiImage ? `${baseUrl}${emojiImage.url}` : undefined,
-        url: `${baseUrl}/${lang}/emoji/${emoji.id}`,
+        url: `${baseUrl}/${lang}/file/${emoji.id}`,
     };
   }, [emoji, lang, emojiTitle, emojiDescription]);
 
