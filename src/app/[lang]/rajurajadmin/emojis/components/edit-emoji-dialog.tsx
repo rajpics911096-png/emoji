@@ -12,7 +12,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -24,10 +23,12 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import type { Emoji, EmojiFormatFile } from "@/lib/types";
-import { categories } from "@/lib/data";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useTranslations } from "@/context/translations-context";
 import { UploadedFileCard } from "./uploaded-file-card";
+import { useCategoryStore } from "@/lib/store";
+import { RichTextEditor } from "@/components/rich-text-editor";
+import { Textarea } from "@/components/ui/textarea";
 
 
 const emojiSchema = z.object({
@@ -50,6 +51,17 @@ interface EditEmojiDialogProps {
 
 export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: EditEmojiDialogProps) {
   const { t } = useTranslations();
+  const { categories } = useCategoryStore();
+  
+  const defaultValues = useMemo(() => ({
+    emoji: emoji.emoji,
+    title: t(emoji.title),
+    description: t(emoji.description),
+    category: emoji.category,
+    metaTitle: emoji.metaTitle,
+    metaDescription: emoji.metaDescription,
+  }), [emoji, t]);
+
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, EmojiFormatFile[]>>(emoji.formats);
 
   const {
@@ -60,36 +72,21 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
     formState: { errors },
   } = useForm<EmojiFormData>({
     resolver: zodResolver(emojiSchema),
-    defaultValues: {
-      emoji: emoji.emoji,
-      title: emoji.title,
-      description: emoji.description,
-      category: emoji.category,
-      metaTitle: emoji.metaTitle,
-      metaDescription: emoji.metaDescription,
-    },
+    defaultValues: defaultValues,
   });
 
   useEffect(() => {
     if (emoji) {
-      reset({
-        emoji: emoji.emoji,
-        title: emoji.title,
-        description: emoji.description,
-        category: emoji.category,
-        metaTitle: emoji.metaTitle,
-        metaDescription: emoji.metaDescription,
-      });
+      reset(defaultValues);
       setUploadedFiles(emoji.formats);
     }
-  }, [emoji, reset]);
+  }, [emoji, reset, defaultValues]);
   
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files) return;
 
     const newFilesMap = Array.from(files).reduce((acc, file) => {
-      const fileType = file.type.split('/')[1];
       const simpleFormat = file.type.startsWith('image/png') ? 'png' :
                            file.type.startsWith('image/gif') ? 'gif' :
                            file.type.startsWith('image/') ? 'image' :
@@ -132,7 +129,17 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
 
 
   const onSubmit = (data: EmojiFormData) => {
-    onEditEmoji({ ...emoji, ...data, formats: uploadedFiles });
+    const isNewTitle = data.title !== t(emoji.title);
+    const isNewDescription = data.description !== t(emoji.description);
+
+    const finalData: Emoji = {
+        ...emoji,
+        ...data,
+        title: isNewTitle ? data.title : emoji.title,
+        description: isNewDescription ? data.description : emoji.description,
+        formats: uploadedFiles
+    };
+    onEditEmoji(finalData);
   };
   
   const handleOpenChange = (open: boolean) => {
@@ -151,7 +158,7 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-3xl">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>{t('edit_emoji_dialog_title')}</DialogTitle>
@@ -187,7 +194,12 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
             <div className="grid grid-cols-1 md:grid-cols-4 items-start gap-4">
               <Label htmlFor="description" className="text-left md:text-right pt-2">{t('emoji_form_description_label')}</Label>
               <div className="md:col-span-3">
-                <Textarea id="description" {...register("description")} />
+                <Controller
+                    name="description"
+                    control={control}
+                    defaultValue={defaultValues.description}
+                    render={({ field }) => <RichTextEditor value={field.value} onChange={field.onChange} />}
+                />
                 {errors.description && <p className="text-destructive text-sm mt-1">{errors.description.message}</p>}
               </div>
             </div>
@@ -222,8 +234,8 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
                         <div className="space-y-3">
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                                 {Object.entries(uploadedFiles).map(([format, files]) => (
-                                    files.map(file => (
-                                        <UploadedFileCard key={file.url} file={file} format={format} onRemove={removeFile} />
+                                    files.map((file, index) => (
+                                        <UploadedFileCard key={`${file.url}-${file.name}-${index}`} file={file} format={format} onRemove={removeFile} />
                                     ))
                                 ))}
                             </div>

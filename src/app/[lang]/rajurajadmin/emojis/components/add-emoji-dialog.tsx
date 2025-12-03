@@ -12,7 +12,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -24,10 +23,12 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import type { Emoji, EmojiFormatFile } from "@/lib/types";
-import { categories } from "@/lib/data";
 import { useTranslations } from "@/context/translations-context";
 import { useState } from "react";
 import { UploadedFileCard } from "./uploaded-file-card";
+import { useCategoryStore } from "@/lib/store";
+import { RichTextEditor } from "@/components/rich-text-editor";
+import { Textarea } from "@/components/ui/textarea";
 
 const emojiSchema = z.object({
   emoji: z.string().min(1, "Emoji character is required."),
@@ -48,6 +49,7 @@ interface AddEmojiDialogProps {
 
 export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDialogProps) {
   const { t } = useTranslations();
+  const { categories } = useCategoryStore();
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, EmojiFormatFile[]>>({
     png: [],
     gif: [],
@@ -128,7 +130,7 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-3xl">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>{t('add_emoji_dialog_title')}</DialogTitle>
@@ -164,7 +166,12 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
             <div className="grid grid-cols-1 md:grid-cols-4 items-start gap-4">
               <Label htmlFor="description" className="text-left md:text-right pt-2">{t('emoji_form_description_label')}</Label>
               <div className="md:col-span-3">
-                <Textarea id="description" {...register("description")} />
+                 <Controller
+                    name="description"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => <RichTextEditor value={field.value} onChange={field.onChange} />}
+                />
                 {errors.description && <p className="text-destructive text-sm mt-1">{errors.description.message}</p>}
               </div>
             </div>
@@ -201,8 +208,8 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
                             <h4 className="font-medium text-sm">{t('emoji_form_uploaded_title')}</h4>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                                 {Object.entries(uploadedFiles).map(([format, files]) => (
-                                    files.map(file => (
-                                        <UploadedFileCard key={file.url} file={file} format={format} onRemove={removeFile} />
+                                    files.map((file, index) => (
+                                        <UploadedFileCard key={`${file.url}-${file.name}-${index}`} file={file} format={format} onRemove={removeFile} />
                                     ))
                                 ))}
                             </div>
