@@ -74,7 +74,7 @@ export function EmojiView({ emoji }: EmojiViewProps) {
   return (
     <article>
         <div className="flex flex-col items-center text-center p-4 sm:p-8 border rounded-lg bg-card shadow-sm">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-headline font-bold text-foreground tracking-tighter">{t(emoji.title)}</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-headline font-bold text-foreground tracking-tighter mb-4">{t(emoji.title)}</h1>
             
             {!isFilePost ? (
               <>
@@ -110,11 +110,11 @@ export function EmojiView({ emoji }: EmojiViewProps) {
                 </div>
               </>
             ) : (
-                featuredImage && (
-                    <div className="my-6 sm:my-8 w-full max-w-md aspect-square relative">
-                        <Image src={featuredImage.url} alt={t(emoji.title)} layout="fill" objectFit="contain" className="rounded-lg" />
-                    </div>
-                )
+                <div className="mt-4">
+                     <Button onClick={handleShare} size="default" variant="outline" className="transition-all">
+                        <Share2 className="mr-2 h-4 w-4" /> Share
+                    </Button>
+                </div>
             )}
       </div>
     </article>
