@@ -31,7 +31,7 @@ import { RichTextEditor } from "@/components/rich-text-editor";
 import { Textarea } from "@/components/ui/textarea";
 
 const emojiSchema = z.object({
-  emoji: z.string().min(1, "Emoji character is required."),
+  emoji: z.string().optional(),
   title: z.string().min(1, "Title is required."),
   description: z.string().min(1, "Description is required."),
   category: z.string().min(1, "Category is required."),
@@ -112,7 +112,7 @@ export function AddEmojiDialog({ isOpen, onOpenChange, onAddEmoji }: AddEmojiDia
   };
 
   const onSubmit = (data: EmojiFormData) => {
-    onAddEmoji({ ...data, formats: uploadedFiles });
+    onAddEmoji({ ...data, emoji: data.emoji || '', formats: uploadedFiles });
     reset();
     setUploadedFiles({ png: [], gif: [], image: [], video: [] });
   };

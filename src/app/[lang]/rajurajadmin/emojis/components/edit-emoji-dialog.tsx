@@ -32,7 +32,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 
 const emojiSchema = z.object({
-  emoji: z.string().min(1, "Emoji character is required."),
+  emoji: z.string().optional(),
   title: z.string().min(1, "Title is required."),
   description: z.string().min(1, "Description is required."),
   category: z.string().min(1, "Category is required."),
@@ -135,6 +135,7 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
     const finalData: Emoji = {
         ...emoji,
         ...data,
+        emoji: data.emoji || '',
         title: isNewTitle ? data.title : emoji.title,
         description: isNewDescription ? data.description : emoji.description,
         formats: uploadedFiles
