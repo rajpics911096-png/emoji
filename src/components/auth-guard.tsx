@@ -3,7 +3,7 @@
 
 import { useUser } from "@/firebase/use-user";
 import { useState, type ReactNode } from "react";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -48,27 +48,6 @@ function LoginPage() {
     }
   };
 
-  const handleSignUp = async () => {
-    setIsLoading(true);
-    const auth = getAuth();
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-       toast({
-        title: "Account Created",
-        description: "Your account has been created successfully. You are now logged in.",
-      });
-      // No need to redirect.
-    } catch (error: any) {
-       toast({
-        variant: "destructive",
-        title: "Sign Up Failed",
-        description: error.message,
-      });
-    } finally {
-        setIsLoading(false);
-    }
-  }
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-sm">
@@ -107,10 +86,6 @@ function LoginPage() {
           <CardFooter className="flex-col gap-4">
             <Button onClick={handleLogin} className="w-full" disabled={isLoading}>
               {isLoading ? "Signing In..." : "Sign In"}
-            </Button>
-            <p className="text-xs text-muted-foreground">First time? Enter details and click Sign Up.</p>
-            <Button onClick={handleSignUp} variant="outline" className="w-full" disabled={isLoading}>
-              {isLoading ? "Creating Account..." : "Sign Up & Log In"}
             </Button>
           </CardFooter>
       </Card>
