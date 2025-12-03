@@ -253,28 +253,7 @@ export default function CategoryPage() {
                 <h2 className="text-2xl font-headline font-bold text-center md:text-left mb-6">
                     File Results
                 </h2>
-                {fileTypes.length > 1 ? (
-                    <Tabs defaultValue={selectedFormat} onValueChange={handleTabChange} className="w-full">
-                        <div className="flex justify-center mb-8">
-                            <TabsList className="bg-background border rounded-full p-1 h-auto flex-wrap">
-                                {fileTypes.map(format => (
-                                <TabsTrigger 
-                                    key={format} 
-                                    value={format}
-                                    className="capitalize rounded-full text-sm font-semibold h-auto px-3 py-1.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
-                                >
-                                    {t(`downloadsTab${format.charAt(0).toUpperCase() + format.slice(1)}`)}
-                                </TabsTrigger>
-                                ))}
-                            </TabsList>
-                        </div>
-                        <TabsContent value={selectedFormat}>
-                            <FeaturedFiles posts={featuredPosts} lang={lang} />
-                        </TabsContent>
-                    </Tabs>
-                ) : (
-                   <FeaturedFiles posts={featuredPosts} lang={lang} />
-                )}
+                <FeaturedFiles posts={featuredPosts} lang={lang} />
             </section>
         )}
 
