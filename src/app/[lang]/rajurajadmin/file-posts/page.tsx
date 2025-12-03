@@ -23,6 +23,7 @@ import { useEmojiStore } from "@/lib/store";
 import { format } from 'date-fns';
 import { AddFilePostDialog } from "./components/add-file-post-dialog";
 import { EditFilePostDialog } from "./components/edit-file-post-dialog";
+import { Input } from "@/components/ui/input";
 
 
 type SortConfig = {
@@ -36,6 +37,7 @@ export default function FilePostsPage() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState<Emoji | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
   
   const { emojis, addEmoji, updateEmoji, deleteEmoji } = useEmojiStore();
   
@@ -55,7 +57,10 @@ export default function FilePostsPage() {
 
 
   const sortedPostList = useMemo(() => {
-    let sortableItems = [...postList];
+    let sortableItems = postList.filter(post => 
+      post.translatedTitle.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     if (sortConfig !== null) {
       sortableItems.sort((a, b) => {
         const aValue = a[sortConfig.key as keyof typeof a];
@@ -80,7 +85,7 @@ export default function FilePostsPage() {
       });
     }
     return sortableItems;
-  }, [postList, sortConfig]);
+  }, [postList, sortConfig, searchTerm]);
 
   const requestSort = (key: SortConfig['key']) => {
     let direction: 'ascending' | 'descending' = 'ascending';
@@ -133,17 +138,25 @@ export default function FilePostsPage() {
     <>
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4">
             <div>
                 <CardTitle>File Posts</CardTitle>
                 <CardDescription>
                   Manage your website's file posts here. You currently have {filePosts.length} posts.
                 </CardDescription>
             </div>
-            <Button size="sm" className="gap-1" onClick={() => setIsAddDialogOpen(true)}>
-                <PlusCircle className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Add File Post</span>
-            </Button>
+            <div className="flex items-center gap-2">
+              <Input
+                placeholder="Search by title..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full sm:w-64"
+              />
+              <Button size="sm" className="gap-1" onClick={() => setIsAddDialogOpen(true)}>
+                  <PlusCircle className="h-3.5 w-3.5" />
+                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Add File Post</span>
+              </Button>
+            </div>
         </div>
       </CardHeader>
       <CardContent>
