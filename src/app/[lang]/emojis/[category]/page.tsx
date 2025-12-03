@@ -80,10 +80,10 @@ export default function CategoryPage() {
         let formatName = file.format.toUpperCase();
         if (file.format === 'image' && file.type) {
             const extension = file.type.split('/')[1]?.toUpperCase();
-            if (extension && extension !== 'JPEG' && extension !== 'PNG' && extension !== 'GIF') {
-               formatName = extension;
-            } else if (extension === 'JPEG') {
-                formatName = 'JPG';
+            if (extension && !['PNG', 'GIF'].includes(extension)) {
+               formatName = extension === 'JPEG' ? 'JPG' : extension;
+            } else {
+               formatName = "Image";
             }
         } else if (file.format === 'video') {
             formatName = 'Video';
