@@ -69,9 +69,6 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
 
   return (
     <section className="mt-12 md:mt-16">
-       <h2 className="text-3xl font-headline font-bold text-center mb-4">
-        {t('downloadsTitle')}
-      </h2>
       <Tabs defaultValue={selectedFormat} onValueChange={handleTabChange} className="w-full">
         <div className="flex justify-center mb-8">
             <TabsList className="bg-background border rounded-full p-1 h-auto flex-wrap">
