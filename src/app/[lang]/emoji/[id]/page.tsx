@@ -59,9 +59,11 @@ export default function EmojiPage() {
   }, [emojis, emoji]);
   
    useEffect(() => {
-    setVisiblePosts(shuffledFilePosts.slice(0, itemsPerPage));
-    setPage(1);
-    setHasMore(shuffledFilePosts.length > itemsPerPage);
+    if (shuffledFilePosts.length > 0) {
+        setVisiblePosts(shuffledFilePosts.slice(0, itemsPerPage));
+        setPage(1);
+        setHasMore(shuffledFilePosts.length > itemsPerPage);
+    }
   }, [shuffledFilePosts, itemsPerPage]);
   
 
@@ -133,8 +135,8 @@ export default function EmojiPage() {
   }, [emoji, lang, emojiTitle, emojiDescription]);
 
 
-  const category = categories.find(c => c.id === emoji.category);
-  const related = getRelatedEmojis(emoji.id);
+  const category = useMemo(() => categories.find(c => c.id === emoji.category), [categories, emoji.category]);
+  const related = useMemo(() => getRelatedEmojis(emoji.id), [getRelatedEmojis, emoji.id]);
 
   const metaTitle = emoji.metaTitle || emojiTitle;
   const metaDescription = emoji.metaDescription || emojiDescription.replace(/<[^>]+>/g, '').substring(0, 160);

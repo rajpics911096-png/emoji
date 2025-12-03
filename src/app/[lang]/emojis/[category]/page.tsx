@@ -1,12 +1,12 @@
 
 'use client';
 
-import { notFound, useParams, useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { notFound, useParams, useSearchParams } from 'next/navigation';
 import { EmojiCard } from '@/components/emoji-card';
 import { useTranslations } from '@/context/translations-context';
 import { useCategoryStore, useEmojiStore } from '@/lib/store';
 import { useMemo, useEffect, useState } from 'react';
-import type { EmojiFormatFile, Emoji } from '@/lib/types';
+import type { EmojiFormatFile } from '@/lib/types';
 import Head from 'next/head';
 import { InfiniteFileScroller } from '@/components/infinite-file-scroller';
 
@@ -38,15 +38,13 @@ const shuffleArray = (array: any[]) => {
 
 export default function CategoryPage() {
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
   const params = useParams<{ category: string, lang: string }>();
   const { category: categorySlug, lang } = params;
 
   const { t } = useTranslations();
   const { categories } = useCategoryStore();
   const { emojis, getEmojisByCategory } = useEmojiStore();
-  const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
+  const [searchTerm, setSearchTerm] = useState('');
   
   useEffect(() => {
     setSearchTerm(searchParams.get('search') || '');
@@ -64,21 +62,22 @@ export default function CategoryPage() {
   const isSearchPage = categorySlug === 'all' && searchTerm;
 
   const emojiList = useMemo(() => {
-    if (!isSearchPage && categorySlug !== 'all') {
-      return getEmojisByCategory(categorySlug).filter(e => e.emoji);
+    const allEmojis = getEmojisByCategory('all').filter(e => e.emoji); // Only emoji posts
+    if (!isSearchPage) {
+        if (categorySlug === 'all') return allEmojis;
+        return allEmojis.filter(emoji => emoji.category === categorySlug);
     }
     
     if (searchTerm) {
         const lowercasedQuery = searchTerm.toLowerCase();
-        return emojis.filter(emoji => 
-            emoji.emoji &&
-            (t(emoji.title).toLowerCase().includes(lowercasedQuery) ||
-            t(emoji.description).toLowerCase().includes(lowercasedQuery))
+        return allEmojis.filter(emoji => 
+            t(emoji.title).toLowerCase().includes(lowercasedQuery) ||
+            t(emoji.description).toLowerCase().includes(lowercasedQuery)
         );
     }
     
-    return getEmojisByCategory(categorySlug).filter(e => e.emoji);
-  }, [getEmojisByCategory, emojis, categorySlug, searchTerm, t, isSearchPage]);
+    return allEmojis;
+  }, [getEmojisByCategory, categorySlug, searchTerm, t, isSearchPage]);
 
 
   const allFoundFiles: FileItem[] = useMemo(() => {

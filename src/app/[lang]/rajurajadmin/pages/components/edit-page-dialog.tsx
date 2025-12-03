@@ -35,6 +35,7 @@ const pageSchema = z.object({
   status: z.enum(["published", "draft"]),
   content: z.string().optional(),
   metaTitle: z.string().optional(),
+  metaDescription: z.string().optional(),
 });
 
 type PageFormData = z.infer<typeof pageSchema>;
@@ -56,14 +57,6 @@ export function EditPageDialog({ isOpen, onOpenChange, onEditPage, page }: EditP
     formState: { errors },
   } = useForm<PageFormData>({
     resolver: zodResolver(pageSchema),
-    defaultValues: {
-      title: page.title,
-      slug: page.slug,
-      status: page.status,
-      content: page.content,
-      metaTitle: page.metaTitle,
-      metaDescription: page.metaDescription,
-    },
   });
 
   useEffect(() => {
@@ -141,6 +134,12 @@ export function EditPageDialog({ isOpen, onOpenChange, onEditPage, page }: EditP
               <Label htmlFor="metaTitle" className="text-left md:text-right">Meta Title</Label>
               <div className="md:col-span-3">
                 <Input id="metaTitle" {...register("metaTitle")} />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 items-start gap-4">
+              <Label htmlFor="metaDescription" className="text-left md:text-right pt-2">Meta Description</Label>
+              <div className="md:col-span-3">
+                <Textarea id="metaDescription" {...register("metaDescription")} />
               </div>
             </div>
           </div>

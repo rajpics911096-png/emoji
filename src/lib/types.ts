@@ -4,6 +4,7 @@ export type EmojiFormatFile = {
   size: string;
   name: string;
   type?: string;
+  'data-ai-hint'?: string;
 };
 
 export type Emoji = {

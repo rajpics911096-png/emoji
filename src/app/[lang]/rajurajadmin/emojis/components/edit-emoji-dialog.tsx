@@ -62,7 +62,7 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
     metaDescription: emoji.metaDescription,
   }), [emoji, t]);
 
-  const [uploadedFiles, setUploadedFiles] = useState<Record<string, EmojiFormatFile[]>>(emoji.formats);
+  const [uploadedFiles, setUploadedFiles] = useState<Record<string, EmojiFormatFile[]>>({});
 
   const {
     register,
@@ -102,14 +102,14 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
         acc[simpleFormat] = [...acc[simpleFormat], newFile];
       }
       return acc;
-    }, { ...uploadedFiles });
+    }, { png: [], gif: [], image: [], video: [], ...uploadedFiles });
 
     setUploadedFiles(newFilesMap);
   };
 
   const removeFile = (format: string, url: string) => {
       setUploadedFiles(prev => {
-        const updatedFormatFiles = prev[format].filter(f => f.url !== url);
+        const updatedFormatFiles = (prev[format] || []).filter(f => f.url !== url);
         const newFiles = {
           ...prev,
           [format]: updatedFormatFiles,
@@ -117,7 +117,7 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
 
         // Also check if this file exists in other formats (like image) and remove it
         if (format === 'png' || format === 'gif') {
-            newFiles.image = newFiles.image.filter(f => f.url !== url);
+            newFiles.image = (newFiles.image || []).filter(f => f.url !== url);
         }
 
         return newFiles;
@@ -147,7 +147,7 @@ export function EditEmojiDialog({ isOpen, onOpenChange, onEditEmoji, emoji }: Ed
     if (!open) {
         // Clean up any blob URLs that were created but not saved
         Object.values(uploadedFiles).flat().forEach(file => {
-            if (file.url.startsWith('blob:') && !Object.values(emoji.formats).flat().some(f => f.url === file.url)) {
+            if (file.url.startsWith('blob:') && !Object.values(emoji.formats || {}).flat().some(f => f.url === file.url)) {
                 URL.revokeObjectURL(file.url);
             }
         });

@@ -12,13 +12,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -26,7 +19,6 @@ import type { Emoji, EmojiFormatFile } from "@/lib/types";
 import { useEffect, useState, useMemo } from "react";
 import { useTranslations } from "@/context/translations-context";
 import { UploadedFileCard } from "@/app/[lang]/rajurajadmin/components/uploaded-file-card";
-import { useCategoryStore } from "@/lib/store";
 import { RichTextEditor } from "@/components/rich-text-editor";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -50,7 +42,6 @@ interface EditFilePostDialogProps {
 
 export function EditFilePostDialog({ isOpen, onOpenChange, onEditPost, post }: EditFilePostDialogProps) {
   const { t } = useTranslations();
-  const { categories } = useCategoryStore();
   
   const defaultValues = useMemo(() => ({
     emoji: post.emoji,
@@ -60,7 +51,7 @@ export function EditFilePostDialog({ isOpen, onOpenChange, onEditPost, post }: E
     metaDescription: post.metaDescription,
   }), [post, t]);
 
-  const [uploadedFiles, setUploadedFiles] = useState<Record<string, EmojiFormatFile[]>>(post.formats);
+  const [uploadedFiles, setUploadedFiles] = useState<Record<string, EmojiFormatFile[]>>({});
 
   const {
     register,
@@ -100,17 +91,17 @@ export function EditFilePostDialog({ isOpen, onOpenChange, onEditPost, post }: E
         acc[simpleFormat] = [...acc[simpleFormat], newFile];
       }
       return acc;
-    }, { ...uploadedFiles });
+    }, { png: [], gif: [], image: [], video: [], ...uploadedFiles });
 
     setUploadedFiles(newFilesMap);
   };
 
   const removeFile = (format: string, url: string) => {
       setUploadedFiles(prev => {
-        const updatedFormatFiles = prev[format].filter(f => f.url !== url);
+        const updatedFormatFiles = (prev[format] || []).filter(f => f.url !== url);
         const newFiles = { ...prev, [format]: updatedFormatFiles };
         if (format === 'png' || format === 'gif') {
-            newFiles.image = newFiles.image.filter(f => f.url !== url);
+            newFiles.image = (newFiles.image || []).filter(f => f.url !== url);
         }
         return newFiles;
       });

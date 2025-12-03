@@ -59,10 +59,12 @@ export default function FilePostPage() {
   }, [emojis, emoji]);
   
   useEffect(() => {
-    setVisiblePosts(shuffledFilePosts.slice(0, itemsPerPage));
-    setPage(1);
-    setHasMore(shuffledFilePosts.length > itemsPerPage);
-  }, [shuffledFilePosts]);
+    if (shuffledFilePosts.length > 0) {
+      setVisiblePosts(shuffledFilePosts.slice(0, itemsPerPage));
+      setPage(1);
+      setHasMore(shuffledFilePosts.length > itemsPerPage);
+    }
+  }, [shuffledFilePosts, itemsPerPage]);
   
   const loadMorePosts = useCallback(() => {
     if (isLoading || !hasMore) return;
@@ -132,8 +134,9 @@ export default function FilePostPage() {
   }, [emoji, lang, emojiTitle, emojiDescription]);
 
 
-  const category = categories.find(c => c.id === emoji.category);
-  const related = getRelatedEmojis(emoji.id);
+  const category = useMemo(() => categories.find(c => c.id === emoji.category), [categories, emoji.category]);
+  const related = useMemo(() => getRelatedEmojis(emoji.id), [getRelatedEmojis, emoji.id]);
+
 
   const metaTitle = emoji.metaTitle || emojiTitle;
   const metaDescription = emoji.metaDescription || emojiDescription.replace(/<[^>]+>/g, '').substring(0, 160);
@@ -252,7 +255,3 @@ export default function FilePostPage() {
     </>
   );
 }
-
-    
-
-    
