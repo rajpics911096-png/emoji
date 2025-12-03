@@ -134,7 +134,7 @@ export default function CategoryPage() {
      }
 
      const fileIds = new Set(allFoundFiles.map(f => f.emojiId));
-     return emojis.filter(emoji => fileIds.has(emoji.id) && !emoji.emoji); // Only file posts in file results
+     return shuffleArray(emojis.filter(emoji => fileIds.has(emoji.id) && !emoji.emoji)); // Only file posts in file results
   },[allFoundFiles, emojis, isFileSearch, searchTerm]);
 
 
