@@ -18,6 +18,7 @@ import { useTranslations } from '@/context/translations-context';
 import { useCategoryStore, useEmojiStore } from '@/lib/store';
 import { FeaturedFiles } from '@/components/featured-files';
 import { useMemo, useState, useEffect } from 'react';
+import { InfiniteFileScroller } from '@/components/infinite-file-scroller';
 
 export default function Home() {
   const params = useParams<{ lang: string }>();
@@ -27,6 +28,7 @@ export default function Home() {
   const { emojis } = useEmojiStore();
   const { categories } = useCategoryStore();
   const [featuredFiles, setFeaturedFiles] = useState<any[]>([]);
+  const [randomFiles, setRandomFiles] = useState<any[]>([]);
 
   const featuredEmojis = useMemo(() => {
     // Show emojis that actually have an emoji character
@@ -35,9 +37,10 @@ export default function Home() {
   
   useEffect(() => {
     if (emojis.length === 0) return;
+    
     // Feature files from posts that are primarily file-based (no emoji character)
     const filePosts = emojis.filter(emoji => !emoji.emoji);
-    const allFiles = filePosts.flatMap(emoji => 
+    const filesFromPosts = filePosts.flatMap(emoji => 
         Object.entries(emoji.formats).flatMap(([format, files]) => 
             files.map(file => ({
                 ...file,
@@ -47,8 +50,22 @@ export default function Home() {
             }))
         )
     );
-    const randomFiles = [...allFiles].sort(() => 0.5 - Math.random()).slice(0, 8);
-    setFeaturedFiles(randomFiles);
+    const randomFeaturedFiles = [...filesFromPosts].sort(() => 0.5 - Math.random()).slice(0, 8);
+    setFeaturedFiles(randomFeaturedFiles);
+
+    // Get all files for the infinite scroller
+    const allFiles = emojis.flatMap(emoji => 
+        Object.entries(emoji.formats).flatMap(([format, files]) => 
+            files.map(file => ({
+                ...file,
+                emojiId: emoji.id,
+                format: format,
+                displayName: file.name,
+            }))
+        )
+    );
+    setRandomFiles([...allFiles].sort(() => 0.5 - Math.random()));
+
   }, [emojis]);
 
 
@@ -127,6 +144,17 @@ export default function Home() {
                 Featured Files
               </h2>
               <FeaturedFiles files={featuredFiles} lang={lang} />
+            </div>
+          </section>
+        )}
+
+        {randomFiles.length > 0 && (
+           <section id="more-files" className="py-12 md:py-16 bg-primary/5">
+            <div className="container mx-auto px-4">
+              <h2 className="text-3xl font-headline font-bold text-center mb-10">
+                Explore More Files
+              </h2>
+              <InfiniteFileScroller allFiles={randomFiles} lang={lang} />
             </div>
           </section>
         )}
