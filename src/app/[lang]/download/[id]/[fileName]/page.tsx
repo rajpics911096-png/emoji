@@ -15,6 +15,14 @@ import { useTranslations } from '@/context/translations-context';
 import type { Emoji, EmojiFormatFile } from '@/lib/types';
 import { SocialShareButtons } from '@/components/social-share-buttons';
 import { AdSlot } from '@/components/ad-slot';
+import { InfiniteFileScroller } from '@/components/infinite-file-scroller';
+
+type FileItem = EmojiFormatFile & {
+    emojiId: string;
+    format: string;
+    displayName: string;
+};
+
 
 export default function DownloadPage() {
   const params = useParams();
@@ -23,7 +31,7 @@ export default function DownloadPage() {
   const fileName = Array.isArray(params.fileName) ? decodeURIComponent(params.fileName[0]) : decodeURIComponent(params.fileName);
   const lang = Array.isArray(params.lang) ? params.lang[0] : params.lang;
 
-  const { getEmojiById } = useEmojiStore();
+  const { emojis, getEmojiById } = useEmojiStore();
   const { categories } = useCategoryStore();
   const { settings } = useSiteSettings();
   const { t } = useTranslations();
@@ -41,6 +49,22 @@ export default function DownloadPage() {
 
     return { post, file };
   }, [id, fileName, getEmojiById]);
+  
+  const allFiles: FileItem[] = useMemo(() => {
+    if (!emojis) return [];
+    const files = emojis.flatMap(emoji =>
+        Object.entries(emoji.formats).flatMap(([format, files]) =>
+            files.map(file => ({
+                ...file,
+                emojiId: emoji.id,
+                format: format,
+                displayName: t(emoji.title),
+            }))
+        )
+    );
+    return files.sort(() => 0.5 - Math.random());
+  }, [emojis, t]);
+
 
   useEffect(() => {
     if (!file || !isDownloading) return;
@@ -101,7 +125,7 @@ export default function DownloadPage() {
               {isVideo ? (
                 <video src={file.url} controls autoPlay muted loop playsInline className="w-full h-auto max-h-[60vh] object-contain" />
               ) : (
-                <Image src={file.url} alt={file.name} width={500} height={500} className="w-full h-auto object-contain" unoptimized={file.type?.includes('gif')} />
+                <Image src={file.url} alt={file.name} width={500} height={500} className="w-full h-auto object-contain" unoptimized={file.type?.includes('gif')} loading="lazy" />
               )}
             </div>
 
@@ -134,7 +158,7 @@ export default function DownloadPage() {
                           {relatedFile.type?.startsWith('video/') ? (
                              <video src={relatedFile.url} muted loop playsInline className="w-full h-full object-contain" />
                           ) : (
-                             <Image src={relatedFile.url} alt={relatedFile.name} width={150} height={150} className="w-full h-full object-contain p-1 group-hover:scale-105 transition-transform" unoptimized={relatedFile.type?.includes('gif')} />
+                             <Image src={relatedFile.url} alt={relatedFile.name} width={150} height={150} className="w-full h-full object-contain p-1 group-hover:scale-105 transition-transform" unoptimized={relatedFile.type?.includes('gif')} loading="lazy" />
                           )}
                         </div>
                       </CardContent>
@@ -162,6 +186,14 @@ export default function DownloadPage() {
                     </Card>
                     </Link>
                 ))}
+                </div>
+            </section>
+             <section id="latest-media" className="py-12 md:py-16">
+                <div className="container mx-auto px-4">
+                    <h2 className="text-3xl font-headline font-bold text-center mb-10">
+                        {t('media_title')}
+                    </h2>
+                    <InfiniteFileScroller allFiles={allFiles} lang={lang} />
                 </div>
             </section>
         </div>
