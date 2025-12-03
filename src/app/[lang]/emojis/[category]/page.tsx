@@ -96,7 +96,7 @@ export default function CategoryPage() {
   const totalResults = emojiList.length + featuredFiles.length;
   
   const pageTitle = isSearchPage 
-    ? `${totalResults} results for "${searchTerm}"`
+    ? `${totalResults} "${searchTerm}"`
     : t(category?.name || 'category_all');
   const pageDescription = isSearchPage
     ? `Found ${totalResults} results for your query: "${searchTerm}"`
