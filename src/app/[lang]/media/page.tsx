@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo } from 'react';
@@ -18,6 +19,9 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTranslations } from '@/context/translations-context';
 import { useEmojiStore } from '@/lib/store';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
+import { useParams } from 'next/navigation';
 
 
 type MediaFile = EmojiFormatFile & { format: string; emojiId: string; dateAdded: number; };
@@ -26,6 +30,8 @@ export default function MediaPage() {
     const { t } = useTranslations();
     const { toast } = useToast();
     const { emojis } = useEmojiStore();
+    const params = useParams<{ lang: string }>();
+    const lang = params.lang;
 
     const initialFiles: MediaFile[] = useMemo(() => emojis.flatMap((emoji, emojiIndex) => 
         Object.entries(emoji.formats).flatMap(([format, files], formatIndex) => 
@@ -167,52 +173,14 @@ export default function MediaPage() {
     const isAllSelected = selectedFiles.length > 0 && selectedFiles.length === mediaFiles.length;
 
     return (
-        <div>
+        <>
+        <Header lang={lang} />
+        <main className="flex-1 container mx-auto py-8 px-4">
             <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
                 <div>
                     <h1 className="text-3xl font-headline font-bold">{t('media_title')}</h1>
                     <p className="text-muted-foreground">{t('media_description')}</p>
                 </div>
-                <div className="flex items-center gap-4 flex-wrap">
-                    {selectedFiles.length > 0 && (
-                        <div className="flex items-center gap-2">
-                             <Button size="sm" variant="destructive" className="gap-1" onClick={handleDeleteSelected}>
-                                <Trash2 className="h-3.5 w-3.5" />
-                                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">{t('media_delete_selected_button', { count: selectedFiles.length.toString() })}</span>
-                            </Button>
-                        </div>
-                    )}
-                    <div className="flex items-center gap-2">
-                        <Checkbox
-                            id="select-all"
-                            checked={selectedFiles.length > 0 && mediaFiles.length > 0 && selectedFiles.length === mediaFiles.length}
-                            onCheckedChange={handleSelectAll}
-                            aria-label={t('media_select_all')}
-                            className='hidden sm:flex'
-                        />
-                        <Label htmlFor='select-all' className='hidden sm:block text-sm font-medium'>
-                            {isAllSelected ? t('media_deselect_all') : t('media_select_all')}
-                        </Label>
-                    </div>
-                     <Select value={sortOrder} onValueChange={setSortOrder}>
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder={t('media_sort_by_placeholder')} />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="newest">{t('media_sort_newest')}</SelectItem>
-                            <SelectItem value="oldest">{t('media_sort_oldest')}</SelectItem>
-                            <SelectItem value="name_asc">{t('media_sort_name_asc')}</SelectItem>
-                            <SelectItem value="name_desc">{t('media_sort_name_desc')}</SelectItem>
-                        </SelectContent>
-                    </Select>
-                    <Button size="sm" className="gap-1" asChild>
-                        <label htmlFor="file-upload">
-                            <Upload className="h-3.5 w-3.5" />
-                            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">{t('media_upload_button')}</span>
-                        </label>
-                    </Button>
-                </div>
-                <input id="file-upload" type="file" multiple className="hidden" onChange={handleFileUpload} />
             </div>
 
             {mediaFiles.length > 0 ? (
@@ -220,47 +188,19 @@ export default function MediaPage() {
                     {sortedMediaFiles.map((file, index) => (
                         <Card 
                             key={`${file.url}-${file.name}-${file.emojiId}-${index}`}
-                            className="group relative cursor-pointer"
-                            onClick={() => handleSelectFile(file.url)}
-                            data-state={selectedFiles.includes(file.url) ? 'selected' : 'unselected'}
+                            className="group relative"
                         >
-                            <div className="absolute top-2 left-2 z-10">
-                                <Checkbox
-                                    checked={selectedFiles.includes(file.url)}
-                                    className="bg-background/50 hover:bg-background/80"
-                                />
-                            </div>
                             <FilePreview file={file} />
                             <CardContent className="p-3">
                                 <p className="text-xs font-medium truncate" title={file.name}>{file.name}</p>
                                 <p className="text-xs text-muted-foreground">{file.size}</p>
+                                 <Button asChild size="sm" className="w-full mt-2">
+                                     <a href={file.url} download={file.name}>
+                                        <Download className="mr-2 h-4 w-4" />
+                                        {t('downloadButton')}
+                                    </a>
+                                 </Button>
                             </CardContent>
-                            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10" onClick={(e) => e.stopPropagation()}>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="secondary" size="icon" className="h-7 w-7">
-                                            <MoreVertical className="h-4 w-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                        <DropdownMenuItem onSelect={() => copyToClipboard(file.url)}>
-                                            <Copy className="mr-2 h-4 w-4" />
-                                            <span>{t('media_toast_url_copied_title')}</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem onSelect={() => downloadFile(file.url, file.name)}>
-                                            <Download className="mr-2 h-4 w-4" />
-                                            <span>{t('downloadButton')}</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem onSelect={() => deleteFile(file)} className="text-destructive">
-                                            <Trash2 className="mr-2 h-4 w-4" />
-                                            <span>{t('dialog_delete_button')}</span>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
-                            <div className="absolute inset-0 rounded-lg ring-2 ring-primary ring-offset-2 ring-offset-background transition-all"
-                                style={{ opacity: selectedFiles.includes(file.url) ? 1 : 0 }}
-                             />
                         </Card>
                     ))}
                 </div>
@@ -270,6 +210,8 @@ export default function MediaPage() {
                     <p className="text-muted-foreground">{t('media_empty_library_desc')}</p>
                 </div>
             )}
-        </div>
+        </main>
+        <Footer lang={lang} />
+        </>
     );
 }

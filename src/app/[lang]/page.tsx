@@ -18,7 +18,6 @@ import { useTranslations } from '@/context/translations-context';
 import { useCategoryStore, useEmojiStore } from '@/lib/store';
 import { FeaturedFiles } from '@/components/featured-files';
 import { useMemo, useState, useEffect } from 'react';
-import { InfiniteFileScroller } from '@/components/infinite-file-scroller';
 
 export default function Home() {
   const params = useParams<{ lang: string }>();
@@ -28,11 +27,10 @@ export default function Home() {
   const { emojis } = useEmojiStore();
   const { categories } = useCategoryStore();
   const [featuredPosts, setFeaturedPosts] = useState<any[]>([]);
-  const [randomFiles, setRandomFiles] = useState<any[]>([]);
 
   const featuredEmojis = useMemo(() => {
     // Show emojis that actually have an emoji character
-    return [...emojis].filter(e => e.emoji).sort(() => 0.5 - Math.random()).slice(0, 8);
+    return [...emojis].filter(e => e.emoji).sort(() => 0.5 - Math.random()).slice(0, 12);
   }, [emojis]);
   
   useEffect(() => {
@@ -42,19 +40,6 @@ export default function Home() {
     const filePosts = emojis.filter(emoji => !emoji.emoji);
     const randomFeaturedPosts = [...filePosts].sort(() => 0.5 - Math.random()).slice(0, 8);
     setFeaturedPosts(randomFeaturedPosts);
-
-    // Get all files for the infinite scroller
-    const allFiles = emojis.flatMap(emoji => 
-        Object.entries(emoji.formats).flatMap(([format, files]) => 
-            files.map(file => ({
-                ...file,
-                emojiId: emoji.id,
-                format: format,
-                displayName: file.name,
-            }))
-        )
-    );
-    setRandomFiles([...allFiles].sort(() => 0.5 - Math.random()));
 
   }, [emojis]);
 
@@ -118,7 +103,7 @@ export default function Home() {
               <h2 className="text-3xl font-headline font-bold text-center mb-10">
                 {t('featuredEmojis')}
               </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
                 {featuredEmojis.map((emoji) => (
                   <EmojiCard key={emoji.id} emoji={emoji} lang={lang} />
                 ))}
@@ -136,7 +121,7 @@ export default function Home() {
               <FeaturedFiles posts={featuredPosts} lang={lang} />
               <div className="text-center mt-8">
                 <Button asChild variant="outline">
-                    <Link href={`/${lang}/emojis/all?search=files`}>
+                    <Link href={`/${lang}/media`}>
                         Read More
                     </Link>
                 </Button>
@@ -145,16 +130,6 @@ export default function Home() {
           </section>
         )}
 
-        {randomFiles.length > 0 && (
-           <section id="more-files" className="py-12 md:py-16 bg-primary/5">
-            <div className="container mx-auto px-4">
-              <h2 className="text-3xl font-headline font-bold text-center mb-10">
-                Explore More Files
-              </h2>
-              <InfiniteFileScroller allFiles={randomFiles} lang={lang} />
-            </div>
-          </section>
-        )}
       </main>
       <Footer lang={lang} />
     </>
