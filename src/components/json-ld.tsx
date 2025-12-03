@@ -1,9 +1,11 @@
+
 "use client";
 
 import { createElement } from 'react';
+import type { WithContext, Thing } from 'schema-dts';
 
 type JsonLdProps = {
-  data: Record<string, any>;
+  data: WithContext<Thing>;
 };
 
 export function JsonLd({ data }: JsonLdProps) {
@@ -12,3 +14,5 @@ export function JsonLd({ data }: JsonLdProps) {
     dangerouslySetInnerHTML: { __html: JSON.stringify(data) },
   });
 }
+
+    

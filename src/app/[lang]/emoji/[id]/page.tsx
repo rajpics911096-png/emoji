@@ -8,15 +8,28 @@ import { EmojiView } from './components/emoji-view';
 import { SvgIcon } from '@/components/svg-icon';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EmojiDownloads } from './components/emoji-downloads';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { useTranslations } from '@/context/translations-context';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { AdSlot } from '@/components/ad-slot';
 import { JsonLd } from '@/components/json-ld';
-import type { Thing } from 'schema-dts';
+import type { Thing, WithContext } from 'schema-dts';
 import { useCategoryStore, useEmojiStore } from '@/lib/store';
 import { FeaturedFiles } from '@/components/featured-files';
 import { EmojiCard } from '@/components/emoji-card';
+import { Loader } from 'lucide-react';
+import type { Emoji } from '@/lib/types';
+
+
+const shuffleArray = (array: any[]) => {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+};
+
 
 export default function EmojiPage() {
   const params = useParams();
@@ -30,7 +43,56 @@ export default function EmojiPage() {
   const effectRan = useRef(false);
   const { t } = useTranslations();
   const { settings } = useSiteSettings();
-  const [featuredPosts, setFeaturedPosts] = useState<any[]>([]);
+
+  const [visiblePosts, setVisiblePosts] = useState<Emoji[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const observer = useRef<IntersectionObserver>();
+  
+  const itemsPerPage = 8;
+
+  const shuffledFilePosts = useMemo(() => {
+    if (!emojis || !emoji) return [];
+    const filePosts = emojis.filter(p => !p.emoji && p.id !== emoji.id);
+    return shuffleArray(filePosts);
+  }, [emojis, emoji]);
+  
+   useEffect(() => {
+    setVisiblePosts(shuffledFilePosts.slice(0, itemsPerPage));
+    setPage(1);
+    setHasMore(shuffledFilePosts.length > itemsPerPage);
+  }, [shuffledFilePosts]);
+  
+
+  const loadMorePosts = useCallback(() => {
+    if (isLoading || !hasMore) return;
+
+    setIsLoading(true);
+    setTimeout(() => {
+        const nextPage = page + 1;
+        const newPosts = shuffledFilePosts.slice(0, nextPage * itemsPerPage);
+        
+        setPage(nextPage);
+        setVisiblePosts(newPosts);
+        setHasMore(newPosts.length < shuffledFilePosts.length);
+        setIsLoading(false);
+    }, 500);
+  }, [page, isLoading, hasMore, shuffledFilePosts, itemsPerPage]);
+
+  const lastPostElementRef = useCallback((node: HTMLDivElement | null) => {
+    if (isLoading) return;
+    if (observer.current) observer.current.disconnect();
+
+    observer.current = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting && hasMore) {
+            loadMorePosts();
+        }
+    });
+
+    if (node) observer.current.observe(node);
+  }, [isLoading, hasMore, loadMorePosts]);
+
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'development' && effectRan.current) return;
@@ -46,13 +108,6 @@ export default function EmojiPage() {
     };
   }, [emoji]);
   
-  useEffect(() => {
-    // Feature files from posts that are primarily file-based (no emoji character)
-    const filePosts = emojis.filter(p => !p.emoji);
-    const randomFeaturedPosts = [...filePosts].sort(() => 0.5 - Math.random()).slice(0, 8);
-    setFeaturedPosts(randomFeaturedPosts);
-  }, [emojis]);
-
 
   if (!emoji || !emoji.emoji) { // Only show emoji posts
     notFound();
@@ -63,7 +118,7 @@ export default function EmojiPage() {
   const emojiDescription = rawDescription.includes('<p>') ? rawDescription : `<p>${rawDescription}</p>`;
 
 
-  const jsonLdData: Thing = useMemo(() => {
+  const jsonLdData: WithContext<Thing> = useMemo(() => {
     const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
     const emojiImage = Object.values(emoji.formats).flat()[0];
 
@@ -148,19 +203,37 @@ export default function EmojiPage() {
               </div>
             </section>
           )}
-
-          {featuredPosts.length > 0 && (
+          
+          {visiblePosts.length > 0 && (
             <section id="featured-files" className="mt-12 md:mt-16">
                 <div className="container mx-auto px-4">
                 <h2 className="text-3xl font-headline font-bold text-center mb-8">
                     Featured Files
                 </h2>
-                <FeaturedFiles posts={featuredPosts} lang={lang} />
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                   {visiblePosts.map((post, index) => {
+                       const isLastElement = index === visiblePosts.length - 1;
+                       return (
+                          <div key={post.id} ref={isLastElement ? lastPostElementRef : null}>
+                            <FeaturedFiles posts={[post]} lang={lang} />
+                          </div>
+                       );
+                   })}
+                </div>
+                {isLoading && (
+                    <div className="flex justify-center items-center py-8">
+                        <Loader className="h-8 w-8 animate-spin text-primary" />
+                        <p className="ml-2 text-muted-foreground">Loading more...</p>
+                    </div>
+                )}
                 </div>
             </section>
             )}
+
         </div>
       </main>
     </>
   );
 }
+
+    
