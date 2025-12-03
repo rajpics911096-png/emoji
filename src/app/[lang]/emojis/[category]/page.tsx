@@ -177,7 +177,7 @@ export default function CategoryPage() {
         
         {emojiList.length > 0 && (
             <section id="emoji-results" className="mb-12">
-                <h2 className="text-2xl font-headline font-bold mb-6">Emoji Results</h2>
+                <h2 className="text-2xl font-headline font-bold text-center mb-6">Emoji Results</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
                     {emojiList.map((emoji) => (
                     <EmojiCard key={emoji.id} emoji={emoji} lang={lang} />
