@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { SvgIcon } from './svg-icon';
 import { useSiteSettings } from '@/context/site-settings-context';
+import { ThemeToggle } from './theme-toggle';
 import { LanguageSwitcher } from './language-switcher';
 import { useTranslations } from '@/context/translations-context';
 import { useState } from 'react';
@@ -71,7 +72,7 @@ export default function Header({ lang }: { lang: string }) {
             </span>
           </Link>
         </div>
-
+        
         <div className="flex-1 flex items-center justify-center md:justify-start">
             <div className="w-full max-w-lg">
                 <IntelligentSearchBar lang={lang} />
@@ -79,6 +80,7 @@ export default function Header({ lang }: { lang: string }) {
         </div>
 
         <div className="flex items-center justify-end space-x-2">
+          <ThemeToggle />
           <LanguageSwitcher />
         </div>
       </div>

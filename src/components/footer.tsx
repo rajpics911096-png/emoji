@@ -12,6 +12,16 @@ export default function Footer({ lang }: { lang: string }) {
   const { settings } = useSiteSettings();
   const { t } = useTranslations();
   const { navigation, legal, social } = useFooterStore();
+
+  const createLink = (href: string) => {
+    try {
+      new URL(href); // Check if it's an absolute URL
+      return href;
+    } catch (_) {
+      // It's a relative path
+      return `/${lang}${href.startsWith('/') ? '' : '/'}${href}`;
+    }
+  };
   
   return (
     <>
@@ -32,7 +42,7 @@ export default function Footer({ lang }: { lang: string }) {
             <h3 className="font-headline font-semibold mb-4">{t('footerNavigation')}</h3>
             <ul className="space-y-2">
               {navigation.map((item, index) => (
-                 <li key={index}><Link href={item.href.startsWith('/') ? `/${lang}${item.href}`: item.href} className="text-sm hover:text-primary transition-colors">{t(item.label)}</Link></li>
+                 <li key={index}><Link href={createLink(item.href)} className="text-sm hover:text-primary transition-colors">{t(item.label)}</Link></li>
               ))}
             </ul>
           </div>
@@ -40,7 +50,7 @@ export default function Footer({ lang }: { lang: string }) {
             <h3 className="font-headline font-semibold mb-4">{t('footerLegal')}</h3>
             <ul className="space-y-2">
               {legal.map((item, index) => (
-                  <li key={index}><Link href={item.href.startsWith('/') ? `/${lang}${item.href}`: item.href} className="text-sm hover:text-primary transition-colors">{t(item.label)}</Link></li>
+                  <li key={index}><Link href={createLink(item.href)} className="text-sm hover:text-primary transition-colors">{t(item.label)}</Link></li>
               ))}
             </ul>
           </div>
