@@ -28,7 +28,7 @@ export default function Home() {
 
   const featuredEmojis = useMemo(() => {
     // Show emojis that actually have an emoji character
-    return [...emojis].filter(e => e.emoji).sort(() => 0.5 - Math.random()).slice(0, 12);
+    return [...emojis].filter(e => e.emoji).sort(() => 0.5 - Math.random()).slice(0, 8);
   }, [emojis]);
   
   useEffect(() => {
@@ -103,6 +103,13 @@ export default function Home() {
                 {featuredEmojis.map((emoji) => (
                   <EmojiCard key={emoji.id} emoji={emoji} lang={lang} />
                 ))}
+              </div>
+               <div className="text-center mt-8">
+                <Button asChild variant="outline">
+                    <Link href={`/${lang}/emojis/all`}>
+                        Read More
+                    </Link>
+                </Button>
               </div>
             </div>
           </section>
