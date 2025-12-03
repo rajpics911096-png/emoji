@@ -44,7 +44,7 @@ export default function Home() {
     
     // Feature files from posts that are primarily file-based (no emoji character)
     const filePosts = emojis.filter(emoji => !emoji.emoji);
-    const randomFeaturedPosts = [...filePosts].sort(() => 0.5 - Math.random()).slice(0, 8);
+    const randomFeaturedPosts = [...filePosts].sort(() => 0.5 - Math.random()).slice(0, 4);
     setFeaturedPosts(randomFeaturedPosts);
 
   }, [emojis]);
