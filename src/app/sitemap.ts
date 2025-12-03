@@ -46,11 +46,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 1.0,
   }));
 
-  const mainRoutes = i18n.locales.map(lang => ({
-      url: `${BASE_URL}/${lang}`,
-      lastModified: new Date(),
-  }));
-
   return [
     ...homeRoutes,
     ...staticPageRoutes,

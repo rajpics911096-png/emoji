@@ -15,6 +15,10 @@ interface EmojiState {
   getRelatedEmojis: (emojiId: string) => Emoji[];
 }
 
+const generateSlug = (title: string) => {
+    return title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+}
+
 export const useEmojiStore = create<EmojiState>()(
   persist(
     (set, get) => ({
@@ -22,7 +26,7 @@ export const useEmojiStore = create<EmojiState>()(
       addEmoji: (newEmoji) => {
         const emojiToAdd: Emoji = {
             ...newEmoji,
-            id: newEmoji.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+            id: generateSlug(newEmoji.title),
             related: [],
             views: 0,
             createdAt: Date.now(),
