@@ -12,13 +12,14 @@ import Image from 'next/image';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { useTranslations } from '@/context/translations-context';
 import { useState, useEffect, useMemo } from 'react';
-import type { EmojiFormatFile } from '@/lib/types';
+import type { Emoji, EmojiFormatFile } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { AdSlot } from '@/components/ad-slot';
 import { useEmojiStore, useCategoryStore } from '@/lib/store';
 import { SocialShareButtons } from '@/components/social-share-buttons';
 import { InfiniteFileScroller } from '@/components/infinite-file-scroller';
+import { FeaturedFiles } from '@/components/featured-files';
 
 const DownloadButton = ({ file, format, emojiId }: { file: EmojiFormatFile, format: string, emojiId: string }) => {
   const { settings } = useSiteSettings();
@@ -105,35 +106,52 @@ export default function FileDownloadPage() {
   const { id, lang, format, filename } = params;
   
   const { t } = useTranslations();
-  const { emojis, getEmojiById } = useEmojiStore();
-  const { categories } = useCategoryStore();
+  const { emojis, getEmojiById, getRelatedEmojis } = useEmojiStore();
   const emoji = getEmojiById(id);
   const [pageUrl, setPageUrl] = useState('');
-  const [randomFiles, setRandomFiles] = useState<any[]>([]);
+  
+  const relatedEmojis = useMemo(() => {
+    if (!emoji) return [];
+    return getRelatedEmojis(emoji.id);
+  }, [emoji, getRelatedEmojis]);
+
+  const relatedFiles = useMemo(() => {
+     return relatedEmojis.flatMap(relatedEmoji => 
+        Object.entries(relatedEmoji.formats).flatMap(([format, files]) => 
+            files.map(file => ({
+                ...file,
+                emojiId: relatedEmoji.id,
+                format: format,
+                displayName: t(relatedEmoji.title),
+            }))
+        )
+    ).sort(() => 0.5 - Math.random()).slice(0, 8);
+  }, [relatedEmojis, t]);
+
+
+  const allOtherFiles = useMemo(() => {
+    const relatedIds = new Set(relatedEmojis.map(e => e.id));
+    relatedIds.add(id); // also exclude current emoji's files
+
+    return emojis
+      .filter(e => !relatedIds.has(e.id))
+      .flatMap(otherEmoji => 
+        Object.entries(otherEmoji.formats).flatMap(([format, files]) => 
+            files.map(file => ({
+                ...file,
+                emojiId: otherEmoji.id,
+                format: format,
+                displayName: t(otherEmoji.title)
+            }))
+        )
+      ).sort(() => 0.5 - Math.random());
+  }, [emojis, relatedEmojis, id, t]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
         setPageUrl(window.location.href);
     }
   }, []);
-  
-   useEffect(() => {
-    if (emojis.length === 0) return;
-    
-    const allFiles = emojis.flatMap(emoji => 
-        Object.entries(emoji.formats).flatMap(([format, files]) => 
-            files.map(file => ({
-                ...file,
-                emojiId: emoji.id,
-                format: format,
-                displayName: file.name,
-            }))
-        )
-    );
-    setRandomFiles([...allFiles].sort(() => 0.5 - Math.random()));
-
-  }, [emojis]);
-
 
   const file = useMemo(() => {
     if (!emoji) return null;
@@ -184,25 +202,20 @@ export default function FileDownloadPage() {
 
                 <Separator className="my-8" />
                 
-                <div className="w-full max-w-5xl space-y-8">
-                    {randomFiles.length > 0 && (
+                <div className="w-full max-w-5xl space-y-12">
+                    {relatedFiles.length > 0 && (
                         <section>
-                            <h2 className="text-2xl font-headline font-bold text-center mb-6">Explore More Files</h2>
-                            <InfiniteFileScroller allFiles={randomFiles} lang={lang} />
+                            <h2 className="text-2xl font-headline font-bold text-center mb-6">{t('relatedFilesTitle')}</h2>
+                            <FeaturedFiles files={relatedFiles} lang={lang} />
                         </section>
                     )}
 
-                    <section>
-                      <h2 className="text-2xl font-headline font-bold text-center mb-6">{t('exploreCategories')}</h2>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                        {categories.map((cat) => (
-                          <Link key={cat.id} href={`/${lang}/emojis/${cat.id}`} className="group flex flex-col items-center justify-center gap-2 p-2 rounded-lg hover:bg-muted/50 transition-colors border aspect-square">
-                            <SvgIcon svg={cat.icon} className="w-10 h-10 text-primary transition-colors group-hover:text-accent-foreground" />
-                            <p className="font-semibold text-sm text-center leading-tight group-hover:text-primary transition-colors">{t(cat.name)}</p>
-                          </Link>
-                        ))}
-                      </div>
-                    </section>
+                    {allOtherFiles.length > 0 && (
+                        <section>
+                            <h2 className="text-2xl font-headline font-bold text-center mb-6">Explore More Files</h2>
+                            <InfiniteFileScroller allFiles={allOtherFiles} lang={lang} />
+                        </section>
+                    )}
                 </div>
             </div>
         </div>
