@@ -23,6 +23,7 @@ import Link from "next/link";
 import { useTranslations } from "@/context/translations-context";
 import { useEmojiStore } from "@/lib/store";
 import { format } from 'date-fns';
+import { Input } from "@/components/ui/input";
 
 
 type SortConfig = {
@@ -36,6 +37,7 @@ export default function EmojisPage() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState<Emoji | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
   
   const { emojis, addEmoji, updateEmoji, deleteEmoji } = useEmojiStore();
   
@@ -55,7 +57,9 @@ export default function EmojisPage() {
 
 
   const sortedEmojiList = useMemo(() => {
-    let sortableItems = [...emojiListWithDetails];
+    let sortableItems = emojiListWithDetails.filter(post => 
+      post.translatedTitle.toLowerCase().includes(searchTerm.toLowerCase())
+    );
     if (sortConfig !== null) {
       sortableItems.sort((a, b) => {
         const aValue = a[sortConfig.key as keyof typeof a];
@@ -80,7 +84,7 @@ export default function EmojisPage() {
       });
     }
     return sortableItems;
-  }, [emojiListWithDetails, sortConfig]);
+  }, [emojiListWithDetails, sortConfig, searchTerm]);
 
   const requestSort = (key: SortConfig['key']) => {
     let direction: 'ascending' | 'descending' = 'ascending';
@@ -140,10 +144,18 @@ export default function EmojisPage() {
                   {t('emojis_description', { count: emojiPosts.length.toString() })}
                 </CardDescription>
             </div>
-            <Button size="sm" className="gap-1" onClick={() => setIsAddDialogOpen(true)}>
-                <PlusCircle className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">{t('emojis_add_button')}</span>
-            </Button>
+            <div className="flex items-center gap-2">
+              <Input
+                placeholder="Search by title..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full sm:w-64"
+              />
+              <Button size="sm" className="gap-1" onClick={() => setIsAddDialogOpen(true)}>
+                  <PlusCircle className="h-3.5 w-3.5" />
+                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">{t('emojis_add_button')}</span>
+              </Button>
+            </div>
         </div>
       </CardHeader>
       <CardContent>
