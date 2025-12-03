@@ -237,9 +237,9 @@ export default function CategoryPage() {
             </p>
         </div>
         
-        {!isFileSearch && emojiList.length > 0 && (
-            <section id="emoji-results">
-                {isSearchPage && <h2 className="text-2xl font-headline font-bold mb-6">Emoji Results</h2>}
+        {emojiList.length > 0 && (
+            <section id="emoji-results" className="mb-12">
+                <h2 className="text-2xl font-headline font-bold mb-6">Emoji Results</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
                     {emojiList.map((emoji) => (
                     <EmojiCard key={emoji.id} emoji={emoji} lang={lang} />
@@ -248,8 +248,11 @@ export default function CategoryPage() {
             </section>
         )}
         
-        {(isSearchPage || isFileSearch) && featuredPosts.length > 0 && (
-             <section className="mt-12 md:mt-16">
+        {featuredPosts.length > 0 && (
+             <section id="file-results" className="mt-12 md:mt-16">
+                <h2 className="text-2xl font-headline font-bold text-center md:text-left mb-6">
+                    File Results
+                </h2>
                 {fileTypes.length > 1 ? (
                     <Tabs defaultValue={selectedFormat} onValueChange={handleTabChange} className="w-full">
                         <div className="flex justify-center mb-8">
@@ -266,21 +269,11 @@ export default function CategoryPage() {
                             </TabsList>
                         </div>
                         <TabsContent value={selectedFormat}>
-                            <section id="featured-files">
-                                <h2 className="text-2xl font-headline font-bold text-center md:text-left mb-6">
-                                    {isFileSearch ? 'All File Posts' : 'File Results'}
-                                </h2>
-                                <FeaturedFiles posts={featuredPosts} lang={lang} />
-                            </section>
+                            <FeaturedFiles posts={featuredPosts} lang={lang} />
                         </TabsContent>
                     </Tabs>
                 ) : (
-                    <section id="featured-files">
-                        <h2 className="text-2xl font-headline font-bold text-center md:text-left mb-6">
-                            {isFileSearch ? 'All File Posts' : 'File Results'}
-                        </h2>
-                        <FeaturedFiles posts={featuredPosts} lang={lang} />
-                    </section>
+                   <FeaturedFiles posts={featuredPosts} lang={lang} />
                 )}
             </section>
         )}
