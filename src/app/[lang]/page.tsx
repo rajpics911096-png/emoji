@@ -103,7 +103,7 @@ export default function Home() {
             <h2 className="text-3xl font-headline font-bold text-center mb-10">
               {t('exploreCategories')}
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
               {featuredCategories.map((category) => (
                 <Link key={category.id} href={`/${lang}/emojis/${category.id}`}>
                   <Card className="group transform hover:-translate-y-1 transition-transform duration-300 ease-in-out hover:shadow-xl h-full">
