@@ -30,9 +30,14 @@ export function FeaturedFiles({ posts, lang }: FeaturedFilesProps) {
 
     const availableFormats = [...new Set(allFiles.map(f => {
         if (!f.format) return null;
+        if (f.format === 'image' && f.type?.includes('png')) return 'PNG';
+        if (f.format === 'image' && f.type?.includes('gif')) return 'GIF';
+        if (f.format === 'image') return 'IMAGE';
         return f.format.toUpperCase();
     }).filter(Boolean))];
+
     const formatsString = availableFormats.join(', ');
+
 
     return (
       <Link
