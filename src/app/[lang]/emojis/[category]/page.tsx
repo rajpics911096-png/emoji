@@ -41,13 +41,6 @@ export default function CategoryPage() {
   }
 
   const isSearchPage = categorySlug === 'all' && searchTerm;
-  const pageTitle = isSearchPage 
-    ? `Search results for "${searchTerm}"`
-    : t(category?.name || 'category_all');
-  const pageDescription = isSearchPage
-    ? `Found results for your query: "${searchTerm}"`
-    : t('categoryDescription', { categoryName: t(category?.name || 'category_all') });
-
 
   const emojiList = useMemo(() => {
     if (searchTerm) {
@@ -99,6 +92,15 @@ export default function CategoryPage() {
     }).slice(0, 12);
 
   }, [emojis, searchTerm, t]);
+  
+  const totalResults = emojiList.length + featuredFiles.length;
+  
+  const pageTitle = isSearchPage 
+    ? `${totalResults} results for "${searchTerm}"`
+    : t(category?.name || 'category_all');
+  const pageDescription = isSearchPage
+    ? `Found ${totalResults} results for your query: "${searchTerm}"`
+    : t('categoryDescription', { categoryName: t(category?.name || 'category_all') });
 
 
   return (
