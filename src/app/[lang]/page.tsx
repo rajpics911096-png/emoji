@@ -29,17 +29,21 @@ export default function Home() {
   const [featuredFiles, setFeaturedFiles] = useState<any[]>([]);
 
   const featuredEmojis = useMemo(() => {
-    return [...emojis].sort(() => 0.5 - Math.random()).slice(0, 8);
+    // Show emojis that actually have an emoji character
+    return [...emojis].filter(e => e.emoji).sort(() => 0.5 - Math.random()).slice(0, 8);
   }, [emojis]);
   
   useEffect(() => {
     if (emojis.length === 0) return;
-    const allFiles = emojis.flatMap(emoji => 
+    // Feature files from posts that are primarily file-based (no emoji character)
+    const filePosts = emojis.filter(emoji => !emoji.emoji);
+    const allFiles = filePosts.flatMap(emoji => 
         Object.entries(emoji.formats).flatMap(([format, files]) => 
             files.map(file => ({
                 ...file,
                 emojiId: emoji.id,
                 format: format,
+                displayName: file.name, // Keep it simple for the homepage
             }))
         )
     );
@@ -101,18 +105,20 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="featured" className="py-12 md:py-16 bg-primary/5">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-headline font-bold text-center mb-10">
-              {t('featuredEmojis')}
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
-              {featuredEmojis.map((emoji) => (
-                <EmojiCard key={emoji.id} emoji={emoji} lang={lang} />
-              ))}
+        {featuredEmojis.length > 0 && (
+          <section id="featured" className="py-12 md:py-16 bg-primary/5">
+            <div className="container mx-auto px-4">
+              <h2 className="text-3xl font-headline font-bold text-center mb-10">
+                {t('featuredEmojis')}
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
+                {featuredEmojis.map((emoji) => (
+                  <EmojiCard key={emoji.id} emoji={emoji} lang={lang} />
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {featuredFiles.length > 0 && (
           <section id="featured-files" className="py-12 md:py-16">
