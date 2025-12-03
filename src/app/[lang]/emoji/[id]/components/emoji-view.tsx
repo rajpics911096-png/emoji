@@ -4,11 +4,9 @@
 import { useState } from 'react';
 import type { Emoji } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { Copy, Check, Code, Share2 } from 'lucide-react';
+import { Copy, Check, Code } from 'lucide-react';
 import { useTranslations } from '@/context/translations-context';
 import { useToast } from '@/hooks/use-toast';
-import { SvgIcon } from '@/components/svg-icon';
-import Image from 'next/image';
 
 interface EmojiViewProps {
   emoji: Emoji;
@@ -38,38 +36,8 @@ export function EmojiView({ emoji }: EmojiViewProps) {
     }
   };
 
-  const copyLinkFallback = () => {
-    navigator.clipboard.writeText(window.location.href);
-    toast({
-      title: "Link Copied",
-      description: "The page link has been copied to your clipboard.",
-    });
-  };
-
-  const handleShare = async () => {
-    const shareData = {
-      title: t(emoji.title),
-      text: `Check out the ${emoji.emoji} emoji!`,
-      url: window.location.href,
-    };
-
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      } catch (error) {
-        // Fallback to copying link if sharing fails (e.g., permission denied, user abort)
-        copyLinkFallback();
-      }
-    } else {
-      // Fallback for browsers that do not support the Web Share API
-      copyLinkFallback();
-    }
-  };
-
-
   const canCopySvg = !!(emoji.formats.png?.length || emoji.formats.gif?.length || emoji.formats.image?.length);
   const isFilePost = !emoji.emoji;
-  const featuredImage = Object.values(emoji.formats).flat()[0];
 
   return (
     <article>
@@ -104,18 +72,9 @@ export function EmojiView({ emoji }: EmojiViewProps) {
                           )}
                       </Button>
                   )}
-                  <Button onClick={handleShare} size="default" variant="outline" className="transition-all">
-                    <Share2 className="mr-2 h-4 w-4" /> Share
-                  </Button>
                 </div>
               </>
-            ) : (
-                <div className="mt-4">
-                     <Button onClick={handleShare} size="default" variant="outline" className="transition-all">
-                        <Share2 className="mr-2 h-4 w-4" /> Share
-                    </Button>
-                </div>
-            )}
+            ) : null}
       </div>
     </article>
   );
