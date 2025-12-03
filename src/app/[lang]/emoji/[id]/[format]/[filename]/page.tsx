@@ -20,7 +20,7 @@ import { AdSlot } from '@/components/ad-slot';
 import { useEmojiStore, useCategoryStore } from '@/lib/store';
 import { SocialShareButtons } from '@/components/social-share-buttons';
 
-const DownloadButton = ({ file, format }: { file: EmojiFormatFile, format: string }) => {
+const DownloadButton = ({ file, format, emojiId }: { file: EmojiFormatFile, format: string, emojiId: string }) => {
   const { settings } = useSiteSettings();
   const { t } = useTranslations();
   const [timer, setTimer] = useState(0);
@@ -47,9 +47,16 @@ const DownloadButton = ({ file, format }: { file: EmojiFormatFile, format: strin
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
-    const currentCount = parseInt(localStorage.getItem('downloadCount') || '0', 10);
-    localStorage.setItem('downloadCount', (currentCount + 1).toString());
+
+    // Update total download count
+    const currentTotalCount = parseInt(localStorage.getItem('downloadCount') || '0', 10);
+    localStorage.setItem('downloadCount', (currentTotalCount + 1).toString());
+
+    // Update individual file download count
+    const fileDownloads = JSON.parse(localStorage.getItem('fileDownloads') || '{}');
+    const fileId = `${emojiId}-${file.name}`;
+    fileDownloads[fileId] = (fileDownloads[fileId] || 0) + 1;
+    localStorage.setItem('fileDownloads', JSON.stringify(fileDownloads));
   };
 
   const startCountdown = () => {
@@ -156,7 +163,7 @@ export default function FileDownloadPage() {
                         <Badge variant="outline" className="capitalize">{format}</Badge>
                         <Badge variant="outline">{file.size}</Badge>
                     </div>
-                    <DownloadButton file={file} format={format} />
+                    <DownloadButton file={file} format={format} emojiId={emoji.id} />
                     <SocialShareButtons url={pageUrl} title={`Download ${file.name}`} />
                 </div>
                 
@@ -219,4 +226,3 @@ export default function FileDownloadPage() {
     </>
   );
 }
-

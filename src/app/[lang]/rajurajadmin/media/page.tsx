@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MoreVertical, Upload, Copy, Download, Trash2, File as FileIcon } from "lucide-react";
@@ -21,27 +21,43 @@ import { useTranslations } from '@/context/translations-context';
 import { useEmojiStore } from '@/lib/store';
 
 
-type MediaFile = EmojiFormatFile & { format: string; emojiId: string; dateAdded: number; };
+type MediaFile = EmojiFormatFile & { format: string; emojiId: string; dateAdded: number; downloadCount: number; };
 
 export default function MediaPage() {
     const { t } = useTranslations();
     const { toast } = useToast();
     const { emojis } = useEmojiStore();
+    const [fileDownloads, setFileDownloads] = useState<Record<string, number>>({});
+
+     useEffect(() => {
+        const storedDownloads = localStorage.getItem('fileDownloads');
+        if (storedDownloads) {
+            setFileDownloads(JSON.parse(storedDownloads));
+        }
+    }, []);
 
     const initialFiles: MediaFile[] = useMemo(() => emojis.flatMap((emoji, emojiIndex) => 
         Object.entries(emoji.formats).flatMap(([format, files], formatIndex) => 
-            files.map((file, fileIndex) => ({ 
-                ...file, 
-                format, 
-                emojiId: emoji.id,
-                dateAdded: Date.now() - (emojiIndex * 10000 + formatIndex * 1000 + fileIndex), // Simulate different added dates
-            }))
+            files.map((file, fileIndex) => {
+                const fileId = `${emoji.id}-${file.name}`;
+                return {
+                    ...file, 
+                    format, 
+                    emojiId: emoji.id,
+                    dateAdded: emoji.createdAt || Date.now() - (emojiIndex * 10000 + formatIndex * 1000 + fileIndex),
+                    downloadCount: fileDownloads[fileId] || 0,
+                };
+            })
         )
-    ), [emojis]);
+    ), [emojis, fileDownloads]);
 
     const [mediaFiles, setMediaFiles] = useState<MediaFile[]>(initialFiles);
     const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
     const [sortOrder, setSortOrder] = useState('newest');
+
+    useEffect(() => {
+        setMediaFiles(initialFiles);
+    }, [initialFiles]);
 
 
     const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,7 +71,8 @@ export default function MediaPage() {
             format: file.type.split('/')[0] || 'file',
             emojiId: 'local-upload',
             dateAdded: Date.now(),
-            type: file.type
+            type: file.type,
+            downloadCount: 0,
         }));
 
         setMediaFiles(prevFiles => [...newFiles, ...prevFiles]);
@@ -68,6 +85,8 @@ export default function MediaPage() {
     const sortedMediaFiles = useMemo(() => {
         return [...mediaFiles].sort((a, b) => {
             switch (sortOrder) {
+                case 'popular':
+                    return b.downloadCount - a.downloadCount;
                 case 'newest':
                     return b.dateAdded - a.dateAdded;
                 case 'oldest':
@@ -98,8 +117,6 @@ export default function MediaPage() {
     }
     
     const deleteFile = (fileToRemove: MediaFile) => {
-        // This is a mock deletion. In a real app, you'd call an API.
-        // And you'd need to update the emoji in the store to remove this file.
         setMediaFiles(mediaFiles.filter(file => file.url !== fileToRemove.url));
         setSelectedFiles(selectedFiles.filter(url => url !== fileToRemove.url));
         if (fileToRemove.url.startsWith('blob:')) {
@@ -109,6 +126,15 @@ export default function MediaPage() {
             title: t('media_toast_file_deleted_title'),
             description: t('media_toast_file_deleted_desc', { name: fileToRemove.name }),
             variant: 'destructive'
+        });
+    }
+    
+    const handleDownloadSelected = () => {
+        selectedFiles.forEach(url => {
+            const file = mediaFiles.find(f => f.url === url);
+            if (file) {
+                downloadFile(file.url, file.name);
+            }
         });
     }
 
@@ -127,7 +153,6 @@ export default function MediaPage() {
     }
 
     const handleDeleteSelected = () => {
-        // Mock deletion
         const remainingFiles = mediaFiles.filter(file => !selectedFiles.includes(file.url));
         const filesToDelete = mediaFiles.filter(file => selectedFiles.includes(file.url));
         
@@ -177,6 +202,10 @@ export default function MediaPage() {
                 <div className="flex items-center gap-4 flex-wrap">
                     {selectedFiles.length > 0 && (
                         <div className="flex items-center gap-2">
+                             <Button size="sm" variant="outline" className="gap-1" onClick={handleDownloadSelected}>
+                                <Download className="h-3.5 w-3.5" />
+                                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">{t('downloadButton')} ({selectedFiles.length})</span>
+                            </Button>
                              <Button size="sm" variant="destructive" className="gap-1" onClick={handleDeleteSelected}>
                                 <Trash2 className="h-3.5 w-3.5" />
                                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">{t('media_delete_selected_button', { count: selectedFiles.length.toString() })}</span>
@@ -200,6 +229,7 @@ export default function MediaPage() {
                             <SelectValue placeholder={t('media_sort_by_placeholder')} />
                         </SelectTrigger>
                         <SelectContent>
+                            <SelectItem value="popular">{t('media_sort_popular')}</SelectItem>
                             <SelectItem value="newest">{t('media_sort_newest')}</SelectItem>
                             <SelectItem value="oldest">{t('media_sort_oldest')}</SelectItem>
                             <SelectItem value="name_asc">{t('media_sort_name_asc')}</SelectItem>
@@ -233,7 +263,13 @@ export default function MediaPage() {
                             </div>
                             <FilePreview file={file} />
                             <CardContent className="p-3">
-                                <p className="text-xs font-medium truncate" title={file.name}>{file.name}</p>
+                                <div className="flex justify-between items-center">
+                                    <p className="text-xs font-medium truncate" title={file.name}>{file.name}</p>
+                                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                        <Download className="h-3 w-3" />
+                                        <span>{file.downloadCount}</span>
+                                    </div>
+                                </div>
                                 <p className="text-xs text-muted-foreground">{file.size}</p>
                             </CardContent>
                             <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10" onClick={(e) => e.stopPropagation()}>
