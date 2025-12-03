@@ -109,7 +109,7 @@ export function InfiniteFileScroller({ allFiles, lang, itemsPerPage = 12 }: Infi
             </Tabs>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
         {visibleFiles.map((file, index) => {
             const downloadUrl = `/${lang}/download/${file.emojiId}/${encodeURIComponent(file.name)}`;
             return (
@@ -117,8 +117,8 @@ export function InfiniteFileScroller({ allFiles, lang, itemsPerPage = 12 }: Infi
                 <Link
                 href={downloadUrl}
                 >
-                <Card className="group overflow-hidden transition-shadow hover:shadow-lg h-full">
-                    <CardContent className="p-3 flex flex-col h-full">
+                <Card className="group overflow-hidden transition-shadow hover:shadow-lg">
+                    <CardContent className="p-3 flex flex-col">
                         <div className="aspect-square bg-muted flex items-center justify-center relative rounded-md overflow-hidden mb-3">
                             {file.type?.startsWith('video/') ? (
                             <video src={file.url} autoPlay muted loop playsInline className="w-full h-full object-contain" />
