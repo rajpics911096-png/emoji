@@ -13,7 +13,6 @@ import {
 } from 'lucide-react';
 import { SvgIcon } from './svg-icon';
 import { useSiteSettings } from '@/context/site-settings-context';
-import { ThemeToggle } from './theme-toggle';
 import { LanguageSwitcher } from './language-switcher';
 import { useTranslations } from '@/context/translations-context';
 import { useState } from 'react';
@@ -86,7 +85,6 @@ export default function Header({ lang }: { lang: string }) {
         </div>
 
         <div className="flex items-center justify-end space-x-1 sm:space-x-2">
-          <ThemeToggle />
           <LanguageSwitcher />
         </div>
       </div>
