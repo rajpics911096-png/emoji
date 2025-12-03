@@ -45,16 +45,18 @@ export function FeaturedFiles({ posts, lang }: FeaturedFilesProps) {
         className={cn("group block relative overflow-hidden rounded-xl", className)}
       >
         <Card className="w-full h-full transition-shadow duration-300 group-hover:shadow-2xl">
-          {firstFile?.url && (
-            <Image 
-              src={firstFile.url} 
-              alt={t(post.title)} 
-              layout="fill" 
-              objectFit="cover" 
-              className="transition-transform duration-300 group-hover:scale-110"
-              unoptimized={firstFile.format === 'gif'}
-            />
-          )}
+            <div className="aspect-square w-full h-full">
+            {firstFile?.url && (
+                <Image 
+                src={firstFile.url} 
+                alt={t(post.title)} 
+                layout="fill" 
+                objectFit="cover" 
+                className="transition-transform duration-300 group-hover:scale-110"
+                unoptimized={firstFile.format === 'gif'}
+                />
+            )}
+            </div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
         </Card>
         <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
@@ -66,17 +68,10 @@ export function FeaturedFiles({ posts, lang }: FeaturedFilesProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-[400px] md:h-[300px]">
-        {posts[0] && (
-            <div className="md:col-span-1">
-                <PostCard post={posts[0]} className="h-full" />
-            </div>
-        )}
-        {posts[1] && (
-            <div className="md:col-span-1">
-                 <PostCard post={posts[1]} className="h-full" />
-            </div>
-        )}
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {posts.map((post) => (
+            <PostCard key={post.id} post={post} className="h-64" />
+        ))}
     </div>
   );
 }
