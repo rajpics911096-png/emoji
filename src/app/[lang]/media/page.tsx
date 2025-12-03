@@ -3,7 +3,7 @@
 
 import { useMemo } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
-import type { Emoji } from '@/lib/types';
+import type { Emoji, EmojiFormatFile } from '@/lib/types';
 import Image from 'next/image';
 import { useTranslations } from '@/context/translations-context';
 import { useEmojiStore } from '@/lib/store';
@@ -11,6 +11,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 export default function MediaPage() {
     const { t } = useTranslations();
@@ -22,30 +23,45 @@ export default function MediaPage() {
     const filePosts = useMemo(() => emojis.filter(emoji => !emoji.emoji), [emojis]);
 
     const PostCard = ({ post }: { post: Emoji }) => {
-        const firstFile = Object.values(post.formats).flat()[0];
+        const allFiles = (Object.entries(post.formats) as [keyof Emoji['formats'], any[]][])
+            .flatMap(([format, files]) => files.map(file => ({ ...file, format })));
+        
+        const firstFile = allFiles[0];
+        const totalFiles = allFiles.length;
+
+        const availableFormats = [...new Set(allFiles.map(f => {
+            if (!f.format) return null;
+            if (f.format === 'image' && f.type?.includes('png')) return 'PNG';
+            if (f.format === 'image' && f.type?.includes('gif')) return 'GIF';
+            if (f.format === 'image') return 'IMAGE';
+            return f.format.toUpperCase();
+        }).filter(Boolean))];
+
+        const formatsString = availableFormats.join(', ');
+
         const postUrl = `/${lang}/file/${post.id}`;
 
         return (
-             <Link href={postUrl} className="group">
-                <Card className="overflow-hidden h-full transition-shadow duration-300 hover:shadow-xl">
+             <Link href={postUrl} className="group block relative overflow-hidden rounded-xl">
+                <Card className="w-full h-full transition-shadow duration-300 group-hover:shadow-2xl">
+                    <div className="aspect-square w-full h-full">
                     {firstFile?.url && (
-                         <div className="aspect-square relative overflow-hidden">
-                            <Image
-                                src={firstFile.url}
-                                alt={t(post.title)}
-                                layout="fill"
-                                objectFit="cover"
-                                className="transition-transform duration-300 group-hover:scale-110"
-                                unoptimized={firstFile.format === 'gif'}
-                            />
-                         </div>
+                        <Image 
+                        src={firstFile.url} 
+                        alt={t(post.title)} 
+                        layout="fill" 
+                        objectFit="cover" 
+                        className="transition-transform duration-300 group-hover:scale-110"
+                        unoptimized={firstFile.format === 'gif'}
+                        />
                     )}
-                    <CardContent className="p-4">
-                        <h3 className="font-headline font-semibold text-base leading-tight truncate" title={t(post.title)}>
-                            {t(post.title)}
-                        </h3>
-                    </CardContent>
+                    </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
                 </Card>
+                <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                    <h3 className="font-headline font-bold text-lg leading-tight truncate">{t(post.title)}</h3>
+                    <p className="text-sm text-white/80">{`${totalFiles} Files (${formatsString})`}</p>
+                </div>
             </Link>
         );
     };
