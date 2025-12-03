@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import type { Emoji } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { Copy, Check, Code } from 'lucide-react';
+import { Copy, Check, Code, Share2 } from 'lucide-react';
 import { useTranslations } from '@/context/translations-context';
 import { useToast } from '@/hooks/use-toast';
 
@@ -33,6 +33,34 @@ export function EmojiView({ emoji }: EmojiViewProps) {
         navigator.clipboard.writeText(svgString);
         setIsSvgCopied(true);
         setTimeout(() => setIsSvgCopied(false), 2000);
+    }
+  };
+
+  const copyLinkFallback = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast({
+      title: "Link Copied",
+      description: "The page link has been copied to your clipboard.",
+    });
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: t(emoji.title),
+      text: `Check out the ${t(emoji.title)} emoji!`,
+      url: window.location.href,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (error) {
+        // Fallback to copying link if sharing fails (e.g., permission denied, user abort)
+        copyLinkFallback();
+      }
+    } else {
+      // Fallback for browsers that do not support the Web Share API
+      copyLinkFallback();
     }
   };
 
@@ -72,6 +100,9 @@ export function EmojiView({ emoji }: EmojiViewProps) {
                           )}
                       </Button>
                   )}
+                  <Button onClick={handleShare} size="default" variant="outline" className="transition-all">
+                    <Share2 className="mr-2 h-4 w-4" /> Share
+                  </Button>
                 </div>
               </>
             ) : null}
