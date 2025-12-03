@@ -153,9 +153,21 @@ export default function CategoryPage() {
   
   const totalResults = emojiList.length + featuredFiles.length;
   
-  const pageTitle = isSearchPage
-    ? `${totalResults} "${searchTerm}" PNG, GIF, Images, Video`
-    : t(category?.name || 'category_all');
+  const pageTitle = useMemo(() => {
+    if (!isSearchPage) {
+        return t(category?.name || 'category_all');
+    }
+    const foundFormats = new Set<string>();
+    allFoundFiles.forEach(file => {
+        if (file.format === 'png') foundFormats.add('PNG');
+        if (file.format === 'gif') foundFormats.add('GIF');
+        if (file.format === 'image') foundFormats.add('Images');
+        if (file.format === 'video') foundFormats.add('Video');
+    });
+    
+    const formatsString = Array.from(foundFormats).join(', ');
+    return `${totalResults} "${searchTerm}" ${formatsString}`;
+  }, [isSearchPage, t, category, totalResults, searchTerm, allFoundFiles]);
 
   const pageDescription = isSearchPage
     ? `Found ${totalResults} results for your query: "${searchTerm}"`
