@@ -85,8 +85,8 @@ export default function CategoryPage() {
     
     return filteredFiles.map((file, index) => {
         let formatName = file.format.toUpperCase();
-        if (file.format === 'image') {
-            const extension = file.name.split('.').pop()?.toUpperCase();
+        if (file.format === 'image' && file.type) {
+            const extension = file.type.split('/')[1]?.toUpperCase();
             formatName = extension || formatName;
         } else if (file.format === 'video') {
             formatName = 'Video';
