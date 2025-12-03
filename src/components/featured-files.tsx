@@ -66,25 +66,15 @@ export function FeaturedFiles({ posts, lang }: FeaturedFilesProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 h-[600px]">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-[400px] md:h-[300px]">
         {posts[0] && (
-            <div className="md:col-span-2 md:row-span-2">
+            <div className="md:col-span-1">
                 <PostCard post={posts[0]} className="h-full" />
             </div>
         )}
         {posts[1] && (
-            <div className="md:col-span-2">
+            <div className="md:col-span-1">
                  <PostCard post={posts[1]} className="h-full" />
-            </div>
-        )}
-        {posts[2] && (
-            <div className="md:col-span-1">
-                 <PostCard post={posts[2]} className="h-full" />
-            </div>
-        )}
-        {posts[3] && (
-            <div className="md:col-span-1">
-                 <PostCard post={posts[3]} className="h-full" />
             </div>
         )}
     </div>
