@@ -1,7 +1,7 @@
-
 "use client";
 
-import { useState } from "react";
+import { useUser } from "@/firebase/use-user";
+import { useEffect, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,8 @@ import { useTranslations } from "@/context/translations-context";
 import { SvgIcon } from "@/components/svg-icon";
 import { useSiteSettings } from "@/context/site-settings-context";
 
-export default function LoginPage() {
+
+function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +35,7 @@ export default function LoginPage() {
     const auth = getAuth();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push(`/${language}/rajurajadmin`);
+      // No need to redirect, the AuthGuard will re-render the children.
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -55,7 +56,7 @@ export default function LoginPage() {
         title: "Account Created",
         description: "Your account has been created successfully. You are now logged in.",
       });
-      router.push(`/${language}/rajurajadmin`);
+      // No need to redirect.
     } catch (error: any) {
        toast({
         variant: "destructive",
@@ -114,4 +115,23 @@ export default function LoginPage() {
       </Card>
     </div>
   );
+}
+
+
+export function AuthGuard({ children }: { children: ReactNode }) {
+  const { user, loading } = useUser();
+
+  if (loading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <LoginPage />;
+  }
+
+  return <>{children}</>;
 }
