@@ -48,6 +48,10 @@ export default function Home() {
     return allCategory ? [allCategory, ...otherCategories] : otherCategories;
   }, [categories, t]);
 
+  const featuredCategories = useMemo(() => {
+    return sortedCategories.slice(0, 8);
+  }, [sortedCategories]);
+
   return (
       <main className="flex-1">
         
@@ -77,7 +81,7 @@ export default function Home() {
               {t('exploreCategories')}
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-              {sortedCategories.map((category) => (
+              {featuredCategories.map((category) => (
                 <Link key={category.id} href={`/${lang}/emojis/${category.id}`}>
                   <Card className="group transform hover:-translate-y-1 transition-transform duration-300 ease-in-out hover:shadow-xl h-full">
                     <CardContent className="p-4 flex flex-col items-center justify-center text-center h-full">
@@ -89,6 +93,13 @@ export default function Home() {
                   </Card>
                 </Link>
               ))}
+            </div>
+            <div className="text-center mt-8">
+              <Button asChild variant="outline">
+                  <Link href={`/${lang}/emojis/all`}>
+                      Read More
+                  </Link>
+              </Button>
             </div>
           </div>
         </section>
