@@ -7,12 +7,11 @@ import Link from 'next/link';
 import type { Emoji } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
-import { Video } from 'lucide-react';
+import { Video, File, Download } from 'lucide-react';
 import { useTranslations } from '@/context/translations-context';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Button } from '@/components/ui/button';
-import { Download } from 'lucide-react';
 import { AdSlot } from '@/components/ad-slot';
+import { Badge } from '@/components/ui/badge';
 
 export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) {
   const { formats } = emoji;
@@ -65,6 +64,9 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
 
   return (
     <section className="mt-12 md:mt-16">
+       <h2 className="text-3xl font-headline font-bold text-center mb-4">
+        {t('downloadsTitle')}
+      </h2>
       <Tabs defaultValue={selectedFormat} onValueChange={handleTabChange} className="w-full">
         <div className="flex justify-center mb-8">
             <TabsList className="bg-background border rounded-full p-1 h-auto flex-wrap">
@@ -72,7 +74,7 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
                 <TabsTrigger 
                     key={format} 
                     value={format}
-                    className="capitalize rounded-full text-sm font-semibold h-auto px-3 py-1.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
+                    className="capitalize rounded-full text-sm font-semibold h-auto px-4 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg"
                 >
                     {t(`downloadsTab${format.charAt(0).toUpperCase() + format.slice(1)}`)}
                 </TabsTrigger>
@@ -84,27 +86,28 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
             {filteredFiles.flatMap((file, index) => {
               const downloadUrl = `/${lang}/download/${emoji.id}/${encodeURIComponent(file.name)}`;
               const fileCard = (
-                <Card key={`${file.url}-${index}`} className="group overflow-hidden transition-shadow hover:shadow-lg">
-                    <CardContent className="p-3 flex flex-col h-full">
-                        <Link 
-                            href={downloadUrl}
-                            className="flex-grow"
-                        >
-                            <div className="aspect-square bg-muted flex items-center justify-center relative rounded-md overflow-hidden mb-3">
-                                {file.format === 'video' || file.type?.startsWith('video/') ? (
-                                    <video src={file.url} autoPlay muted loop playsInline className="w-full h-full object-contain" />
-                                ) : (
-                                    <Image src={file.url} alt={file.name} layout="fill" objectFit="contain" className="p-2" unoptimized={file.format === 'gif'}/>
-                                )}
+                <Link href={downloadUrl} key={`${file.url}-${index}`} className="group block">
+                    <Card className="overflow-hidden transition-transform duration-300 ease-in-out group-hover:scale-105 group-hover:shadow-2xl">
+                        <div className="aspect-square bg-muted flex items-center justify-center relative">
+                            {file.format === 'video' || file.type?.startsWith('video/') ? (
+                                <video src={file.url} autoPlay muted loop playsInline className="w-full h-full object-contain" />
+                            ) : (
+                                <Image src={file.url} alt={file.name} layout="fill" objectFit="contain" className="p-2" unoptimized={file.format === 'gif'}/>
+                            )}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <div className="absolute bottom-2 left-2 right-2 text-white p-2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                                <p className="text-xs font-bold truncate">{file.name}</p>
                             </div>
-                            <p className="text-sm font-medium truncate" title={file.name}>{file.name}</p>
-                        </Link>
-                    </CardContent>
-                </Card>
+                             <Badge variant="secondary" className="absolute top-2 right-2 opacity-80 text-xs">
+                                {file.type?.split('/')[1]?.toUpperCase() || file.format.toUpperCase()}
+                             </Badge>
+                        </div>
+                    </Card>
+                </Link>
               );
 
-              if ((index + 1) % 2 === 0) {
-                return [fileCard, <AdSlot key={`ad-${index}`} location="in_download_grid" className="flex items-center justify-center" />];
+              if ((index + 1) % 4 === 0 && index !== filteredFiles.length - 1) {
+                return [fileCard, <AdSlot key={`ad-${index}`} location="in_download_grid" className="flex items-center justify-center rounded-lg bg-muted aspect-square" />];
               }
               return fileCard;
             })}
