@@ -16,6 +16,14 @@ import { useTranslations } from '@/context/translations-context';
 import { useCategoryStore, useEmojiStore } from '@/lib/store';
 import { FeaturedFiles } from '@/components/featured-files';
 import { useMemo, useState, useEffect } from 'react';
+import type { EmojiFormatFile } from '@/lib/types';
+import { InfiniteFileScroller } from '@/components/infinite-file-scroller';
+
+type FileItem = EmojiFormatFile & {
+    emojiId: string;
+    format: string;
+    displayName: string;
+};
 
 export default function Home() {
   const params = useParams<{ lang: string }>();
@@ -51,6 +59,21 @@ export default function Home() {
   const featuredCategories = useMemo(() => {
     return sortedCategories.slice(0, 8);
   }, [sortedCategories]);
+
+  const allFiles: FileItem[] = useMemo(() => {
+    const files = emojis.flatMap(emoji =>
+        Object.entries(emoji.formats).flatMap(([format, files]) =>
+            files.map(file => ({
+                ...file,
+                emojiId: emoji.id,
+                format: format,
+                displayName: t(emoji.title),
+            }))
+        )
+    );
+    return files.sort(() => 0.5 - Math.random());
+  }, [emojis, t]);
+
 
   return (
       <main className="flex-1">
@@ -143,6 +166,15 @@ export default function Home() {
             </div>
           </section>
         )}
+
+        <section id="latest-media" className="py-12 md:py-16 bg-primary/5">
+            <div className="container mx-auto px-4">
+                <h2 className="text-3xl font-headline font-bold text-center mb-10">
+                    {t('media_title')}
+                </h2>
+                <InfiniteFileScroller allFiles={allFiles} lang={lang} />
+            </div>
+        </section>
 
       </main>
   );
