@@ -182,7 +182,7 @@ export default function MediaPage() {
                 {isImage ? (
                     <Image src={file.url} alt={file.name} layout="fill" objectFit="contain" className="p-1" />
                 ) : isVideo ? (
-                    <video src={file.url} controls muted className="w-full h-full object-contain" />
+                    <video src={file.url} autoPlay muted loop playsInline className="w-full h-full object-contain" />
                 ) : (
                     <FileIcon className="w-16 h-16 text-muted-foreground" />
                 )}

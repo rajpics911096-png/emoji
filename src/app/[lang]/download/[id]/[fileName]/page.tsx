@@ -123,7 +123,7 @@ export default function DownloadPage() {
             
             <div className="max-w-xl mx-auto border rounded-lg p-4 bg-card">
               {isVideo ? (
-                <video src={file.url} controls autoPlay muted loop playsInline className="w-full h-auto max-h-[60vh] object-contain" />
+                <video src={file.url} autoPlay muted loop playsInline className="w-full h-auto max-h-[60vh] object-contain" />
               ) : (
                 <Image src={file.url} alt={file.name} width={500} height={500} className="w-full h-auto object-contain" unoptimized={file.type?.includes('gif')} loading="lazy" />
               )}
@@ -156,7 +156,7 @@ export default function DownloadPage() {
                       <CardContent className="p-2">
                         <div className="aspect-square bg-muted flex items-center justify-center rounded-md overflow-hidden">
                           {relatedFile.type?.startsWith('video/') ? (
-                             <video src={relatedFile.url} muted loop playsInline className="w-full h-full object-contain" />
+                             <video src={relatedFile.url} muted loop playsInline autoPlay className="w-full h-full object-contain" />
                           ) : (
                              <Image src={relatedFile.url} alt={relatedFile.name} width={150} height={150} className="w-full h-full object-contain p-1 group-hover:scale-105 transition-transform" unoptimized={relatedFile.type?.includes('gif')} loading="lazy" />
                           )}
