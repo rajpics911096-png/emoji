@@ -25,6 +25,7 @@ import { useTranslations } from '@/context/translations-context';
 import type { AdSetting } from '@/lib/types';
 import { useSiteSettings } from '@/context/site-settings-context';
 import { Trash2 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 export default function AdsSettingsPage() {
   const { t } = useTranslations();
@@ -62,6 +63,12 @@ export default function AdsSettingsPage() {
     const newSettings = [...adSettings];
     newSettings[index].enabled = enabled;
     setAdSettings(newSettings);
+  }
+  
+  const handleShowAfterChange = (index: number, value: string) => {
+      const newSettings = [...adSettings];
+      newSettings[index].showAfter = parseInt(value, 10) || 0;
+      setAdSettings(newSettings);
   }
 
   const handleAddSlot = () => {
@@ -131,6 +138,18 @@ export default function AdsSettingsPage() {
                     </SelectContent>
                   </Select>
                 </div>
+                {setting.location === 'in_download_grid' && (
+                    <div className="space-y-2">
+                        <Label htmlFor={`show-after-${index}`}>Show After (files)</Label>
+                        <Input
+                            id={`show-after-${index}`}
+                            type="number"
+                            value={setting.showAfter || 4}
+                            onChange={(e) => handleShowAfterChange(index, e.target.value)}
+                            placeholder="e.g. 4"
+                        />
+                    </div>
+                )}
                 <div className="md:col-span-2 space-y-2">
                   <Label htmlFor={`ad-code-${index}`}>{t('ads_settings_code_label')}</Label>
                   <Textarea

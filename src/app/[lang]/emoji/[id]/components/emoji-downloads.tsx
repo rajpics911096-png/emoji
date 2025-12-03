@@ -12,6 +12,7 @@ import { useTranslations } from '@/context/translations-context';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { AdSlot } from '@/components/ad-slot';
 import { Badge } from '@/components/ui/badge';
+import { useSiteSettings } from '@/context/site-settings-context';
 
 export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) {
   const { formats } = emoji;
@@ -19,6 +20,7 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+  const { settings } = useSiteSettings();
   
   const selectedFormat = searchParams.get('format') || 'all';
 
@@ -61,6 +63,9 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
   if (fileTypes.length <= 1 && filteredFiles.length === 0) {
     return null;
   }
+  
+  const gridAdSetting = settings.adSettings.find(ad => ad.location === 'in_download_grid');
+  const adFrequency = gridAdSetting?.enabled ? (gridAdSetting.showAfter || 4) : 0;
 
   return (
     <section className="mt-12 md:mt-16">
@@ -106,7 +111,7 @@ export function EmojiDownloads({ emoji, lang }: { emoji: Emoji, lang: string }) 
                 </Link>
               );
 
-              if ((index + 1) % 4 === 0 && index !== filteredFiles.length - 1) {
+              if (adFrequency > 0 && (index + 1) % adFrequency === 0 && index !== filteredFiles.length - 1) {
                 return [fileCard, <AdSlot key={`ad-${index}`} location="in_download_grid" className="flex items-center justify-center rounded-lg bg-muted aspect-square" />];
               }
               return fileCard;

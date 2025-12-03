@@ -63,6 +63,7 @@ export type AdSetting = {
   code: string;
   enabled: boolean;
   align?: 'left' | 'center' | 'right';
+  showAfter?: number;
 };
 
 export type HSLColor = {
