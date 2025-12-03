@@ -61,7 +61,7 @@ export default function MediaPage() {
         return (
              <Link href={postUrl} className="group block relative overflow-hidden rounded-xl">
                 <Card className="w-full h-full transition-shadow duration-300 group-hover:shadow-2xl">
-                    <div className="aspect-square w-full h-full">
+                    <div className="aspect-square w-full h-full bg-muted">
                     {featuredFile?.url && (
                         isVideo ? (
                             <video 
@@ -88,7 +88,7 @@ export default function MediaPage() {
                 </Card>
                 <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                     <h3 className="font-headline font-bold text-lg leading-tight truncate">{t(post.title)}</h3>
-                    <p className="text-sm text-white/80">{`${totalFiles} Files (${formatsString})`}</p>
+                    <p className="text-sm text-white/80 truncate">{`${totalFiles} Files (${formatsString})`}</p>
                 </div>
             </Link>
         );
@@ -106,7 +106,7 @@ export default function MediaPage() {
             </div>
 
             {filePosts.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
                     {filePosts.map((post) => (
                         <PostCard key={post.id} post={post} />
                     ))}
