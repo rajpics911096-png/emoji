@@ -16,8 +16,8 @@ import { cn } from '@/lib/utils';
 export default function MediaPage() {
     const { t } = useTranslations();
     const { emojis } = useEmojiStore();
-    const params = useParams<{ lang: string }>();
-    const lang = params.lang;
+    const params = useParams();
+    const lang = Array.isArray(params.lang) ? params.lang[0] : params.lang;
     const router = useRouter();
 
     const filePosts = useMemo(() => emojis.filter(emoji => !emoji.emoji), [emojis]);
