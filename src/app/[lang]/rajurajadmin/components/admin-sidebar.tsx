@@ -70,6 +70,12 @@ export function AdminSidebar() {
       activeMatch: '/rajurajadmin/emojis',
     },
     {
+      href: `/rajurajadmin/categories`,
+      label: t('admin_emoji_categories'),
+      icon: Tags,
+      activeMatch: '/rajurajadmin/categories',
+    },
+    {
       href: `/rajurajadmin/file-posts`,
       label: "File Posts",
       icon: FileUp,
@@ -86,12 +92,6 @@ export function AdminSidebar() {
       label: t('admin_media'),
       icon: Library,
       activeMatch: '/rajurajadmin/media',
-    },
-    {
-      href: `/rajurajadmin/categories`,
-      label: t('admin_categories'),
-      icon: Tags,
-      activeMatch: '/rajurajadmin/categories',
     },
     {
       href: `/rajurajadmin/ads-settings`,
