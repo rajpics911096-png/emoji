@@ -22,7 +22,8 @@ import { FeaturedFiles } from '@/components/featured-files';
 
 export default function EmojiPage() {
   const params = useParams<{ id: string, lang: string }>();
-  const { id, lang } = params;
+  const id = Array.isArray(params.id) ? params.id[0] : params.id;
+  const lang = Array.isArray(params.lang) ? params.lang[0] : params.lang;
   
   const { emojis, getEmojiById, getRelatedEmojis } = useEmojiStore();
   const { categories } = useCategoryStore();

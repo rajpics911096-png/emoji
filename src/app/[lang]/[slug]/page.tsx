@@ -14,7 +14,8 @@ const getPageBySlug = (slug: string, pages: any[]) => {
 
 export default function GenericPage() {
   const params = useParams<{ slug: string, lang: string }>();
-  const { slug, lang } = params;
+  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
+  const lang = Array.isArray(params.lang) ? params.lang[0] : params.lang;
   const { pages } = usePageStore();
   const page = getPageBySlug(slug, pages);
   const { settings } = useSiteSettings();
