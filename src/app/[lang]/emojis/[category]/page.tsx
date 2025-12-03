@@ -153,9 +153,10 @@ export default function CategoryPage() {
   
   const totalResults = emojiList.length + featuredFiles.length;
   
-  const pageTitle = isSearchPage 
-    ? `${totalResults} "${searchTerm}"`
+  const pageTitle = isSearchPage
+    ? `${totalResults} "${searchTerm}" PNG, GIF, Images, Video`
     : t(category?.name || 'category_all');
+
   const pageDescription = isSearchPage
     ? `Found ${totalResults} results for your query: "${searchTerm}"`
     : t('categoryDescription', { categoryName: t(category?.name || 'category_all') });
