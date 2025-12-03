@@ -32,10 +32,10 @@ export default function DashboardPage() {
 
 
     const stats = [
-        { title: t('dashboard_total_emojis'), value: emojiCount.toLocaleString(), icon: Smile, change: "20.1%", color: "bg-blue-500" },
-        { title: t('dashboard_total_pages'), value: pageCount.toLocaleString(), icon: FilePlus, change: "5", color: "bg-green-500" },
-        { title: t('dashboard_total_categories'), value: categoryCount.toLocaleString(), icon: Tags, change: "2", color: "bg-yellow-500" },
-        { title: t('dashboard_total_downloads'), value: downloadCount.toLocaleString(), icon: Download, change: "22%", color: "bg-red-500" },
+        { title: t('dashboard_total_emojis'), value: emojiCount.toLocaleString(), icon: Smile, change: "20.1%", color: "bg-blue-500", href: `/${params.lang}/rajurajadmin/emojis` },
+        { title: t('dashboard_total_pages'), value: pageCount.toLocaleString(), icon: FilePlus, change: "5", color: "bg-green-500", href: `/${params.lang}/rajurajadmin/pages` },
+        { title: t('dashboard_total_categories'), value: categoryCount.toLocaleString(), icon: Tags, change: "2", color: "bg-yellow-500", href: `/${params.lang}/rajurajadmin/categories` },
+        { title: t('dashboard_total_downloads'), value: downloadCount.toLocaleString(), icon: Download, change: "22%", color: "bg-red-500", href: `/${params.lang}/rajurajadmin/media` },
     ];
 
     const quickActions = [
@@ -50,18 +50,20 @@ export default function DashboardPage() {
         
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat) => (
-            <Card key={stat.title}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-                <div className={`p-2 rounded-full text-primary-foreground ${stat.color}`}>
-                    <stat.icon className="h-4 w-4" />
-                </div>
-                </CardHeader>
-                <CardContent>
-                <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-muted-foreground">{t('dashboard_stat_change', { change: stat.change })}</p>
-                </CardContent>
-            </Card>
+            <Link href={stat.href} key={stat.title}>
+                <Card className="hover:bg-muted/50 transition-colors">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+                    <div className={`p-2 rounded-full text-primary-foreground ${stat.color}`}>
+                        <stat.icon className="h-4 w-4" />
+                    </div>
+                    </CardHeader>
+                    <CardContent>
+                    <div className="text-2xl font-bold">{stat.value}</div>
+                    <p className="text-xs text-muted-foreground">{t('dashboard_stat_change', { change: stat.change })}</p>
+                    </CardContent>
+                </Card>
+            </Link>
             ))}
         </div>
         

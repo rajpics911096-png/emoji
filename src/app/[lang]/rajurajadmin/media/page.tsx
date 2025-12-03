@@ -4,14 +4,13 @@
 import { useState, useMemo } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MoreVertical, Upload, Copy, Download, Trash2, File as FileIcon, X, Share2 } from "lucide-react";
+import { MoreVertical, Upload, Copy, Download, Trash2, File as FileIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { emojis } from '@/lib/data';
 import type { EmojiFormatFile } from '@/lib/types';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
@@ -19,24 +18,27 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTranslations } from '@/context/translations-context';
+import { useEmojiStore } from '@/lib/store';
 
 
 type MediaFile = EmojiFormatFile & { format: string; emojiId: string; dateAdded: number; };
 
-const initialFiles: MediaFile[] = emojis.flatMap((emoji, emojiIndex) => 
-    Object.entries(emoji.formats).flatMap(([format, files], formatIndex) => 
-        files.map((file, fileIndex) => ({ 
-            ...file, 
-            format, 
-            emojiId: emoji.id,
-            dateAdded: Date.now() - (emojiIndex * 10000 + formatIndex * 1000 + fileIndex), // Simulate different added dates
-        }))
-    )
-);
-
 export default function MediaPage() {
     const { t } = useTranslations();
     const { toast } = useToast();
+    const { emojis } = useEmojiStore();
+
+    const initialFiles: MediaFile[] = useMemo(() => emojis.flatMap((emoji, emojiIndex) => 
+        Object.entries(emoji.formats).flatMap(([format, files], formatIndex) => 
+            files.map((file, fileIndex) => ({ 
+                ...file, 
+                format, 
+                emojiId: emoji.id,
+                dateAdded: Date.now() - (emojiIndex * 10000 + formatIndex * 1000 + fileIndex), // Simulate different added dates
+            }))
+        )
+    ), [emojis]);
+
     const [mediaFiles, setMediaFiles] = useState<MediaFile[]>(initialFiles);
     const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
     const [sortOrder, setSortOrder] = useState('newest');
@@ -53,6 +55,7 @@ export default function MediaPage() {
             format: file.type.split('/')[0] || 'file',
             emojiId: 'local-upload',
             dateAdded: Date.now(),
+            type: file.type
         }));
 
         setMediaFiles(prevFiles => [...newFiles, ...prevFiles]);
@@ -95,6 +98,8 @@ export default function MediaPage() {
     }
     
     const deleteFile = (fileToRemove: MediaFile) => {
+        // This is a mock deletion. In a real app, you'd call an API.
+        // And you'd need to update the emoji in the store to remove this file.
         setMediaFiles(mediaFiles.filter(file => file.url !== fileToRemove.url));
         setSelectedFiles(selectedFiles.filter(url => url !== fileToRemove.url));
         if (fileToRemove.url.startsWith('blob:')) {
@@ -122,6 +127,7 @@ export default function MediaPage() {
     }
 
     const handleDeleteSelected = () => {
+        // Mock deletion
         const remainingFiles = mediaFiles.filter(file => !selectedFiles.includes(file.url));
         const filesToDelete = mediaFiles.filter(file => selectedFiles.includes(file.url));
         
@@ -142,28 +148,9 @@ export default function MediaPage() {
         setSelectedFiles([]);
     }
 
-    const handleShare = async (file: MediaFile) => {
-        const shareData = {
-          title: file.name,
-          text: `Check out this file: ${file.name}`,
-          url: window.location.origin + file.url,
-        };
-
-        if (navigator.share) {
-          try {
-            await navigator.share(shareData);
-          } catch (error) {
-            console.error('Error sharing:', error);
-            copyToClipboard(file.url);
-          }
-        } else {
-          copyToClipboard(file.url);
-        }
-    };
-
     const FilePreview = ({ file }: { file: MediaFile }) => {
-        const isImage = ['png', 'gif', 'image', 'jpeg', 'webp'].includes(file.format) || file.url.startsWith('blob:image');
-        const isVideo = file.format === 'video' || file.url.startsWith('blob:video');
+        const isImage = ['png', 'gif', 'image', 'jpeg', 'webp'].includes(file.format) || file.type?.startsWith('image');
+        const isVideo = file.format === 'video' || file.type?.startsWith('video');
 
         return (
             <div className="aspect-square bg-muted flex items-center justify-center relative rounded-t-lg overflow-hidden">
@@ -199,7 +186,7 @@ export default function MediaPage() {
                     <div className="flex items-center gap-2">
                         <Checkbox
                             id="select-all"
-                            checked={selectedFiles.length > 0 && selectedFiles.length === mediaFiles.length}
+                            checked={selectedFiles.length > 0 && mediaFiles.length > 0 && selectedFiles.length === mediaFiles.length}
                             onCheckedChange={handleSelectAll}
                             aria-label={t('media_select_all')}
                             className='hidden sm:flex'
@@ -257,10 +244,6 @@ export default function MediaPage() {
                                         </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
-                                        <DropdownMenuItem onSelect={() => handleShare(file)}>
-                                            <Share2 className="mr-2 h-4 w-4" />
-                                            <span>Share</span>
-                                        </DropdownMenuItem>
                                         <DropdownMenuItem onSelect={() => copyToClipboard(file.url)}>
                                             <Copy className="mr-2 h-4 w-4" />
                                             <span>{t('media_toast_url_copied_title')}</span>
@@ -291,5 +274,3 @@ export default function MediaPage() {
         </div>
     );
 }
-
-    
