@@ -1,10 +1,11 @@
 
 import { AuthGuard } from "@/components/auth-guard";
+import type { ReactNode } from 'react';
 
 export default function AdminLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <AuthGuard>
