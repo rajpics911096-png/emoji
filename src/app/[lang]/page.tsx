@@ -16,7 +16,7 @@ import { useTranslations } from '@/context/translations-context';
 import { useCategoryStore, useEmojiStore } from '@/lib/store';
 import { FeaturedFiles } from '@/components/featured-files';
 import { useMemo, useState, useEffect } from 'react';
-import type { EmojiFormatFile } from '@/lib/types';
+import type { EmojiFormatFile, Emoji } from '@/lib/types';
 import { InfiniteFileScroller } from '@/components/infinite-file-scroller';
 
 type FileItem = EmojiFormatFile & {
@@ -74,16 +74,16 @@ export default function Home() {
   return (
       <main className="flex-1">
         
-        <section className="relative py-12 md:py-16 bg-primary/10">
+        <section className="relative py-16 md:py-24">
           <div className="container mx-auto text-center px-4">
             <h1 className="text-4xl md:text-6xl font-headline font-bold text-primary tracking-tighter">
               {t('welcomeMessage', { siteName: settings.name })}
             </h1>
-            <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto text-foreground/80">
+            <p className="mt-4 text-lg md:text-xl max-w-3xl mx-auto text-foreground/80">
               {t('siteDescription')}
             </p>
             
-            <div className="mt-6">
+            <div className="mt-8">
               <Button asChild size="lg" className="font-bold group">
                 <Link href={`/${lang}/emojis/all`}>
                   {t('browseEmojis')}
@@ -104,7 +104,7 @@ export default function Home() {
                 <Link key={category.id} href={`/${lang}/emojis/${category.id}`}>
                   <Card className="group transform hover:-translate-y-1 transition-transform duration-300 ease-in-out hover:shadow-xl h-full">
                     <CardContent className="p-4 flex flex-col items-center justify-center text-center h-full">
-                      <SvgIcon svg={category.icon} className="w-14 h-14 mb-3 text-primary transition-colors group-hover:text-accent-foreground" />
+                      <SvgIcon svg={category.icon} className="w-12 h-12 mb-3 text-primary transition-colors group-hover:text-accent-foreground" />
                       <h3 className="text-base font-headline font-semibold leading-tight">
                         {t(category.name)}
                       </h3>
@@ -127,10 +127,10 @@ export default function Home() {
                   <EmojiCard key={emoji.id} emoji={emoji} lang={lang} />
                 ))}
               </div>
-               <div className="text-center mt-8">
-                <Button asChild variant="outline">
+               <div className="text-center mt-10">
+                <Button asChild variant="outline" size="lg">
                     <Link href={`/${lang}/emojis/all`}>
-                        Read More
+                        View More
                     </Link>
                 </Button>
               </div>
@@ -145,10 +145,10 @@ export default function Home() {
                 Featured Files
               </h2>
               <FeaturedFiles posts={featuredPosts} lang={lang} />
-              <div className="text-center mt-8">
-                <Button asChild variant="outline">
+              <div className="text-center mt-10">
+                <Button asChild variant="outline" size="lg">
                     <Link href={`/${lang}/media`}>
-                        Read More
+                        View More Files
                     </Link>
                 </Button>
               </div>

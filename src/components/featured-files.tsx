@@ -62,10 +62,10 @@ export function FeaturedFiles({ posts, lang }: FeaturedFilesProps) {
     return (
       <Link
         href={`/${lang}${linkPrefix}/${post.id}`}
-        className={cn("group block relative overflow-hidden rounded-xl", className)}
+        className={cn("group block relative overflow-hidden rounded-xl h-full", className)}
       >
         <Card className="w-full h-full transition-shadow duration-300 group-hover:shadow-2xl">
-            <div className="aspect-[4/3] w-full h-full bg-muted">
+            <div className="aspect-video w-full h-full bg-muted">
             {featuredFile?.url && (
                 isVideo ? (
                     <video 
@@ -84,6 +84,7 @@ export function FeaturedFiles({ posts, lang }: FeaturedFilesProps) {
                         objectFit="cover" 
                         className="transition-transform duration-300 group-hover:scale-105"
                         unoptimized={featuredFile.format === 'gif'}
+                        loading="lazy"
                     />
                 )
             )}
@@ -98,19 +99,11 @@ export function FeaturedFiles({ posts, lang }: FeaturedFilesProps) {
     );
   };
 
-  const firstPost = posts[0];
-  const remainingPosts = posts.slice(1);
-
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {firstPost && <PostCard post={firstPost} className="md:col-span-1" />}
-        {remainingPosts.length > 0 && (
-            <div className="grid grid-cols-2 gap-4">
-                {remainingPosts.map((post) => (
-                    <PostCard key={post.id} post={post} />
-                ))}
-            </div>
-        )}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {posts.map((post) => (
+            <PostCard key={post.id} post={post} />
+        ))}
     </div>
   );
 }

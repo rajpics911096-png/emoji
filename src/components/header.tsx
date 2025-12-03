@@ -31,7 +31,7 @@ export default function Header({ lang }: { lang: string }) {
   return (
     <>
     <header className="sticky top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
-      <div className="container flex h-16 items-center">
+      <div className="container flex h-16 items-center px-4 sm:px-6 lg:px-8">
         <div className="flex items-center md:hidden">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
@@ -44,11 +44,11 @@ export default function Header({ lang }: { lang: string }) {
                 </Button>
             </SheetTrigger>
             <SheetContent side="left">
-                <Link href={`/${lang}`} className="flex items-center space-x-2" onClick={() => setIsMobileMenuOpen(false)}>
+                <Link href={`/${lang}`} className="flex items-center space-x-2 mb-6" onClick={() => setIsMobileMenuOpen(false)}>
                 <SvgIcon svg={settings.logo} className="h-6 w-6" />
                 <span className="font-bold font-headline text-lg">{settings.name}</span>
                 </Link>
-                <div className="mt-6 flex flex-col space-y-4">
+                <div className="flex flex-col space-y-4">
                   <Link href={`/${lang}/categories`} className="text-lg font-medium text-foreground/80 hover:text-primary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
                     Categories
                   </Link>
@@ -62,6 +62,9 @@ export default function Header({ lang }: { lang: string }) {
                       {t(category.name)}
                     </Link>
                   ))}
+                   <Link href={`/${lang}/media`} className="text-lg font-medium text-foreground/80 hover:text-primary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                    {t('media_title')}
+                  </Link>
                 </div>
             </SheetContent>
             </Sheet>
@@ -77,12 +80,12 @@ export default function Header({ lang }: { lang: string }) {
         </div>
         
         <div className="flex-1 flex items-center justify-center md:justify-start">
-            <div className="w-full max-w-lg">
+            <div className="w-full max-w-md lg:max-w-lg">
                 <IntelligentSearchBar lang={lang} />
             </div>
         </div>
 
-        <div className="flex items-center justify-end space-x-2">
+        <div className="flex items-center justify-end space-x-1 sm:space-x-2">
           <ThemeToggle />
           <LanguageSwitcher />
         </div>

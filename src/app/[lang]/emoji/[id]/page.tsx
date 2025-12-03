@@ -62,7 +62,7 @@ export default function EmojiPage() {
     setVisiblePosts(shuffledFilePosts.slice(0, itemsPerPage));
     setPage(1);
     setHasMore(shuffledFilePosts.length > itemsPerPage);
-  }, [shuffledFilePosts]);
+  }, [shuffledFilePosts, itemsPerPage]);
   
 
   const loadMorePosts = useCallback(() => {
@@ -154,12 +154,12 @@ export default function EmojiPage() {
           <div className="grid md:grid-cols-3 gap-8 md:gap-12">
             <div className="md:col-span-2">
                 <EmojiView emoji={emoji} />
-                <div className="my-6">
+                <div className="my-8">
                   <AdSlot location="below_emoji" />
                 </div>
                 <EmojiDownloads emoji={emoji} lang={lang} />
             </div>
-            <aside className="space-y-6">
+            <aside className="space-y-8">
               <AdSlot location="sidebar" />
               <div className="space-y-4">
                 <h3 className="font-headline text-2xl font-semibold text-primary">
@@ -187,7 +187,7 @@ export default function EmojiPage() {
             </aside>
           </div>
           
-          <div className="my-6">
+          <div className="my-8">
             <AdSlot location="below_download" />
           </div>
 
@@ -210,7 +210,7 @@ export default function EmojiPage() {
                 <h2 className="text-3xl font-headline font-bold text-center mb-8">
                     Featured Files
                 </h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                    {visiblePosts.map((post, index) => {
                        const isLastElement = index === visiblePosts.length - 1;
                        return (
@@ -235,5 +235,3 @@ export default function EmojiPage() {
     </>
   );
 }
-
-    

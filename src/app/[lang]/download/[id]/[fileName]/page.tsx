@@ -145,23 +145,25 @@ export default function DownloadPage() {
             </section>
           )}
 
-          <section>
-            <h2 className="text-2xl font-headline font-bold text-center mb-8">Explore Categories</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-              {categories.map((category) => (
-                <Link key={category.id} href={`/${lang}/emojis/${category.id}`}>
-                  <Card className="group transform hover:-translate-y-1 transition-transform duration-300 ease-in-out hover:shadow-xl h-full">
-                    <CardContent className="p-4 flex flex-col items-center justify-center text-center h-full">
-                      <SvgIcon svg={category.icon} className="w-14 h-14 mb-3 text-primary transition-colors group-hover:text-accent-foreground" />
-                      <h3 className="text-base font-headline font-semibold leading-tight">
-                        {t(category.name)}
-                      </h3>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
-            </div>
-          </section>
+          <section className="mt-12 md:mt-16">
+                <h2 className="text-3xl font-headline font-bold text-center mb-10">
+                    {t('exploreCategories')}
+                </h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
+                {categories.filter(c => c.id !== 'all' && c.id !== 'uncategorized').map((category) => (
+                    <Link key={category.id} href={`/${lang}/emojis/${category.id}`}>
+                    <Card className="group transform hover:-translate-y-1 transition-transform duration-300 ease-in-out hover:shadow-xl h-full">
+                        <CardContent className="p-4 flex flex-col items-center justify-center text-center h-full">
+                        <SvgIcon svg={category.icon} className="w-12 h-12 mb-3 text-primary transition-colors group-hover:text-accent-foreground" />
+                        <h3 className="text-base font-headline font-semibold leading-tight">
+                            {t(category.name)}
+                        </h3>
+                        </CardContent>
+                    </Card>
+                    </Link>
+                ))}
+                </div>
+            </section>
         </div>
       </main>
     </>

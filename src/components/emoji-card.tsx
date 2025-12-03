@@ -23,16 +23,16 @@ export function EmojiCard({ emoji, lang }: EmojiCardProps) {
   return (
     <Link href={linkUrl} className="group">
       <Card className="h-full transform hover:-translate-y-1 transition-transform duration-300 ease-in-out hover:shadow-xl">
-        <CardContent className="p-4 flex flex-col items-center justify-center text-center">
+        <CardContent className="p-4 flex flex-col items-center justify-center text-center h-full">
           <div className="text-6xl mb-3 aspect-square flex items-center justify-center">
             {isFilePost ? (
                 featuredImage ? (
-                    <Image src={featuredImage.url} alt={title} width={64} height={64} className="w-16 h-16 object-contain" />
+                    <Image src={featuredImage.url} alt={title} width={64} height={64} className="w-16 h-16 object-contain" loading="lazy" />
                 ) : (
                     <File className="w-16 h-16 text-muted-foreground" />
                 )
             ) : (
-                emoji.emoji
+                <span className="text-6xl">{emoji.emoji}</span>
             )}
           </div>
           <h3 className="font-headline font-semibold text-base leading-tight truncate w-full" title={title}>

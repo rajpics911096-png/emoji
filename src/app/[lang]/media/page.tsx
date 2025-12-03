@@ -80,6 +80,7 @@ export default function MediaPage() {
                                 objectFit="cover" 
                                 className="transition-transform duration-300 group-hover:scale-110"
                                 unoptimized={featuredFile.format === 'gif'}
+                                loading="lazy"
                             />
                         )
                     )}
@@ -106,7 +107,7 @@ export default function MediaPage() {
             </div>
 
             {filePosts.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                     {filePosts.map((post) => (
                         <PostCard key={post.id} post={post} />
                     ))}

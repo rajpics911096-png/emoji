@@ -117,13 +117,13 @@ export function InfiniteFileScroller({ allFiles, lang, itemsPerPage = 12 }: Infi
                 <Link
                 href={downloadUrl}
                 >
-                <Card className="group overflow-hidden transition-shadow hover:shadow-lg">
-                    <CardContent className="p-3 flex flex-col">
-                        <div className="aspect-square bg-muted flex items-center justify-center relative rounded-md overflow-hidden mb-3">
+                <Card className="group overflow-hidden transition-shadow hover:shadow-lg h-full">
+                    <CardContent className="p-3 flex flex-col h-full">
+                        <div className="aspect-square bg-muted flex items-center justify-center relative rounded-md overflow-hidden mb-3 flex-1">
                             {file.type?.startsWith('video/') ? (
                             <video src={file.url} autoPlay muted loop playsInline className="w-full h-full object-contain" />
                             ) : (
-                            <Image src={file.url} alt={file.name} layout="fill" objectFit="contain" className="p-2" unoptimized={file.format === 'gif'} />
+                            <Image src={file.url} alt={file.name} layout="fill" objectFit="contain" className="p-2" unoptimized={file.format === 'gif'} loading="lazy" />
                             )}
                         </div>
                         <p className="text-sm font-medium truncate" title={file.displayName}>
