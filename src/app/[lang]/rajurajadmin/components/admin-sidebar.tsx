@@ -45,7 +45,7 @@ export function AdminSidebar() {
         title: "Logged Out",
         description: "You have been successfully logged out.",
       });
-      router.push(`/${language}/login`);
+      router.push(`/${language}`);
     } catch (error) {
       toast({
         variant: "destructive",
