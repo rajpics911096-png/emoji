@@ -340,11 +340,11 @@ export default function SettingsPage() {
             <Label>{t('settings_sitemap_label')}</Label>
             <Button variant="outline" className="w-full" asChild>
               <Link href="/sitemap.xml" target="_blank">
-                Sitemap Generation
+                View Sitemap
               </Link>
             </Button>
             <p className="text-sm text-muted-foreground">
-              {t('settings_sitemap_desc')}
+              Your sitemap is generated automatically.
             </p>
           </div>
         </CardContent>
