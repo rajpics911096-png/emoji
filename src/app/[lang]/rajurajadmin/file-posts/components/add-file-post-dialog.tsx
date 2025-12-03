@@ -25,7 +25,7 @@ import * as z from "zod";
 import type { Emoji, EmojiFormatFile } from "@/lib/types";
 import { useTranslations } from "@/context/translations-context";
 import { useState } from "react";
-import { UploadedFileCard } from "@/app/[lang]/rajurajadmin/emojis/components/uploaded-file-card";
+import { UploadedFileCard } from "@/app/[lang]/rajurajadmin/components/uploaded-file-card";
 import { useCategoryStore } from "@/lib/store";
 import { RichTextEditor } from "@/components/rich-text-editor";
 import { Textarea } from "@/components/ui/textarea";
