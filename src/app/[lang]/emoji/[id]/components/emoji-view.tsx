@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import type { Emoji } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { Copy, Check, Code, Share2 } from 'lucide-react';
+import { Copy, Check, Code, Share2, Download } from 'lucide-react';
 import { useTranslations } from '@/context/translations-context';
 import { useToast } from '@/hooks/use-toast';
 
@@ -33,6 +33,28 @@ export function EmojiView({ emoji }: EmojiViewProps) {
         navigator.clipboard.writeText(svgString);
         setIsSvgCopied(true);
         setTimeout(() => setIsSvgCopied(false), 2000);
+    }
+  };
+
+  const handleDownload = () => {
+    const pngFile = emoji.formats.png?.[0];
+    if (pngFile) {
+        const link = document.createElement('a');
+        link.href = pngFile.url;
+        link.download = pngFile.name || `${emoji.id}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        toast({
+            title: "Download Started",
+            description: `Downloading ${pngFile.name}.`,
+        });
+    } else {
+        toast({
+            variant: "destructive",
+            title: "Download Not Available",
+            description: "No PNG file is available for this emoji.",
+        });
     }
   };
 
@@ -65,6 +87,7 @@ export function EmojiView({ emoji }: EmojiViewProps) {
   };
 
   const canCopySvg = !!(emoji.formats.png?.length || emoji.formats.gif?.length || emoji.formats.image?.length);
+  const canDownload = !!emoji.formats.png?.length;
   const isFilePost = !emoji.emoji;
 
   return (
@@ -98,6 +121,12 @@ export function EmojiView({ emoji }: EmojiViewProps) {
                                   <Code className="mr-2 h-4 w-4" /> Copy SVG
                               </>
                           )}
+                      </Button>
+                  )}
+                  {canDownload && (
+                      <Button onClick={handleDownload} size="default" variant="secondary">
+                          <Download className="mr-2 h-4 w-4" />
+                          {t('downloadButton')}
                       </Button>
                   )}
                   <Button onClick={handleShare} size="default" variant="outline" className="transition-all">
